@@ -49,6 +49,7 @@ Private IP Adresse Komunnizieren
 
 
 # milestones 
+Sind in Github definiert
 
 ## 15.5 1.Sprint
 Project kick off abgeschlossen
