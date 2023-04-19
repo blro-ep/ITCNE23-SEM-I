@@ -50,3 +50,20 @@ Private IP Adresse Komunnizieren
 
 # milestones 
 
+## 15.5 1.Sprint
+Project kick off abgeschlossen
+Individuelle Tasks angefangen iac und monitoring
+
+## 14.6 2. Sprint 
+Schnittstellen klar definiert und implementieren
+Integration test iac - monitoring 
+
+## 05.7 3. Sprint
+Aschliessendes zusammenfügen und ausfürhliches Testing
+Prio A Tasks abgeschlossen 
+Fazit erstellen 
+
+## 12.7 4. Sprint 
+Abnahme der Arbeit 
+Präsentation 
+
