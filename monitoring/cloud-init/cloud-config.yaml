@@ -26,3 +26,8 @@ runcmd:
   - apt-get install -y docker-ce docker-ce-cli containerd.io
   - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
+  - docker run -d --name prometheus -p 9090:9090 prom/prometheus
+  - docker run -d --name alertmanager -p 9093:9093 prom/alertmanager
+  - docker run -d --name blackbox -p 9115:9115 prom/blackbox-exporter
+  - docker run -d --name=grafana -p 3000:3000  grafana/grafana-enterprise
+  
