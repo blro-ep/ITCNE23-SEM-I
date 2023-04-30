@@ -4,7 +4,6 @@ Definition Lean / Agile Project
 Roger stellt die User data für Grafana und DB Server berreit. 
 
 Implemenatin User Data to ec2 über github -> Dany 
-iAWS Account keine neuen User erstellen.
 
 ## Table of Content
 
