@@ -1,17 +1,22 @@
 
 ## AWS 3 Tier Architecture
 
-Benefits of a 3 Tier Architecture
-Decreased development time — different teams can work on different tiers simultaneously, resulting in decreased time to deploy
-Increased scalability — a tier can have an auto-scaling group independent of other tiers, meaning for each tier, you only use what you need
-Increased reliability — each tier can have multiple resources in multiple availability zones and the success and availability of one tier is independent of the other tiers
-Increased security — each tier can have its own security group, allowing for custom permissions depending on the needs of that tier
-
 Expect Auto Dokumentaiton erstellt von yaml file -> Tool ?
 Verschiedene templates um deine umgebung flexible einzubauen  
 
 
-## Infrastructure best practice :
+**Benefits of a 3 Tier Architecture**
+- Decreased development time — different teams can work on different tiers simultaneously, resulting in decreased time to deploy
+- Increased scalability — a tier can have an auto-scaling group independent of other tiers, meaning for each tier, you only use what you need
+- Increased reliability — each tier can have multiple resources in multiple availability zones and the success and availability of one tier is independent of the other tiers
+- Increased security — each tier can have its own security group, allowing for custom permissions depending on the needs of that tier
+
+## VPC CIDR
+
+![CIDR Block](images/rec_vpc_cidr.png)
+
+
+## Infrastructure best practice:
 
 A highly available architecture that spans two to four Availability Zones.
 
@@ -50,3 +55,6 @@ Separate your application into multiple stacks as dictated by deployment require
 
 A layered architecture organizes stacks into multiple horizontal layers that build on top of one another. 
 
+
+
+## game days

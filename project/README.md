@@ -28,13 +28,13 @@ We choose a lean and simple kanban board design, where the following columns rep
 - Backlog
 ```
 
-![Kanbandboard](kanbanboard.png)
+![Kanbandboard](images/kanbanboard.png)
 
 When there is a new task or work item that needs to be completed, we first open a new "issue" in the ITCNE23-SEM-1 Github repository. 
 
 In this "issue" we contain information about the task, such as its Title, assignees, label, milestone, priority, start date, end date and any notes or details related to the task.
 
-![issue](kanbanissue.png)
+![issue](images/kanbanissue.png)
 
 We have defined four different labels that are used to indicate what type of category the kanban card is in.
 
@@ -65,7 +65,7 @@ The "Backlog" column can be seen as a holding area for tasks that are waiting to
 
 ## 02 Communication 
 
-![MSTeams](msteams_logo.png)
+![MSTeams](images/msteams_logo.png)
 
 In order to ensure total transparency for the auditors, the project communication will be carried out via a dedicated teams channel "ITCNE23-SEM-I communication".
 
@@ -83,7 +83,7 @@ User Data bereitgestellt ber Github
 
 ###  iac
 
-![yamliac](yaml_logo.png)
+![yamliac](images/yaml_logo.png)
 
 The project is about gain hands-on experience with YAML scripting creating an AWS CloudFormation template to automate a small environment with a Variety of AWS services such as 
 Amazon EC2 instances, Amazon RDS instances, Amazon S3 buckets, and Amazon CloudFront distributions, while following the best practices outlined in the AWS Well-Architected Framework.
@@ -111,7 +111,7 @@ Amazon EC2 instances, Amazon RDS instances, Amazon S3 buckets, and Amazon CloudF
 
 ###  monitoring 
 
-![grafana](grafana_logo.png)
+![grafana](images/grafana_logo.png)
 
 ## 04 Seusag
 Was deployed Dany was kommt von Roger 
