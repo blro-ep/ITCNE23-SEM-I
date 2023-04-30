@@ -30,7 +30,7 @@ We choose a lean and simple kanban board design, where the following columns rep
 - Backlog
 ```
 
-![Kanbandboard](/kanbanboard.png)
+![Kanbandboard](kanbanboard.png)
 
 When there is a new task or work item that needs to be completed, we first open a new "issue" in the ITCNE23-SEM-1 Github repository. 
 
