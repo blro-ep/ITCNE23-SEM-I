@@ -80,13 +80,15 @@ Port Matrix
 Layout iac kommunizieren
 User Data bereitgestellt ber Github
 
-### ![yamliac](/yaml_logo.png) iac
+###  iac
+
+![yamliac](/yaml_logo.png)
 
 The project is about gain hands-on experience with YAML scripting creating an AWS CloudFormation template to automate a small environment with a Variety of AWS services such as 
 Amazon EC2 instances, Amazon RDS instances, Amazon S3 buckets, and Amazon CloudFront distributions, while following the best practices outlined in the AWS Well-Architected Framework.
 
-By providing an accessible platform, this project will enable individuals to gain valuable experience in CloudFormation scripting, as well as an understanding of the fundamentals and possibilitys of CloudFormation.
-This project aims to demonstrate multiple approaches for connecting different CloudFormation scripts together and the implementation will be extensively explained and commented on to make each step easy to understand. 
+> By providing an accessible platform, this project will enable individuals to gain valuable experience in CloudFormation scripting, as well as an understanding of the fundamentals and possibilitys of CloudFormation.
+> This project aims to demonstrate multiple approaches for connecting different CloudFormation scripts together and the implementation will be extensively explained and commented on to make each step easy to understand. 
 
 ```
 - Automate Infrastructure Provisionen with Cloudformation.
@@ -106,7 +108,9 @@ This project aims to demonstrate multiple approaches for connecting different Cl
 - Use a version control system such as CodeCommit or GitHub to track changes to templates.
 ```
 
-### ![grafana](/grafana_logo.png) monitoring 
+###  monitoring 
+
+![grafana](/grafana_logo.png)
 
 ## 04 Seusag
 Was deployed Dany was kommt von Roger 
