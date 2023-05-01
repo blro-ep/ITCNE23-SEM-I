@@ -109,7 +109,7 @@ Amazon EC2 instances, Amazon RDS instances, Amazon S3 buckets, and Amazon CloudF
 - Use a version control system such as CodeCommit or GitHub to track changes to templates.
 ```
 
-###  monitoring 
+###  monitoring
 
 ![grafana](images/grafana_logo.png)
 
