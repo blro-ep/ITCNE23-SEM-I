@@ -15,6 +15,11 @@ Mapping für Instance Size or Ort erstellen
 Mit oder ohne db ?
 Work with Secret Manager to store PW 
 
+Stack Deeleten Protection?
+
+CloudFormation Template for the prerequests ?
+https://aws.nz/best-practice/cloudformation-service-roles/
+
 Nat Gateway Alarms
 https://github.com/cfn-modules/vpc-nat-gateway/blob/master/module.yml
 

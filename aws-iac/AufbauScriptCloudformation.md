@@ -1,19 +1,18 @@
-
-
-# Methoden 
+### Methoden 
 
 Have Every approche in the Script ? 
 
-# 1  main script und different Script where you give your parameter from main to different script
+1.  main script und different Script where you give your parameter from main to different script
 
-# 2. Main Script to different script with output and Import 
+2. Main Script to different script with output and Import 
+    
     Prifix it with : Fn::ImportValue: !Sub ${VPCStackName}-ID
-    ## Achtung export können nicht mehr geändert werden. 
+    !!Achtung export können nicht mehr geändert werden. !!
 
-# 3. Nested Stack 
+3. Nested Stack 
     github.com/cfn-modules 
 
-# 4. Modules 
+4. Modules 
     Not for Serverless
     ModuleRegestry anlegen
     cfn init
@@ -24,7 +23,11 @@ Have Every approche in the Script ?
     Change sets allow you to see how proposed changes to a stack might impact your running resources before you implement them
     https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html
 
-    AWS CloudFormation templates contain nine main objects:
+    
+
+
+# AWS CloudFormation templates contain nine main objects:
+
 
 Format:  version—defines the version of the template format (currently only one option, 2010-09-09)
 
