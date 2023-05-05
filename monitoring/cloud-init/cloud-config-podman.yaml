@@ -10,40 +10,16 @@ packages:
   - curl
   - gnupg
   - lsb-release
-# create the docker group
-groups:
-  - docker
-
-# Add default auto created user to docker group
-system_info:
-  default_user:
-    groups: [docker]
 
 runcmd:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-  - echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  - apt-get update
-  - apt-get install -y docker-ce docker-ce-cli containerd.io
-  - curl -L "https://github.com/docker/compose/releases/download/2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  - chmod +x /usr/local/bin/docker-compose
-  - docker run -d --name prometheus -p 9090:9090 prom/prometheus
-  - docker run -d --name alertmanager -p 9093:9093 prom/alertmanager
-  - docker run -d --name blackbox -p 9115:9115 prom/blackbox-exporter
-  - docker run -d --name grafana -p 3000:3000  grafana/grafana-enterprise
-  - apt-get install -y prometheus-node-exporter
-
-
-
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/Release.key \
-  | gpg --dearmor \
-  | sudo tee /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg]\
-    https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/ /" \
-  | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
-sudo apt-get update -qq
-sudo apt-get -qq -y install podman
-
-
+  - sudo mkdir -p /etc/apt/keyrings
+  - sudo curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg] https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
+  - sudo apt-get install -y prometheus-node-exporter
+  - sudo apt-get install -y containernetworking-plugins
+  - sudo apt-get install -y podman
+  - podman run -dt --name prometheus -p 9090:9090 docker.io/prom/prometheus
+  - podman run -dt --name alertmanager -p 9093:9093 docker.io/prom/alertmanager
+  - podman run -dt --name blackbox -p 9115:9115 docker.io/prom/blackbox-exporter
+  - podman run -dt --name grafana -p 3000:3000  docker.io/grafana/grafana-enterprise
   
