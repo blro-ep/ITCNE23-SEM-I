@@ -10,14 +10,6 @@ packages:
   - curl
   - gnupg
   - lsb-release
-# create the docker group
-groups:
-  - docker
-
-# Add default auto created user to docker group
-system_info:
-  default_user:
-    groups: [docker]
 
 runcmd:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
