@@ -1,4 +1,4 @@
-Description:  This template deploys a VPC, with a pair of public and private subnets spread
+Description: This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
   and default routes for them in the private subnets. **WARNING** This template creates AWS resources. You will be billed for the
@@ -23,6 +23,27 @@ Parameters:
     Type: String
     Default: true
     AllowedValues: [true, false]
+
+  # This Parameter will be used to determine if an S3 endpoint should be added to the VPC or not
+  S3Endpoint:
+    Description: 'Do you want to add a S3 endpoint to VPC'
+    Type: String
+    Default: true
+    AllowedValues: [true, false]
+
+  # This Parameter will specify if you want to enable VPC Flow Logs or not, and what traffic type to capture.
+  FlowLog:
+    Description: 'Do you want to Enable VPC Flow Log?'
+    Type: String
+    Default: reject-only
+    AllowedValues: [true, reject-only, false]
+
+  # This Parameter lets you specify how long you want to retain your flow log event
+  FlowLogRetentionDays:
+    Description: The number of days you want to retain flow log events
+    Type: Number
+    Default: 5
+    AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150]
 
 ## Network Parameter
 ####################
@@ -92,12 +113,13 @@ Parameters:
 
 #  Specify an optional resource or property based on the value of a parameter or another condition.
 Conditions:
-  # Logical ID of Condition: Intrinsic funtion (!Equals) true if the Parameter is set to true
-  WantNatGateways: !Equals [!Ref NatGateways, true]
+ 
+  # The Two Flow Log Conditions evaluate the condition to true if the value of the FlowLog parameter is !NOT false, and will evaluate to false otherwise.
+  WantFlowLog: !Not [!Equals [!Ref FlowLog, false]]
+ 
+  # The condition will be true if the value of the FlowLog parameter is exactly 'reject-only', and will evaluate to false otherwise.
+  WantFlowLogRejectOnly: !Equals [!Ref FlowLog, 'reject-only']
 
-  # This Cloud Formation condition checks if the value of S3Endpoint parameter is true. If the parameter value is true, then the WantS3Endpoint condition will be true to and any resource that uses this condition will be created
-  WantS3Endpoint: !Equals [!Ref S3Endpoint, true]
-  
 
 ## VPC and Network Structure
 ###################
@@ -127,7 +149,7 @@ Resources:
         - Key: Name
           Value: !Ref EnvironmentName
 
-# DHCP Assosiation with VPC
+# DHCP Association with VPC
   VPCDHCPOptionsAssociation:
     Type: AWS::EC2::VPCDHCPOptionsAssociation
     Properties:
@@ -146,7 +168,7 @@ Resources:
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      InternetGatewayId: !Sub ${EnvironmentName} Internet Gateway
+      InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
 
 ## Subnets
@@ -169,7 +191,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -181,7 +203,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -193,7 +215,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -205,7 +227,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet3CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -217,7 +239,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet4CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -232,7 +254,7 @@ Resources:
     Condition: WantNatGateways
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/natgateway.yaml
+      TemplateURL: templates/vpc/NatGateway.yaml
       Parameters:
         Subnet1Nat: !Ref PublicSubnet1
         Subnet2Nat: !Ref PublicSubnet2
@@ -354,7 +376,7 @@ Resources:
 ## Security Group
 #################
 
-# Creates a Secuirty Group with no ingress rules
+# Creates a Security Group with no ingress rules
   NoIngressSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -535,7 +557,7 @@ Resources:
         Code: -1
         Type: 8
 
-# 5. NACL entry to Allows Ephermeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+# 5. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
   PubNACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -646,7 +668,7 @@ Resources:
          Value: Private3-Tier-ACL-AZ1
 
 # create a Outbound Rule allow all outbound
-  Private2NACLOutboundRule:
+  Private3NACLOutboundRule:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private3NACL
@@ -696,7 +718,7 @@ Resources:
 ## Key Pair
 ###########
 
-# First KeyPair erstellt
+# First KeyPair
   NewKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
@@ -765,17 +787,21 @@ Resources:
 ## S3 Public Bucket 
 ###################
 
-# S3 Public Bucket wird erstellt
+# S3 Public Bucket created with a bucket policy
   S3Bucket:
     Type: AWS::S3::Bucket
-    Description: "S3 Public bucket creation"
     Properties:
       BucketName: public-bucket-dam
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
   
-# creates an S3 bucket policy that allows any AWS principal to perform any action on objects within the public S3 bucket 
+# creates an S3 bucket policy that allows any AWS principal to perform get Object and the root user to perform get and put object
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -783,8 +809,43 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Action: "*"
+          - Action: 
+            - "s3:GetObject"
+            - "s3:PutObject"
             Effect: Allow
             Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
-            Principal:
-              AWS: "*"
+            Principal: 
+               AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
+
+# Missing Public AccessS !!!
+
+## S3 Bucket Private -> Nested Stack 
+####################
+
+  # Nesting a stack in a template s3bucket.yaml -> Giving the Parameters to the Nested Stack
+  s3BucketModule:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+        Parameters:
+          s3BucketfirstName: private-bucket-dam
+          ValueEnvironment: !Ref EnvironmentName
+        TemplateURL: templates/s3/s3bucket.yaml
+
+## Flow Log Nested -> Giving the Parameters to the Nested Stack
+##################
+
+  FlowLogModule:
+    Condition: WantFlowLog
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: templates/vpc/flowLog.yaml 
+      Parameters:
+        VPCModule: !Ref AWS::StackName
+        # Using the function !If to set the value of "TrafficType" based on the value of "WantFlowLogRejectOnly".  If WantFlowLogRejectOnly is true, the function will return the string REJECT as the value . If WantFlowLogRejectOnly is false, ALL will be the value
+        TrafficType: !If [WantFlowLogRejectOnly, REJECT, ALL]
+        RetentionDays: !Ref FlowLogRetentionDays
+        VPCID: !Ref VPC
