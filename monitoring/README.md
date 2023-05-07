@@ -32,6 +32,7 @@ All monitoring components are open source.
 - [Git](https://git-scm.com/download/linux)
 
 ### Multipass
+For this project, Multipass is used for testing cloud-init. It's easier than on AWS's EC2 instances.
 - [Mltipass](https://multipass.run/)
 
 
