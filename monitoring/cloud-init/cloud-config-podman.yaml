@@ -19,7 +19,9 @@ runcmd:
   - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg] https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
   - sudo apt-get install -y prometheus-node-exporter
   - sudo apt-get install -y containernetworking-plugins
+  - sudo apt-get install -y python3-pip
   - sudo apt-get install -y podman
+  - sudo pip3 install podman-compose
   - podman run -dt --name prometheus -p 9090:9090 docker.io/prom/prometheus
   - podman run -dt --name alertmanager -p 9093:9093 docker.io/prom/alertmanager
   - podman run -dt --name blackbox -p 9115:9115 docker.io/prom/blackbox-exporter
