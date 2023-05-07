@@ -37,7 +37,9 @@ This project aims to demonstrate multiple approaches for connecting different Cl
 Grafana is a multi-platform open source analytics and interactive visualization web application. 
 It provides charts, graphs, and alerts for the web when connected to supported data sources. 
 
-> It can be easily installed using Docker or Docker Compose
+In this project, we use Prometheus as data source, it is an open-source systems monitoring and alerting toolkit. Prometheus collects data in the form of time series.
+
+> The monitoring components can be easily operated as a container using Podman. These are official Docker images.
 
 - [**Monitoring Documentation**](monitoring/README.md)
 
