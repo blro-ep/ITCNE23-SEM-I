@@ -26,4 +26,6 @@ runcmd:
 #  - podman run -dt --name alertmanager -p 9093:9093 docker.io/prom/alertmanager
 #  - podman run -dt --name blackbox -p 9115:9115 docker.io/prom/blackbox-exporter
 #  - podman run -dt --name grafana -p 3000:3000  docker.io/grafana/grafana-enterprise
+  - cd /opt/ITCNE23-SEM-I/monitoring/
+  - sudo podman-compose up -d
   

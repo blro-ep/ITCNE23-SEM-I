@@ -31,7 +31,7 @@ services:
     restart: always
 
   grafana:
-    image: grafana/grafana-enterprise
+    image: docker.io/grafana/grafana-enterprise
     container_name: grafana
     volumes:
       - grafana-storage:/var/lib/grafana
