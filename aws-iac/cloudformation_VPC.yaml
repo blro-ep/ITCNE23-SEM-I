@@ -1,4 +1,4 @@
-Description: This template deploys a VPC, with a pair of public and private subnets spread
+Description:  This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
   and default routes for them in the private subnets. **WARNING** This template creates AWS resources. You will be billed for the
@@ -44,6 +44,21 @@ Parameters:
     Type: Number
     Default: 5
     AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150]
+
+  # This Parameter will be used to determine if a Basic Ec2 Instance should be deployed
+  SimpleEc2Instance:
+    Description: 'Do you want to add a Simple EC2 Instance to your VPC'
+    Type: String
+    Default: true
+    AllowedValues: [true, false]
+
+  # This Parameter will be used to determine if a Basic 3 Ec2 Instance with a PHP Website and a extra EBS Volume and SSM connection should be deployed
+  EnvType:
+    Description: Specify the Environment type of the stack.
+    Type: String
+    Default: test
+    AllowedValues: [test, prod]
+    ConstraintDescription: Specify either test or prod.
 
 ## Network Parameter
 ####################
@@ -113,13 +128,25 @@ Parameters:
 
 #  Specify an optional resource or property based on the value of a parameter or another condition.
 Conditions:
- 
+  # Logical ID of Condition: Intrinsic funtion (!Equals) true if the Parameter is set to true
+  WantNatGateways: !Equals [!Ref NatGateways, true]
+
+  # This Cloud Formation condition checks if the value of S3Endpoint parameter is true. If the parameter value is true, then the WantS3Endpoint condition will be true to and any resource that uses this condition will be created
+  WantS3Endpoint: !Equals [!Ref S3Endpoint, true]
+  
   # The Two Flow Log Conditions evaluate the condition to true if the value of the FlowLog parameter is !NOT false, and will evaluate to false otherwise.
   WantFlowLog: !Not [!Equals [!Ref FlowLog, false]]
  
   # The condition will be true if the value of the FlowLog parameter is exactly 'reject-only', and will evaluate to false otherwise.
   WantFlowLogRejectOnly: !Equals [!Ref FlowLog, 'reject-only']
 
+  # The condition will be true if the value of the SimpleEc2Instance is True
+  WantEC2: !Equals [!Ref SimpleEc2Instance, true]
+
+  # The condition will be true if the value of the EnvType is prod / different way of writing a condition
+  WantProduction: !Equals
+    - !Ref EnvType
+    - prod
 
 ## VPC and Network Structure
 ###################
@@ -149,7 +176,7 @@ Resources:
         - Key: Name
           Value: !Ref EnvironmentName
 
-# DHCP Association with VPC
+# DHCP Assosiation with VPC
   VPCDHCPOptionsAssociation:
     Type: AWS::EC2::VPCDHCPOptionsAssociation
     Properties:
@@ -168,7 +195,7 @@ Resources:
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      InternetGatewayId: !Ref InternetGateway
+      InternetGatewayId: !Sub ${EnvironmentName} Internet Gateway
       VpcId: !Ref VPC
 
 ## Subnets
@@ -191,7 +218,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
       CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -203,7 +230,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
       CidrBlock: !Ref PrivateSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -215,7 +242,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
       CidrBlock: !Ref PrivateSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -227,7 +254,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
       CidrBlock: !Ref PrivateSubnet3CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -239,7 +266,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
       CidrBlock: !Ref PrivateSubnet4CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -254,7 +281,7 @@ Resources:
     Condition: WantNatGateways
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: templates/vpc/NatGateway.yaml
+      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/natgateway.yaml
       Parameters:
         Subnet1Nat: !Ref PublicSubnet1
         Subnet2Nat: !Ref PublicSubnet2
@@ -376,7 +403,7 @@ Resources:
 ## Security Group
 #################
 
-# Creates a Security Group with no ingress rules
+# Creates a Secuirty Group with no ingress rules
   NoIngressSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -557,7 +584,7 @@ Resources:
         Code: -1
         Type: 8
 
-# 5. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+# 5. NACL entry to Allows Ephermeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
   PubNACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -668,7 +695,7 @@ Resources:
          Value: Private3-Tier-ACL-AZ1
 
 # create a Outbound Rule allow all outbound
-  Private3NACLOutboundRule:
+  Private2NACLOutboundRule:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private3NACL
@@ -718,7 +745,7 @@ Resources:
 ## Key Pair
 ###########
 
-# First KeyPair
+# First KeyPair erstellt
   NewKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
@@ -787,21 +814,17 @@ Resources:
 ## S3 Public Bucket 
 ###################
 
-# S3 Public Bucket created with a bucket policy
+# S3 Public Bucket wird erstellt
   S3Bucket:
     Type: AWS::S3::Bucket
+    Description: "S3 Public bucket creation"
     Properties:
       BucketName: public-bucket-dam
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
   
-# creates an S3 bucket policy that allows any AWS principal to perform get Object and the root user to perform get and put object
+# creates an S3 bucket policy that allows any AWS principal to perform any action on objects within the public S3 bucket 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -809,19 +832,11 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Action: 
-            - "s3:GetObject"
-            - "s3:PutObject"
+          - Action: "*"
             Effect: Allow
             Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
-            Principal: 
-               AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
-          - Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
-
-# Missing Public AccessS !!!
+            Principal:
+              AWS: "*"
 
 ## S3 Bucket Private -> Nested Stack 
 ####################
@@ -832,8 +847,8 @@ Resources:
     Properties:
         Parameters:
           s3BucketfirstName: private-bucket-dam
-          ValueEnvironment: !Ref EnvironmentName
-        TemplateURL: templates/s3/s3bucket.yaml
+          ValueEnviroment: !Ref EnvironmentName
+        TemplateURL: 'https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/s3bucket.yaml'
 
 ## Flow Log Nested -> Giving the Parameters to the Nested Stack
 ##################
@@ -842,10 +857,141 @@ Resources:
     Condition: WantFlowLog
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: templates/vpc/flowLog.yaml 
+      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/flowlog.yaml
       Parameters:
         VPCModule: !Ref AWS::StackName
         # Using the function !If to set the value of "TrafficType" based on the value of "WantFlowLogRejectOnly".  If WantFlowLogRejectOnly is true, the function will return the string REJECT as the value . If WantFlowLogRejectOnly is false, ALL will be the value
         TrafficType: !If [WantFlowLogRejectOnly, REJECT, ALL]
         RetentionDays: !Ref FlowLogRetentionDays
         VPCID: !Ref VPC
+
+
+
+## Simple EC2 Nested -> Giving the Parameters to the Nested Stack
+####################
+
+  VPCEc2Instance:
+    Condition: WantEC2
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/simpleec2.yaml
+      Parameters:
+        VPCModule: !Ref AWS::StackName
+        VPCID: !Ref VPC
+        MynewKeyPair: !Ref NewKeyPair
+        Subnet4ec2: !Ref PublicSubnet1
+        InstanceType: !If [WantProduction, t3.small, t3.micro]
+
+        
+# When the Stack is Running, check your Outputs to get a better understanding with: aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile Swisscom       
+Outputs:
+  VPCID:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+    Export:
+      Name: "VPCID"
+    # In My Case its vpc-0425af0359ec28474
+
+  IPEc2InstanceID:
+    Description: The Public IP Address of the Ec2 Template
+    Value: !GetAtt VPCEc2Instance.Outputs.PublicIPAddress
+
+  StackName:
+    Description: The Name of the Stack we gave @ the Parameter --stack-name VPC-DEV01 
+    Value: !Ref AWS::StackName
+    Export:
+      Name: "StackName"  
+    # My Case This Value is: VPC-DEV01
+
+  Id:
+    Value: !Ref VPC
+    # In my Case: vpc-0425af0359ec28474 Same as AWS::StackId
+    Export:
+      Name: !Sub ${AWS::StackName}-Id
+    # In my Case VPC-DEV01-Id
+
+  Region:
+    Description: "Lab Region"
+    Value: !Ref AWS::Region
+  
+  DevInstanceSecurityGrp:
+    Value: !Ref DevInstanceSecurityGrp
+    Export:
+      Name: "DevInstanceSecurityGrp" 
+    # In my Case: vpc-0425af0359ec28474 Same as AWS::StackId
+    
+  PublicSubnets:
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
+    Export:
+      Name: "PublicSubnets"  
+
+  PublicSubnet1:
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: "PublicSubnet1"  
+
+  PublicSubnet2:
+    Description: A reference to the public subnet in the 2nd Availability Zone
+    Value: !Ref PublicSubnet2
+    Export:
+      Name: "PublicSubnet2"  
+
+  PrivateSubnets:
+    Description: A list of the private subnets
+    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+    Export:
+      Name: "PrivateSubnets"  
+
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: "PrivateSubnet1" 
+
+  PrivateSubnet2:
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: "PrivateSubnet2" 
+
+  NoIngressSecurityGroup:
+    Description: Security group with no ingress rule
+    Value: !Ref NoIngressSecurityGroup
+
+  PubNACL:
+    Description: A reference to the public subnet NACL for both Availability Zone
+    Value: !Ref PubNACL
+
+  Private1NACL:
+    Description: A reference to the private subnet NACL in the 1st Availability Zone
+    Value: !Ref Private1NACL
+  
+  Private2NACL:
+    Description: A reference to the private subnet NACL in the 2st Availability Zone
+    Value: !Ref Private2NACL
+
+  S3Bucket:
+    Description: Bucket Created using this template.
+    Value: !Ref S3Bucket
+    # In my Case : public-bucket-dam
+
+  s3BucketModule:
+    Description: s3BucketModule Created using this template.
+    Value: !Ref s3BucketModule
+    # In my Case arn:aws:cloudformation:eu-central-2:931336182845:stack/VPC-DEV01-s3BucketModule-HYUB6WYNWXO3/a3a1c680-bc4f-11ed-b29f-0a221553cce2
+
+    # Check if the stack we created via template is completed successfully: 
+    # aws cloudformation list-stack-resources --stack-name VPC-DEV03
+
+    # Describe stack and its resources to view its properties:
+    # aws cloudformation describe-stacks --stack-name VPC-DEV03
+    # aws cloudformation describe-stack-resources --stack-name VPC-DEV03
+
+    # Update the Stack:
+    # aws cloudformation update-stack --stack-name VPC-DEV03 --template-body file://cloudformation_VPC.yaml --parameters ParameterKey=EnvironmentName,ParameterValue=VPC-DEV03 ParameterKey=VpcCIDR,ParameterValue=10.2.0.0/16 ParameterKey=PublicSubnet1CIDR,ParameterValue=10.2.10.0/24 ParameterKey=PublicSubnet2CIDR,ParameterValue=10.2.11.0/24 ParameterKey=PrivateSubnet1CIDR,ParameterValue=10.2.20.0/24 ParameterKey=PrivateSubnet2CIDR,ParameterValue=10.2.21.0/24
+
+    # Delete the Stack 
+    # aws cloudformation delete-stack --stack-name VPC-DEV03
+    #

@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Nat Gateway deployment'
+
+
+Parameters:
+  Subnet1Nat:
+    Type: String
+    Description: Give the Subnet where the Nat Gateway is located 
+  Subnet2Nat:
+    Type: String
+    Description: Give the Subnet where the Nat Gateway is located 
+  PrivateRouteTable1Nat:
+    Type: String
+    Description: Makes a Route Table entry to the NAT Gateway  
+  PrivateRouteTable2Nat:
+    Type: String
+    Description: Makes a Route Table entry to the NAT Gateway 
+
+# NAT Gateway 
+#######################################
+
+Resources:
+
+# The AWS::EC2::EIP resources create Elastic IP addresses that can be associated with the NAT gateways.
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    # The DependsOn attribute in the NAT gateway resources specifies that the Elastic IP addresses must be created before the NAT gateways are created.
+    Properties:
+      Domain: vpc
+      
+# The AWS::EC2::EIP resources create a second Elastic IP addresses that can be associated with the NAT gateways.
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    # The DependsOn attribute in the NAT gateway resources specifies that the Elastic IP addresses must be created before the NAT gateways are created.
+    Properties:
+      Domain: vpc
+
+# The AWS::EC2::NatGateway resources create NAT gateways that provide internet access to resources in the private subnets, places it in the Public Subnet and attaches the EIP to it.
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref Subnet1Nat
+
+# The AWS::EC2::NatGateway resources create NAT gateways that provide internet access to resources in the private subnets, places it in the Public Subnet and attaches the EIP to it.
+  NatGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref Subnet2Nat
+
+# Route Table Entry
+####################
+
+# Creates a Route to allow traffic from the Privat Subnet 1 to the NAT Gateway.
+  DefaultPrivateRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1Nat
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+
+# Creates a Route to allow traffic from the Privat Subnet 2 to the NAT Gateway.
+  DefaultPrivateRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2Nat
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway2
+
+Outputs:
+  NatGateway1ID:
+    Description: A reference to the created VPC
+    Value: !Ref NatGateway1
+  NatGateway2ID:
+    Description: A reference to the created VPC
+    Value: !Ref NatGateway2

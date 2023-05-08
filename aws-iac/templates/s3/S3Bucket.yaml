@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Deploy a S3 Bucket with a Policy and a s3AccessPoint to it
+
+# Parameter given to the script
+Parameters:
+  s3BucketfirstName:
+    Description: 'Bucket name of new S3 Bucket'
+    Type: String
+
+  ValueEnvironment:
+    Description: 'Environment Valve from Main Script'
+    Type: String
+
+Resources:
+#S3 Bucket is created
+  OptS3Bucket:
+    Type: AWS::S3::Bucket
+    Description: "S3 new bucket creation"
+    Properties:
+      BucketName: !Ref s3BucketfirstName
+      Tags:
+        - Key: Name
+          Value: !Ref ValueEnvironment
+
+# creates an S3 bucket policy that allows any AWS principal to perform any action on objects within the specified S3 bucket 
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      # The name of the Amazon S3 bucket to which the policy applies.
+      Bucket: !Ref OptS3Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action: 
+            - "s3:GetObject"
+            - "s3:PutObject"
+            Effect: Allow
+            Resource: !Join [ "", [ !GetAtt OptS3Bucket.Arn, "/*" ]]
+            Principal: 
+               AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+
+  ## S3 VPC Endpoint
+  ##################
+  
+  # creates an S3 Access Point for the specified S3 bucket
+  S3AccessPoint:
+    Type: AWS::S3::AccessPoint
+    DependsOn: OptS3Bucket
+    Properties:
+      Bucket: !Ref OptS3Bucket
+      Name: !Join [ "", [ !Ref s3BucketfirstName, "ap" ]]
+
+      # The PublicAccessBlockConfiguration attribute specifies the settings that determine how public access is blocked for the access point. Setting all the attributes to true ensures that public access is blocked.
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+  
+Outputs:
+  s3BucketfirstName:
+    Description: Parameter from the Main Script
+    Value: !Ref s3BucketfirstName
+
+  ValueEnvironment:
+    Description: Parameter from the Main Script
+    Value: !Ref ValueEnvironment
+
+  S3AccessPoint:
+    Description: AccessPoint created for the Private S3 Bucket
+    Value: !Ref S3AccessPoint
+
+  OptS3Bucket:
+    Description: Bucket Created for Private Access 
+    Value: !Ref OptS3Bucket
+
+  S3BucketPolicy:
+    Description: Bucket Policy Created for the Private Bucket
+    Value: !Ref S3BucketPolicy

@@ -1,0 +1,118 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Deploys a development Amazon Linux instance with a extra 8GB Volume, a user called Bob, the Public SSH Key of my Notebook and a Security Group to log into it. 
+
+# Parameter given to the script
+Parameters:
+  VPCModule:
+    Type: String
+    Description: A reference to the VPC Stick Name
+  VPCID:
+    Type: String
+    Description: ID of default VPC
+  MyNewKeyPair:
+    Type: String
+    Description: the Key Pair
+  Subnet4ec2:
+    Type: String
+    Description: the Subnet ID
+  InstanceType:
+    Type: String
+    Description: The Size of the Instance
+  # Will get the latest ami from the Parameter Store
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  AvailabilityZone:
+    Type: String
+    Description: The AvailabilityZone the Instance and Volume will be hosted
+  PublicKey4SSH:
+    Type: String
+    Description: Attach your SSH Public Key to connect to the Instance directly without a password
+
+Resources:
+  # Creates a Security Group with SSH inbound traffic and HTTP/HTTPS and SSH outbound traffic access allowed
+  DevInstanceSecurityGrp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH for remote access
+      GroupName: RemoteAccess
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - Description: Allow SSH 
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - Description: Allow HTTP
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: Allow SSH
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - Description: Allow HTTPS
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+  
+  # Creates an EBS (Elastic Block Store) volume in the specified availability zone given through the Parameter, with a size of 8GB and gp2 volume type
+  DevInstanceVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      VolumeType: gp2
+      Size: 8
+      AvailabilityZone: !Ref AvailabilityZone
+  
+  # Configuration for the provision of the ec2 instance
+  DevInstance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      AvailabilityZone: !Ref AvailabilityZone
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      # Attache the before configured Security Group to the Instance
+      SecurityGroupIds:
+        - !GetAtt DevInstanceSecurityGrp.GroupId
+      Tags: 
+        - Key: Name
+          Value: basic-instance
+        - Key: DeployedWith
+          Value: Cloudformation
+
+      KeyName: !Ref MyNewKeyPair
+      SubnetId: !Ref Subnet4ec2
+      
+      # Attaches the before configured Volume to the Instance
+      Volumes:
+        - Device: /dev/sdh
+          VolumeId: !Ref DevInstanceVolume
+
+      # Passes the UserData script to the instance: creates a user named bob with the public key of my notebook, adds it to the sudo group and sets the password to never expire
+      UserData:
+        Fn::Base64: !Sub |
+          #cloud-config
+          users:
+          - name: bob
+            primary_group: students
+            groups: sudo
+            shell: /bin/bash
+            sudo: ['ALL=(ALL) NOPASSWD:ALL']
+            ssh-authorized-keys: 
+            - ssh-rsa ${PublicKey4SSH}
+            expiredate: '2032-09-01'
+            lock_passwd: false
+
+Outputs:
+  PublicIPAddress:
+    Description: The public IP address of the deployed instance
+    Value: !GetAtt DevInstance.PublicIp
+
+  SSHConnection:
+    Description: The public IP address of the deployed instance
+    Value: !Sub ssh bob@${DevInstance.PublicIp}
