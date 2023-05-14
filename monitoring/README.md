@@ -7,6 +7,7 @@ Open Source Monitoring
 * 02 - [Project Overview](#02-project-overview)
 * 03 - [Sources](#03-sources)
 * 04 - [Applications](#04-applications)
+* 05 - [Portmatrix](#05-portmatrix)
 
 ## 01 Introduction Monitoring
 
@@ -65,3 +66,18 @@ Podman (Pod Manager) is a fully featured container engine. Podman provides a Doc
 - Official site: [Podman](https://podman.io/get-started)
 
 ### Git
+Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+
+Git is used in this project to manage the monitoring setup.
+
+## 05 Portmatrix
+
+| Application | DST | SRC | Port | INT/EXT |
+|---|---|---|---|---|
+| Prometheus |  2 |  3 | 9090 | intern |
+| Node Exporter|   |   | 9100 |  intern |
+| Blackbox Exporter |   |  | 9115 | intern |
+| Alertmanager |   |  | 9093 | intern |
+| Grafan |   |   |  3000 | extern |
+| res |  |  |   |   |
+| res |  |  |   |   |
