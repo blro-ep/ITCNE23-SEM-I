@@ -13,7 +13,8 @@ NACL für Private Out alles offen
 simpleec3 AvailabilityZone: eu-central-2b fest programmiert
 Mapping für Instance Size or Ort erstellen
 Mit oder ohne db ?
-Work with Secret Manager to store PW 
+Work with Secret Manager to store PW
+Fixes Passwort ersetzen für IAM USer mit Secret Manager 
 
 Stack Deeleten Protection?
 

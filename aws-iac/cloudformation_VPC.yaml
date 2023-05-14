@@ -53,6 +53,13 @@ Parameters:
     AllowedValues: [true, false]
 
   # This Parameter will be used to determine if a Basic 3 Ec2 Instance with a PHP Website and a extra EBS Volume and SSM connection should be deployed
+  SimpleEc3Instance:
+    Description: 'Do you want to add a Simple EC2 3 Instance with a PHP Website and SSM connection to your VPC'
+    Type: String
+    Default: true
+    AllowedValues: [true, false]
+
+  # This Parameter will be used to determine if a Basic 3 Ec2 Instance with a PHP Website and a extra EBS Volume and SSM connection should be deployed
   EnvType:
     Description: Specify the Environment type of the stack.
     Type: String
@@ -142,6 +149,9 @@ Conditions:
 
   # The condition will be true if the value of the SimpleEc2Instance is True
   WantEC2: !Equals [!Ref SimpleEc2Instance, true]
+
+  # The condition will be true if the value of the SimpleEc3Instance is True
+  WantEC3: !Equals [!Ref SimpleEc3Instance, true]
 
   # The condition will be true if the value of the EnvType is prod / different way of writing a condition
   WantProduction: !Equals
@@ -882,6 +892,23 @@ Resources:
         Subnet4ec2: !Ref PublicSubnet1
         InstanceType: !If [WantProduction, t3.small, t3.micro]
 
+## Simple 3 EC2 Nested -> Giving the Parameters to the Nested Stack
+######################
+
+  VPCEc3Instance:
+    Condition: WantEC3
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/simpleec3.yaml
+      Parameters:
+        VPCModule: !Ref AWS::StackName
+        VPCID: !Ref VPC
+        MynewKeyPair: !Ref NewKeyPair
+        Subnet4ec2: !Ref PublicSubnet2
+        InstanceType: !If [WantProduction, t2.small, t2.micro]
+        DevInstanceProfile: !Ref DevInstanceProfile
+        DevInstanceSecurityGrp: !Ref DevInstanceSecurityGrp
+        IPEc2Instance: !GetAtt VPCEc2Instance.Outputs.PublicIPAddress
         
 # When the Stack is Running, check your Outputs to get a better understanding with: aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile Swisscom       
 Outputs:
