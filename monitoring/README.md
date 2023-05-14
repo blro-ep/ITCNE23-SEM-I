@@ -41,7 +41,7 @@
 
 ## 1 Summary
 
-| Projectname | ITCNE23-SEM-I |
+| <div style="width:125px">Projectname</div> | ITCNE23-SEM-I |
 |---|---|
 | Subproject name | Monitoring  |
 | Project lecturer | Rohr Philipp |
@@ -97,8 +97,10 @@ A short software description and a link to the official website can be found in 
 ![System boundary](images/system-boundary.svg)
 
 ### 3.2 Influencing factors
+![Influencing factors](images/influencing-factors.drawio.svg)
 
 ### 3.3 Sub- and part systems
+![Sub- and part systems](images/sub-part-systems.drawio.svg)
 
 ### 3.4 System boundary
 The following elements that are directly related to the monitoring have been included within the system boundary.
@@ -117,6 +119,18 @@ The following elements are not directly related to the monitoring and were defin
 - Exporter
 
 ### 3.5 Influencing factors and restrictions
+The project is limited to the installation and execution of the monitoring software.
+
+| number | factor | restrictions |
+|---|---|---|
+| E1 | Cloud Provider | Die Monitoring Software installation mit cloud-init ist Provider neutral.
+Es wurde für die AWS sowie Multipass getestet. |
+| E2 | Sub Project IaC | The monitoring also works independently.
+However, there is a dependency in relation to the overall project.
+The risk can be extremely minimized in close cooperation with Dany Ambühl (subproject IaC). |
+| E3 | Lecturer TBZ | The lecturers check the project for content and function and can instruct it to be aborted. The risk can be minimized by regular comparison with the lecturers. |
+| E4 | Software | Open source products are used to operate the monitoring software.
+To minimize the risk, all software could be downloaded additionally. However, this measure is waived. |
 
 ### 3.6 Subsystem
 #### 3.6.1 Prometheus
@@ -152,7 +166,7 @@ Github is used in this project to manage the monitoring setup.
 - Official site: [github](https://github.com/)
 
 ### 3.7 Interfaces
-| Schnittstelle | Element | Description |
+| Schnittstelle | <div style="width:175px">Element</div> | Description |
 |---------------|---------|-------------|
 | S1 | Prometheus / Blackbox-Exporter |Prometheus pulls the metrics from the Blackbox-Exporter and stores them in its time series database.|
 | S2 | Grafana / Prometheus | Grafana reads the metrics form time series database from prometheus, this data can be presented graphically in the form of a dashboard.|
