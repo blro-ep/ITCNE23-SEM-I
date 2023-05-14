@@ -3,13 +3,44 @@
 ![Prometheus](images/prometheus-icon.png)
 
 ## Table of conten
+* 1     - [Summary](#1-summary)
+* 2     - [Introduction](#2-introduction)
+* 2.1   - [Initial-Position](#21-initial-position)
+* 2.2   - [Mission](#22-mission)
+* 2.3   - [Sources](#23-sources)
+* 2.3.1 - [Podman](#231-podman)
+* 2.3.2 - [Docker Images](#232-docker-official-image)
+* 2.3.3 - [Node-Exporter](#233-node-exporter)
+* 2.3.4 - [Apache-Exporter](#234-apache-exporter)
+* 2.3.5 - [GIT](#235-git)
+* 2.3.6 - [Multipass](#236-multipass)
+* 3     - [SEUSAG](#3-seusag)
+* 3.1   - [System Boundary / Interface](#31-system-boundary--interface)
+* 3.2   - [Influencing Factors](#32-influencing-factors)
+* 3.3   - [Sub- and Partsystems](#33-sub--and-part-systems)
+* 3.4   - [System Boundary](#34-system-boundary)
+* 3.5   - [Influencing Factors and Restrictions](#35-influencing-factors-and-restrictions)
+* 3.6   - [Subsystem](#36-subsystem)
+* 3.7   - [Inferfaces](#37-interfaces)
+* 3.7.1 - [Portmatrix](#371-portmatrix)
+* 4     - [Project Goals](#4-project-goals)
+* 4.1   - [Procedural Goals](#41-procedural-goals)
+* 4.2   - [System Golas](#42-system-goals)
+* 5     - [Appreciation](#5-appreciation-swot-analysis)
+* 5.1   - [Strengths](#51-strengths)
+* 5.2   - [Weaknesses](#52-weaknesses)
+* 5.3   - [Opportunities](#53-opportunities)
+* 5.4   - [Threats](#54-threats)
+* 6     - [Project Planning](#6-project-planning)
+* 6.1   - [Project Management Tools](#61-projectmanagement-tools)
+* 6.2   - [Tasks](#62-tasks)
+* 7     - [Glossar](#7-glossar)
 
-
-
+---
 
 ## 1 Summary
 
-| Projectname  | ITCNE23-SEM-I |
+| Projectname | ITCNE23-SEM-I |
 |---|---|
 | Subproject name | Monitoring  |
 | Project lecturer | Rohr Philipp |
@@ -18,6 +49,8 @@
 | Initial position | With this semester work, a monitoring should be made available, which can be automatically started up in the AWS-Cloud and can be used for existing and new servers. |
 | Goals  | Automated installation of the monitoring components using Cloud-Init <br><br>Dashboard for EC2 Instances / Apache<br><br>Alerting based on defined threshold values via email<br><br>Setup of monitoring via Github<br><br>Integration into sub-project (ICA) from Dany Ambühl |
 | Task | The software is operated using containers, which are managed using prodman based on the POC <br><br>Resource planning and tasks are planned in github<br><br> |
+
+---
 
 ## 2 Introduction
 
@@ -28,7 +61,8 @@ Project Overview
 ![Draw](images/prometheus.drawio.png)
 
 ### 2.3 Sources
-All monitoring components are open source.
+Different software is used for this project. The link to the source can be found in the list below.<br>
+A short software description and a link to the official website can be found in point [3.6 Subsystem](#36-subsystem).
 
 #### 2.3.1 Podman
 - [Podman](https://github.com/containers/podman.io)
@@ -46,21 +80,37 @@ All monitoring components are open source.
 - [Apache-Exporter](https://github.com/Lusitaniae/apache_exporter)
 
 #### 2.3.6 Multipass
-For this project, Multipass is used for testing cloud-init. It's easier than on AWS's EC2 instances.
 - [Mltipass](https://multipass.run/)
 
 #### 2.3.5 Git
 - [Git](https://git-scm.com/download/linux)
 
+---
+
 ## 3. SEUSAG
 
 ### 3.1 System boundary / Interface
+![System boundary](images/system-boundary.svg)
 
 ### 3.2 Influencing factors
 
 ### 3.3 Sub- and part systems
 
 ### 3.4 System boundary
+The following elements that are directly related to the monitoring have been included within the system boundary.
+- Podman
+- Prometheus
+- Alertmanager
+- Blackbox-Exporter
+- Grafana
+- Cloud-init
+
+The following elements are not directly related to the monitoring and were defined outside the system boundary.
+- Cloud Provider
+- Mail Provider 
+- EC2 Instances
+- Github
+- Exporter
 
 ### 3.5 Influencing factors and restrictions
 
@@ -98,6 +148,11 @@ Github is used in this project to manage the monitoring setup.
 - Official site: [github](https://github.com/)
 
 ### 3.7 Interfaces
+| Schnittstelle | Element | Description |
+|---------------|---------|-------------|
+| S1 | Prometheus / Blackbox-Exporter |Prometheus pulls the metrics from the Blackbox-Exporter and stores them in its time series database.|
+| S2 | Grafana / Prometheus | Grafana reads the metrics form time series database from prometheus, this data can be presented graphically in the form of a dashboard.|
+| S3 | Promethes / Alertmanager | Prometheus pushes the alerts to the alert manager, from where they are sent. |
 
 #### 3.7.1 Portmatrix
 
@@ -111,21 +166,27 @@ Github is used in this project to manage the monitoring setup.
 | res |  |  |   |   |
 | res |  |  |   |   |
 
+---
+
 ## 4. Project goals
 
 ### 4.1 Procedural goals
 
 ### 4.2 System goals
 
-## 5. SWOT-Analyse
+---
+
+## 5. Appreciation (SWOT-Analysis)
 
 ### 5.1 Strengths
 
-### 5.2 Weaknes
+### 5.2 Weaknesses
 
-### 5.3 Oportunities
+### 5.3 Opportunities
 
 ### 5.4 Threats
+
+---
 
 ## 6. Project planning
 Agile project management is used for project planning. We use the tools provided by Github.
@@ -154,6 +215,8 @@ We have defined additional fields for planning.
   - Start Date of a Task
 - End Date
   - End Date of a Task
+
+---  
 
 ## 7. Glossar
 
