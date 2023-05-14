@@ -41,7 +41,7 @@
 
 ## 1 Summary
 
-| <div style="width:125px">Projectname</div> | ITCNE23-SEM-I |
+| <div style="width:122px">Projectname</div> | ITCNE23-SEM-I |
 |---|---|
 | Subproject name | Monitoring  |
 | Project lecturer | Rohr Philipp |
@@ -123,14 +123,10 @@ The project is limited to the installation and execution of the monitoring softw
 
 | number | factor | restrictions |
 |---|---|---|
-| E1 | Cloud Provider | Die Monitoring Software installation mit cloud-init ist Provider neutral.
-Es wurde für die AWS sowie Multipass getestet. |
-| E2 | Sub Project IaC | The monitoring also works independently.
-However, there is a dependency in relation to the overall project.
-The risk can be extremely minimized in close cooperation with Dany Ambühl (subproject IaC). |
+| E1 | Cloud Provider | Die Monitoring Software installation mit cloud-init ist Provider neutral.<br>Es wurde für die AWS sowie Multipass getestet. |
+| E2 | Sub Project IaC | The monitoring also works independently.<br>However, there is a dependency in relation to the overall project.<br>The risk can be extremely minimized in close cooperation with Dany Ambühl (subproject IaC). |
 | E3 | Lecturer TBZ | The lecturers check the project for content and function and can instruct it to be aborted. The risk can be minimized by regular comparison with the lecturers. |
-| E4 | Software | Open source products are used to operate the monitoring software.
-To minimize the risk, all software could be downloaded additionally. However, this measure is waived. |
+| E4 | Software | Open source products are used to operate the monitoring software.<br> To minimize the risk, all software could be downloaded additionally.<br>However, this measure is waived. |
 
 ### 3.6 Subsystem
 #### 3.6.1 Prometheus
