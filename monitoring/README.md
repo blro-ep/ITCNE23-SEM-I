@@ -108,7 +108,7 @@ A short software description and a link to the official website can be found in 
 ## 3. SEUSAG
 
 ### 3.1 System boundary / Interface
-![System boundary](images/system-boundary.svg)
+![System boundary](images/system-boundary.drawio.png)
 
 ### 3.2 Influencing factors
 ![Influencing factors](images/influencing-factors.drawio.svg)
