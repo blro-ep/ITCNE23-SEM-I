@@ -23,7 +23,12 @@ TBZ Semster Arbeit Dany / Roger
 | Sub-project leader | Dany Ambühl  |
 | Initial position | In this term paper, I will automatically deploy a basic AWS infrastructure using AWS Cloud Formation. It will also integrate Roger Blum's monitoring solution |
 | Goals  | - Deploy a highly available architecture - Integrate Roger's monitoring solution |
-| Milestones | - 1.Sprint - Project kickoff finished, Individual tasks started iac and monitoring - 2.Sprint - Definition and implementation of the dependencies and first testings iac - monitoring - 3.Sprint - Finish prio A tasks, join the two project and extensive testing - 4.Sprint - Conclusion, Work acceptance and Presentation |
+|   | - Integrate Roger's monitoring solution |
+| Milestones | - 1.Sprint - Project kickoff finished, Individual tasks started iac and monitoring |
+|  | 2.Sprint - Definition and implementation of the dependencies and first testings iac - monitoring |
+|  | 3.Sprint - Finish prio A tasks, join the two sub-projectsand extensive testing 
+|  | 4.Sprint - Conclusion, Work acceptance and Presentation |
+
 ## 01 Introduction IAC
 
 **What is IaC?**
