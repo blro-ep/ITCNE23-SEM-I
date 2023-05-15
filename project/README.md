@@ -132,12 +132,35 @@ Ich öffne die enstprechenden verbindungen und intigriere die server mit userdat
 
 ### iac Seusag
 
+Here is a diagram showing the integration of the monitoring resources into the underlying AWS infrastructure and their interdependencies with interfaces and ports.
+
+![grafana](images/infradepend.png)
+
+**Portmatrix**
+
+| Application | DST | SRC | Port | INT/EXT |
+|---|---|---|---|---|
+| Prometheus |  2 |  3 | 9090 | intern |
+| Node Exporter|   |   | 9100 |  intern |
+| Blackbox Exporter |   |  | 9115 | intern |
+| Alertmanager |   |  | 9093 | intern |
+| Grafan |   |   |  3000 | extern |
+| res |  |  |   |   |
+| res |  |  |   |   |
+
 ### Monitoring Seusag 
 
 ### Zusammengefügtes seusag
 
 
 ## 05 Dependencies
+
+### iac Cross Stack Dependencies
+
+Here is a diagram showing the cross stack dependencies for the IaC part of the project.
+Where the VPC stack is the base stack and the other stacks are dependent on it, are built on top of it and Userdata information is provided by Roger.
+
+![grafana](images/cross_stack_dependencies.png)
 
 ### Monitoring
 User Data wird von Github pull gemacht

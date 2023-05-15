@@ -22,9 +22,12 @@ TBZ Semster Arbeit Dany / Roger
 | Subject lecturer | Calisto Marcello |
 | Sub-project leader | Dany Ambühl  |
 | Initial position | In this term paper, I will automatically deploy a basic AWS infrastructure using AWS Cloud Formation. It will also integrate Roger Blum's monitoring solution |
-| Goals  | - Deploy a highly available architecture - Integrate Roger's monitoring solution |
+| Goals  | - Deploy a highly available architecture |
+|   | - Include various basic AWS infrastructure services |
+|   | - Built according to AWS best practices  |
+|   | - Build flexible CloudFormation templates  |
 |   | - Integrate Roger's monitoring solution |
-| Milestones | - 1.Sprint - Project kickoff finished, Individual tasks started iac and monitoring |
+| Milestones | 1.Sprint - Project kickoff finished, Individual tasks started iac and monitoring |
 |  | 2.Sprint - Definition and implementation of the dependencies and first testings iac - monitoring |
 |  | 3.Sprint - Finish prio A tasks, join the two sub-projectsand extensive testing 
 |  | 4.Sprint - Conclusion, Work acceptance and Presentation |
