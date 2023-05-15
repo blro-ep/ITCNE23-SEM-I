@@ -174,6 +174,7 @@ UserData:
 ----
 
 ![!Ref](images/get.png)**!GetAtt**
+
 The !GetAtt retrieves the value of an attribute from a resource
 
 The !GetAtt function takes two parameters: the logical name of the resource and the name of the attribute whose value you want to retrieve. The syntax is as follows
@@ -201,6 +202,7 @@ The !GetAtt function takes two parameters: the logical name of the resource and 
 
 ## Conditions 
 Conditions let's you make your template more reusable. 
+
 CloudFormation evaluates all conditions in your template before creating any resources at stack creation or stack update
 
 **Example**
@@ -226,6 +228,7 @@ Resource:
 
 ## Outputs
 Outputs enable you to get access to information about resources within a stack
+
 Furthermore, output values can be imported into other stacks. These are known as cross-stack references.
 
 **1. Example**
@@ -272,7 +275,7 @@ Error "Circular dependency between resources: "
 
 ![Circular Dependency](images/circular.png)
 
-https://aws.amazon.com/blogs/infrastructure-and-automation/handling-circular-dependency-errors-in-aws-cloudformation/
+
 **Example not working**
 ``` 
   WebTierSecurityGroup:
@@ -457,16 +460,22 @@ aws cloudformation create-stack \
 ------
 Source: 
 
-CloudFormation 101: https://catalog.workshops.aws/cfn101/en-US/basics/templates
+- [**CloudFormation 101**](https://catalog.workshops.aws/cfn101/en-US/basics/templates)
+
 template anatomy: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html
+
 Pseudo Parameter: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
+
 Ref: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html
+
 !Sub: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
+
 !Join: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-join.html
 Conditions: https://catalog.workshops.aws/cfn101/en-US/intermediate/templates/conditions
 Mapping: https://catalog.workshops.aws/cfn101/en-US/basics/templates/mappings
 Pass variable : https://repost.aws/knowledge-center/cloudformation-nested-stacks-values
 Mapping: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html
+CircularDependency: https://aws.amazon.com/blogs/infrastructure-and-automation/handling-circular-dependency-errors-in-aws-cloudformation/
 
 ---
 

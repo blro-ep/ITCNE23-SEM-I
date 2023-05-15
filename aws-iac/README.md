@@ -14,21 +14,36 @@ TBZ Semster Arbeit Dany / Roger
 
 ## 01 Introduction IAC
 
-What is IaC?
+**What is IaC?**
 
 > mature technology used by DevOps teams to automate resource provisioning on the cloud
 
-> Amazon provides its own IaC platform called CloudFormation
-
-What is CloudFormation?
+![AWS CloudFormation](images/cloudformation_logo.png)**What is CloudFormation?**
  
-> CloudFormation provisions and configures resources based on a template you create, which specifies the resources you require (such as EC2 instances or RDS DB instances, ...)
+> Amazon provides its own IaC platform called CloudFormation, it provisions and configures resources based on a template you create, which specifies the resources you require (such as EC2 instances or RDS DB instances, ...)
+
+**What format is the code in?**
 
 > The template you use in CloudFormation template will be a text file in JSON or YAML format 
 
+**What is the project's main mission?**
 
-The project is about gain hands-on experience with YAML scripting creating an AWS CloudFormation template to automate a small environment with a Variety of AWS services such as 
-Amazon EC2 instances, Amazon RDS instances, Amazon S3 buckets, and Amazon CloudFront distributions, while following the best practices outlined in the AWS Well-Architected Framework.
+> The project is about gain hands-on experience with YAML scripting creating an AWS CloudFormation template to automate a small environment with a Variety of AWS services such as
+- EC2 instances
+- Subnets
+- NACL
+- NAT Gateways
+- Load Balancer
+- RouteTables
+- Endpoints
+- Security Groups
+- Roles
+- Flow Logs
+- S3 buckets 
+
+> while following the best practices outlined in the AWS Well-Architected Framework.
+
+**What is the secondary mission of the project?**
 
 ```
 By providing an accessible platform, this project will enable individuals to gain valuable experience in CloudFormation scripting, as well as an understanding of the fundamentals and possibility's of CloudFormation.
@@ -38,24 +53,24 @@ This project aims to demonstrate multiple approaches for connecting different Cl
 
 ## 02 AWS CloudFormation Cheat Sheet
 
-![AWS CloudFormation](images/cloudformation_logo.png)  
-
 This AWS CloudFormation Cheat Sheet is a quick, self-made reference guide that will provide you with a complete list of all the features that are used in my script.
-
-For keeping the scop of this project reasonable, the guide is described just in YAML and it's designed to help you to understand the fundamentals and the possibility's of CloudFormation.
-In order to understand the functions used in the script, the cheat sheet will contain many practical examples of the CloudFormation template written.
-
-- [**Cheat Sheet**](Cheat_Sheet_Cloud_Formation.md)
-
-Short Table Version PDF -> Prio C 
 
 ![Short Table Version](images/cheat_logo.png)  
 
+- [**Full Cheat Sheet**](Cheat_Sheet_Cloud_Formation.md)
+
+- [**Short Cheat Sheet PDF**](cheatsheet_aws-cloudformation.pdf)
+
+For keeping the scop of this project reasonable, the guide is described just in YAML and with man practical examples from the Template, it's designed to help you to understand the fundamentals and the possibility's of CloudFormation.
 ## 03 Project Overview 
+
+> Here is an overview of the AWS infrastructure that will be deployed for the project
 
 ![Drawio](images/AWSInfra01.png)
 
 ## 04 How to Deploy 
+
+![DeployCLI](images/deploy.png)  
 
 > Here i will describe how the Template can be deployed via AWS CLI 
 
