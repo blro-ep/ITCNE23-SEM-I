@@ -114,7 +114,7 @@ A short software description and a link to the official website can be found in 
 ![Influencing factors](images/influencing-factors.drawio.svg)
 
 ### 3.3 Sub- and part systems
-![Sub- and part systems](images/sub-part-systems.drawio.svg)
+![Sub- and part systems](images/sub-part-systems.drawio.png)
 
 ### 3.4 System boundary
 The following elements that are directly related to the monitoring have been included within the system boundary.
