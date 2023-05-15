@@ -7,6 +7,7 @@
 * 2     - [Introduction](#2-introduction)
 * 2.1   - [Initial-Position](#21-initial-position)
 * 2.2   - [Mission](#22-mission)
+* 2.2.1 - [Monitoring Overview](#221-monitoring-overview)
 * 2.3   - [Sources](#23-sources)
 * 2.3.1 - [Podman](#231-podman)
 * 2.3.2 - [Docker Images](#232-docker-official-image)
@@ -56,9 +57,22 @@
 ## 2 Introduction
 
 ### 2.1 Initial position
+Cloud computing" is the on-demand delivery of IT resources over the Internet at pay-as-you-go prices. Instead of purchasing, owning, and maintaining physical data centers and servers, you can access technology services on an as-needed basis through a cloud provider such as Amazon Web Services (AWS). such as computing power, memory and databases.
+
+AWS offers monitoring by default, which can only be adapted to your own needs to a limited extent.
 
 ### 2.2 Mission
-Project Overview
+As part of this semester work, an open source monitoring solution is to be made available.
+The solution can be made available in the AWS cloud with simple steps and can be adapted to individual needs.
+
+The mission consists of:
+- Automated installation of the monitoring components using Cloud-Init
+- Dashboard for EC2 instances (CPU / Memory / Disk)
+- Dashboard for Apache Service (home page availability)
+- Alerting based on defined threshold values by e-mail (Fring / Resolved).
+- Shared git repository with Dany Ambühl for semester work, enabling agile collaboration.
+
+#### 2.2.1 Monitoring Overview
 ![Draw](images/prometheus.drawio.png)
 
 ### 2.3 Sources
@@ -153,6 +167,8 @@ Grafana allows you to query, visualize, alert on and understand your metrics no 
 Podman (Pod Manager) is a fully featured container engine. Podman provides a Docker-CLI comparable command line that eases the transition from other container engines and allows the management of pods, containers and images. 
 
 - Official site: [Podman](https://podman.io/get-started)
+
+*At the suggestion of the lecturer Calisto Marcello, Docker was replaced with Podman.*
 
 #### 3.6.6 Github
 GGitHub is an Internet hosting service for software development and version control using Git. It provides the distributed version control of Git plus access control, bug tracking, software feature requests, task management, continuous integration, and wikis for every project.
