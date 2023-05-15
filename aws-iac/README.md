@@ -5,6 +5,7 @@ TBZ Semster Arbeit Dany / Roger
 
 ## Table of Content
 
+* 00 - [Summary](#01-Summary)
 * 01 - [Introduction IAC](#01-Introduction-IAC)
 * 02 - [AWS CloudFormation Cheat Sheet](#02-AWS-CloudFormation-Cheat-Sheet)
 * 03 - [Project Overview](#04-Project-Overview)
@@ -12,6 +13,17 @@ TBZ Semster Arbeit Dany / Roger
 * 05 - [AWS Well Architected Framework ](#03-AWS-Well-Architected-Framework)
 * 05 - [Conclusion](#05-Conclusion)
 
+## 00 Summary
+
+| Projectname | ITCNE23-SEM-I |
+|---|---|
+| Sub-project name | AWS Infrastructure as Code  |
+| Project lecturer | Rohr Philipp |
+| Subject lecturer | Calisto Marcello |
+| Sub-project leader | Dany Ambühl  |
+| Initial position | In this term paper, I will automatically deploy a basic AWS infrastructure using AWS Cloud Formation. It will also integrate Roger Blum's monitoring solution |
+| Goals  | - Deploy a highly available architecture - Integrate Roger's monitoring solution |
+| Milestones | - 1.Sprint - Project kickoff finished, Individual tasks started iac and monitoring - 2.Sprint - Definition and implementation of the dependencies and first testings iac - monitoring - 3.Sprint - Finish prio A tasks, join the two project and extensive testing - 4.Sprint - Conclusion, Work acceptance and Presentation |
 ## 01 Introduction IAC
 
 **What is IaC?**
@@ -28,23 +40,27 @@ TBZ Semster Arbeit Dany / Roger
 
 **What is the project's main mission?**
 
-> The project is about gain hands-on experience with YAML scripting creating an AWS CloudFormation template to automate a small environment with a Variety of AWS services such as
-- EC2 instances
-- Subnets
-- NACL
-- NAT Gateways
-- Load Balancer
-- RouteTables
-- Endpoints
-- Security Groups
-- Roles
-- Flow Logs
-- S3 buckets 
+```
+- Automate Infrastructure Provisionen with Cloudformation.
+- Deploy a highly available architecture with a reliable 3-tier infrastructure that spans two availability zones.
+- Managed network address translation (NAT) gateways to allow outbound internet access for resources in the private subnets.
+- Dedicated custom network access control lists (ACLs) for each Availability Zone.
+- A single routing table for the public subnet, because the public subnets all use the same Internet gateway as the only route to communicate with the Internet.
+- Dedicated custom network ACLs for each Availability Zone
+- An independent routing table for each private subnet configured to control the flow of traffic within and outside the VPC.
+- Spare capacity for adding subnets to support your environment as it grows.
+- a VPC gateway endpoint for Amazon Simple Storage Service (Amazon S3). This endpoint provides a secure, reliable connection to Amazon S3
+- A layered architecture organizes stacks into multiple horizontal layers that build on top of one another. 
+- Include various basic AWS infrastructure services such as SSM / Endpoints / NAT Gateway / Security Groups / NACL / Flow Log / EFS / EC2 / Load Balancer / S3 Bucket
+- Built according to AWS best practices and the AWS Well-Architected Framework.
+- Build flexible CloudFormation templates with detailed code comments and a cheat sheet to explain the CloudFormation code used.
+- Integrate Roger's monitoring solution into my AWS infrastructure and provision various services for monitoring.
+- Use a version control system such as CodeCommit or GitHub to track changes to templates.
+```
 
 > while following the best practices outlined in the AWS Well-Architected Framework.
 
 **What is the secondary mission of the project?**
-
 
 > By providing an accessible platform, this project will enable individuals to gain valuable experience in CloudFormation scripting, as well as an understanding of > the fundamentals and possibility's of CloudFormation.
 
