@@ -65,13 +65,6 @@ AWS offers monitoring by default, which can only be adapted to your own needs to
 As part of this semester work, an open source monitoring solution is to be made available.
 The solution can be made available in the AWS cloud with simple steps and can be adapted to individual needs.
 
-The mission consists of:
-- Automated installation of the monitoring components using Cloud-Init
-- Dashboard for EC2 instances (CPU / Memory / Disk)
-- Dashboard for Apache Service (home page availability)
-- Alerting based on defined threshold values by e-mail (Fring / Resolved).
-- Shared git repository with Dany Ambühl for semester work, enabling agile collaboration.
-
 #### 2.2.1 Monitoring Overview
 ![Draw](images/prometheus.drawio.png)
 
@@ -202,9 +195,17 @@ Github is used in this project to manage the monitoring setup.
 
 ### 4.1 Procedural goals
 
+
+- Shared github repository with Dany Ambühl, enabling agile collaboration.The repository should be public. This means that the current status can be understood at any time and the project planning / project progress can be seen.
+
 ### 4.2 System goals
 
----
+| Goals | Dates |
+|---|---|
+|The software components are installed on an AWS EC2 instance using cloud-init. | Sprint 1 |
+|Dashboard for EC2 Instances, which provides information about CPU, Memory, Disk usage. The Dashobard should be accessible from the Internet and be able to be customized.| Sprint 2 |
+|Dashboard for Apache Service, which shows the availability of the service (http status code, http duration). The Dashobard should be accessible via the Internet and be able to be individually adjusted. | Sprint 2 |
+|Alerting based on defined threshold values by e-mail (Fring / Resolved).| Sprint 3 | 
 
 ## 5. Appreciation (SWOT-Analysis)
 
