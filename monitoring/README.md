@@ -195,8 +195,9 @@ Github is used in this project to manage the monitoring setup.
 
 ### 4.1 Procedural goals
 
-
-- Shared github repository with Dany Ambühl, enabling agile collaboration.The repository should be public. This means that the current status can be understood at any time and the project planning / project progress can be seen.
+| Goals | Dates |
+|---|---|
+|Shared github repository with Dany Ambühl, enabling agile collaboration.The repository should be public. This means that the current status can be understood at any time and the project planning / project progress can be seen. | Sprint 1 |
 
 ### 4.2 System goals
 
