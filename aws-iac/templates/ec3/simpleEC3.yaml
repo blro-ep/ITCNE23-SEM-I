@@ -1,0 +1,147 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Deploys a development Amazon Linux instance with an extra EBS Volume of 4GB and a PHP Website with instructions to connect to it over SSM 
+
+# Parameter given to the script
+Parameters:
+  VPCModule:
+    Type: String
+    Description: A reference to the VPC Stick Name
+  VPCID:
+    Type: String
+    Description: ID of default VPC
+  MyNewKeyPair:
+    Type: String
+    Description: the Key Pair
+  Subnet4ec2:
+    Type: String
+    Description: the Subnet ID
+  DevInstanceProfile:
+    Type: String
+    Description: the DevInstanceProfile
+  DevInstanceSecurityGrp:
+    Type: String
+    Description: Security Group ID for Instance
+  InstanceType:
+    Type: String
+    Description: The Size of the Instance
+  IPEc2Instance:
+    Type: String
+    Description: The Public IP Address of the Ec2 Template
+  AvailabilityZone:
+    Type: String
+    Description: The AvailabilityZone the Instance and Volume will be hosted
+
+# The Mappings section defines the AMI IDs (unique identifiers for Amazon Machine Images) for each region and instance type. in eu-centeral-1 and eu-central-2
+Mappings:
+  AMIMap:
+    eu-central-1:
+      Ubuntu22: ami-0ec7f9846da6b0f61
+      Ubuntu20: ami-0d497a49e7d359666
+      Amazon: ami-0b7fd829e7758b06d
+    eu-central-2:
+      Ubuntu22: ami-08c947c038321a605
+      Ubuntu20: ami-04fe12af5cb123aec
+      Amazon: ami-0a2877e34c231859d
+
+Resources:
+
+  # Creates an EBS (Elastic Block Store) volume in the specified availability zone given through the Parameter, with a size of 4GB and gp2 volume type
+  DevInstanceVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      VolumeType: gp2
+      Size: 4
+      AvailabilityZone: !Ref AvailabilityZone
+
+# Configuration for the provision of the ec2 instance
+  DevInstance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      AvailabilityZone: !Ref AvailabilityZone 
+      # Gets the AMI ID from the Mappings section based on the region and instance type specified in the FindInMap function "Amazon"
+      ImageId: !FindInMap [AMIMap, !Ref "AWS::Region", Amazon]
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref MyNewKeyPair
+      SubnetId: !Ref Subnet4ec2
+      # Attaches the EBS volume to the instance
+      Volumes:
+        - Device: /dev/sdh
+          VolumeId: !Ref DevInstanceVolume
+      # Attaches the IAM role from the Main Template to the instance
+      IamInstanceProfile: !Ref DevInstanceProfile
+      SecurityGroupIds: 
+        - !Ref DevInstanceSecurityGrp
+      
+      Tags: 
+        - Key: Name
+          Value: dev-instance
+        - Key: DeployedWith
+          Value: Cloudformation
+    
+
+    # sudo apt-get install -y prometheus-node-exporter
+      # Passes the UserData script to the instance: Installing Apache and PHP, and creating a PHP script to display the instance ID and availability zone
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd php
+          systemctl start httpd
+          systemctl enable httpd
+          usermod -a -G apache ec2-user
+          chown -R ec2-user:apache /var/www
+          chmod 2775 /var/www
+          find /var/www -type d -exec chmod 2775 {} \;
+          find /var/www -type f -exec chmod 0664 {} \;
+          # PHP script to display Instance ID and Availability Zone
+          cat << 'EOF' > /var/www/html/index.php
+            <!DOCTYPE html>
+            <html>
+            <body>
+              <center>
+              <?php
+              # Get the instance ID from meta-data and store it in the $instance_id variable
+              $url = "http://169.254.169.254/latest/meta-data/instance-id";
+              $instance_id = file_get_contents($url);
+              # Get the instance's availability zone from metadata and store it in the $zone variable
+              $url = "http://169.254.169.254/latest/meta-data/placement/availability-zone";
+              $zone = file_get_contents($url);
+              ?>
+              <h2>EC2 Instance ID: <?php echo $instance_id ?></h2>
+              <h2>Availability Zone: <?php echo $zone ?></h2>
+              <h3>!!Warning!! Deployment needs 5 min before Connection can be established with EC2 SSM Connection CMD:</h3>
+              <h2>aws ssm start-session --target <?php echo $instance_id ?> --profile gmail</h2>
+              <h2>Connect to the other Ec2 Instance directly over SSH</h2>
+              <h2> ssh ec2-user@${IPEc2Instance}</h2>
+              </center>
+            </body>
+            </html>
+          EOF
+
+# Source -> https://harishkm.in/2020/08/03/how-to-get-the-ec2-instance-id-from-within-an-ec2-instance/
+
+Outputs:
+  PublicIPAddress:
+    Description: The public IP address of the deployed instance
+    Value: !GetAtt DevInstance.PublicIp
+
+  IPEc2InstanceID:
+    Description: The Public IP Address of the Ec2 Template
+    Value: !Ref IPEc2Instance
+
+  WebsiteURL:
+    Value: !Sub http://${DevInstance.PublicIp}
+    Description: Application URL
+
+  InstanceID:
+    Value: !Ref DevInstance
+    Description: Shows you the Instance ID of the EC2
+    #i-04a3cc73a1c73cf94
+
+  SSMManager:
+    Value: !Sub aws ssm start-session --target ${DevInstance} --profile gmail
+    Description: CMD Commend to Connect to the Linux Machine over Session Manager
+
+# Source Session Manager : https://catalog.workshops.aws/cfn101/en-US/basics/operations/session-manager 
+# Source User Data Parts : https://catalog.workshops.aws/cfn101/en-US/basics/operations/user-data 

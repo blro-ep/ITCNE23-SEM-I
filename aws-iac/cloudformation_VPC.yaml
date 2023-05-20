@@ -1,4 +1,4 @@
-Description:  This template deploys a VPC, with a pair of public and private subnets spread
+Description: This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
   and default routes for them in the private subnets. **WARNING** This template creates AWS resources. You will be billed for the
@@ -45,6 +45,13 @@ Parameters:
     Default: 5
     AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150]
 
+  # This Parameter will specify if you want to enable VPC Flow Logs or not, and what traffic type to capture.
+  s3Bucket:
+    Description: 'Do you want to create a s3 Bucket?'
+    Type: String
+    Default: false
+    AllowedValues: [true, false]
+
   # This Parameter will be used to determine if a Basic Ec2 Instance should be deployed
   SimpleEc2Instance:
     Description: 'Do you want to add a Simple EC2 Instance to your VPC'
@@ -67,6 +74,35 @@ Parameters:
     AllowedValues: [test, prod]
     ConstraintDescription: Specify either test or prod.
 
+  KeyPairName:
+    Description: >-
+      Enter a Public/private key pair. If you do not have one in this AWS Region,
+      create it before continuing
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Default: gmail
+
+## IAM
+####################
+
+  # This Parameter will be used to specify the Monitoring Group Name
+  IAM:
+    Description: Specify if IAM Resources should be created.
+    Type: String
+    Default: true
+    AllowedValues: [true, false]
+
+  # This Parameter will be used to specify the Monitoring Group Name
+  MonitoringGroup:
+    Description: Specify the Monitoring User Name.
+    Type: String
+    Default: MonitoringGroup
+
+  # This Parameter will be used to specify the Monitoring User Name
+  MonitoringUser:
+    Description: Specify the Monitoring User Name.
+    Type: String
+    Default: Monitoring
+
 ## Network Parameter
 ####################
 
@@ -75,16 +111,14 @@ Parameters:
     Type: String
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.42.0.0/16
 
   PublicSubnet1CIDR:
     Description: Please enter the IP range for the public subnet in the first Availability Zone
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Type: String
     Default: 10.42.10.0/24
 
@@ -92,8 +126,7 @@ Parameters:
     Description: Please enter the IP range for the public subnet in the second Availability Zone
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Type: String
     Default: 10.42.11.0/24
 
@@ -101,8 +134,7 @@ Parameters:
     Description: Please enter the IP range for the private subnet in the first Availability Zone
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Type: String
     Default: 10.42.20.0/24
 
@@ -110,8 +142,7 @@ Parameters:
     Description: Please enter the IP range for the private subnet in the second Availability Zone
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Type: String
     Default: 10.42.21.0/24
 
@@ -119,8 +150,7 @@ Parameters:
     Description: Please enter the IP range for the private subnet in the first Availability Zone
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Type: String
     Default: 10.42.30.0/24
 
@@ -128,14 +158,19 @@ Parameters:
     Description: Please enter the IP range for the private subnet in the second Availability Zone
     # this pattern ensures that the input string is a valid IP address range in CIDR notation, where the first three octets of the IP address are between 0 and 255, and the CIDR suffix is between 16 and 28.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: >-
-      CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Type: String
     Default: 10.42.31.0/24
 
 #  Specify an optional resource or property based on the value of a parameter or another condition.
 Conditions:
-  # Logical ID of Condition: Intrinsic funtion (!Equals) true if the Parameter is set to true
+  # If the value in IAM is true then the condition will be true and the resource will be created. If the value is false then the condition will be false and the resource will not be created.
+  WantIAM: !Equals [!Ref IAM, true]
+
+  # The condition will be true if the value of the S3Bucket parameter is true
+  Wants3Bucket: !Equals [!Ref s3Bucket, true]
+
+  # Logical ID of Condition: Intrinsic function (!Equals) true if the Parameter is set to true
   WantNatGateways: !Equals [!Ref NatGateways, true]
 
   # This Cloud Formation condition checks if the value of S3Endpoint parameter is true. If the parameter value is true, then the WantS3Endpoint condition will be true to and any resource that uses this condition will be created
@@ -186,7 +221,7 @@ Resources:
         - Key: Name
           Value: !Ref EnvironmentName
 
-# DHCP Assosiation with VPC
+# DHCP Association with VPC
   VPCDHCPOptionsAssociation:
     Type: AWS::EC2::VPCDHCPOptionsAssociation
     Properties:
@@ -205,7 +240,7 @@ Resources:
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      InternetGatewayId: !Sub ${EnvironmentName} Internet Gateway
+      InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
 
 ## Subnets
@@ -228,7 +263,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -240,7 +275,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -252,7 +287,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -264,7 +299,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet3CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -276,7 +311,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref PrivateSubnet4CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -291,7 +326,7 @@ Resources:
     Condition: WantNatGateways
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/natgateway.yaml
+      TemplateURL: templates/vpc/NatGateway.yaml
       Parameters:
         Subnet1Nat: !Ref PublicSubnet1
         Subnet2Nat: !Ref PublicSubnet2
@@ -413,13 +448,16 @@ Resources:
 ## Security Group
 #################
 
-# Creates a Secuirty Group with no ingress rules
+# Creates a Security Group with no ingress rules
   NoIngressSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: "no-ingress-sg"
       GroupDescription: "Security group with no ingress rule"
       VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: NoIngressSecurityGroup
 
 # Creates a Security Group with allow Ping ingress rules
   PingIngressSecurityGroup:
@@ -428,6 +466,9 @@ Resources:
       GroupName: "ping-ingress-sg"
       GroupDescription: "Security group with SSH und Ping ingress rule"
       VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: PingIngressSecurityGroup
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
@@ -438,15 +479,21 @@ Resources:
           ToPort: -1
           CidrIp: 0.0.0.0/0
 
+# Endpoint Security Group
+#########################
+
   # Security Group for VPC Endpoints Allows HTTPS In and all Out
   SSMEndpointsSg:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: 'security group for VPC endpoints SSM / EC2 Messages'
       VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: SSMEndpointsSg
       SecurityGroupIngress:
         - Description: 'allow inbound HTTPS from instance'
-          SourceSecurityGroupId: !Ref DevInstanceSecurityGrp
+          SourceSecurityGroupId: !Ref AppTierSG
           FromPort: 443
           ToPort: 443
           IpProtocol: tcp
@@ -457,37 +504,119 @@ Resources:
           ToPort: 443
           IpProtocol: tcp
 
-  # Security Group for Dev Instance Allows HTTP, HTTPS und SSH In and all Out
-  DevInstanceSecurityGrp:
+# Public Tier Security Group
+######################
+
+  # Security Group for VPC Endpoints Allows HTTPS In and all Out
+  PubTierSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow HTTP/HTTPS and SSH In and Out bound traffic
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: PubTierSG
+      SecurityGroupIngress:
+        - Description: 'allow inbound HTTP from instance'
+          FromPort: 80
+          ToPort: 80
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+        - Description: 'allow inbound HTTPS from instance'
+          FromPort: 443
+          ToPort: 443
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+  
+  PubTierSGIngressicmp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Inbound Rule between App Tier and Web Tier 
+      GroupId: !Ref PubTierSG
+      IpProtocol: icmp 
+      FromPort: 8 
+      ToPort: -1
+      SourceSecurityGroupId: !Ref AppTierSG 
+
+# App Tier Security Group
+##################
+
+  # Security Group for App Tier Allows HTTP, HTTPS und SSH In and all Out
+  AppTierSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow HTTP/HTTPS In and Out for remote access for Dev Instance
-      GroupName: HTTPSAccess
+      GroupDescription: Allow HTTP/HTTPS, SSH and Ping In and Out bound traffic
+      GroupName: ApplicationTier SG
       VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - Description: Allow HTTP
-          IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - Description: Allow HTTPS
-          IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        - Description: Allow HTTP
-          IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - Description: Allow HTTPS
-          IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: AppTierSG
 
-  # Security Group for EFS Mount Target to DevInstanceSecurityGrp
+  # creates an inbound rule to allow HTTP traffic (port 80) from PubTierSG to security group AppTierSG
+  AppTierSGIngressPort80:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group HTTP Inbound Rule between App Tier and Web Tier 
+      GroupId: !Ref AppTierSG
+      IpProtocol: tcp 
+      FromPort: 80 
+      ToPort: 80
+      SourceSecurityGroupId: !Ref PubTierSG
+
+  # creates an inbound rule to allow HTTPS traffic (port 443) from PubTierSG to security group AppTierSG
+  AppTierSGIngressPort443:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group HTTPS Inbound Rule between App Tier and Web Tier 
+      GroupId: !Ref AppTierSG
+      IpProtocol: tcp 
+      FromPort: 443 
+      ToPort: 443
+      SourceSecurityGroupId: !Ref PubTierSG
+
+  # creates an inbound rule to allow SSH traffic (port 22) from PubTierSG to security group AppTierSG
+  AppTierSGIngressPort22:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Inbound Rule between App Tier and Web Tier 
+      GroupId: !Ref AppTierSG
+      IpProtocol: tcp 
+      FromPort: 22 
+      ToPort: 22
+      SourceSecurityGroupId: !Ref PubTierSG
+
+  # creates an inbound rule to allow Ping traffic from PubTierSG to security group AppTierSG
+  AppTierSGIngressicmp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Inbound Rule between App Tier and Web Tier 
+      GroupId: !Ref AppTierSG
+      IpProtocol: icmp 
+      FromPort: 8 
+      ToPort: -1
+      SourceSecurityGroupId: !Ref PubTierSG 
+ 
+ # DB Tier Security Group
+ #######################
+
+  # Security Group for Database Tier Allows SSH In and all Out
+  DBTierSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH In and Out bound traffic from and to AppTierSG
+      GroupName: Database Tier Secuirty Group
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: DBTierSG
+      SecurityGroupIngress:
+        - Description: Allow SSH
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          SourceSecurityGroupId: !Ref AppTierSG
+
+  # Security Group for EFS Mount Target to AppTierSG
   EFSMountTargetSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -498,7 +627,7 @@ Resources:
           Value: EFSMountTargetSecurityGroup
       SecurityGroupIngress:
         - IpProtocol: tcp
-          SourceSecurityGroupId: !Ref DevInstanceSecurityGrp
+          SourceSecurityGroupId: !Ref AppTierSG
           FromPort: 80
           ToPort: 80
 
@@ -543,14 +672,53 @@ Resources:
          Value: Public-Tier-ACL
 
 # 1.NACL entry to allow inbound SSH traffic to the public subnet.
-  PubNACLInboundRule:
+  PubNACLInboundRulePort22:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
        RuleNumber: 100
        Protocol: 6
        RuleAction: allow
-       CidrBlock: 0.0.0.0/0
+       CidrBlock: !Ref PrivateSubnet1CIDR
+       PortRange:
+         From: 22
+         To: 22
+
+# 1.1 NACL entry to allow inbound SSH traffic to the public subnet.
+  PubNACLInboundRulePort22PrivateSubnet2:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 101
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref PrivateSubnet2CIDR
+       PortRange:
+         From: 22
+         To: 22
+
+# 1.2 NACL entry to allow inbound SSH traffic to the public subnet.
+  PubNACLInboundRulePort22PrivateSubnet3:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 102
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref PrivateSubnet3CIDR
+       PortRange:
+         From: 22
+         To: 22
+    
+# 1.2 NACL entry to allow inbound SSH traffic to the public subnet.
+  PubNACLInboundRulePort22PrivateSubnet4:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 103
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref PrivateSubnet4CIDR
        PortRange:
          From: 22
          To: 22
@@ -581,7 +749,7 @@ Resources:
          From: 443
          To: 443
 
-# 4. NACL entry to allow inbound ICMP / Ping traffic to the public subnet.
+# 4. NACL entry to allow inbound ICMP / Ping traffic from the Private 1 Subnet.
   PubNACLInboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -589,12 +757,26 @@ Resources:
        RuleNumber: 130
        Protocol: 1
        RuleAction: allow
-       CidrBlock: 0.0.0.0/0
+       CidrBlock: !Ref PrivateSubnet1CIDR
        Icmp:
         Code: -1
         Type: 8
 
-# 5. NACL entry to Allows Ephermeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+# 4. NACL entry to allow inbound ICMP / Ping traffic from the Private 2 Subnet.
+  PubNACLInboundRuleICMPEchoPrivateSubnet2:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 131
+       Protocol: 1
+       RuleAction: allow
+       CidrBlock: !Ref PrivateSubnet2CIDR
+       Icmp:
+        Code: -1
+        Type: 8
+
+# 5. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  # The RFC 6056 says that the range for ephemeral ports should be 1024–65535 
   PubNACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -604,19 +786,92 @@ Resources:
        RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
-         From: 32768
+         From: 1024
          To: 65535
 
-# create a NACL Outbound Rule for everything 
-  PubNACLOutboundRule:
+# 1.NACL Outbound Rule to allow SSH traffic to everywhere
+  PubNACLOutboundRulePort22:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
        RuleNumber: 100
-       Protocol: -1
-       Egress: true
+       Protocol: 6
+       Egress: true # Egress is true  means it is a outbound rules
        RuleAction: allow
-       CidrBlock: 0.0.0.0/0   
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 22
+         To: 22
+
+# 2. NACL Outbound Rule to allow HTTP traffic to everywhere
+  PubNACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 110
+       Protocol: 6
+       Egress: true # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 3. NACL Outbound Rule to allow HTTPS traffic to everywhere
+  PubNACLOutboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 120
+       Protocol: 6
+       Egress: true # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 443
+         To: 443
+
+# 4. NACL Outbound Rule to allow ICMP / Ping traffic to the private subnet 2.
+  PubNACLOutboundRuleICMPEcho:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 130
+       Protocol: 1
+       Egress: true # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: !Ref PrivateSubnet1CIDR
+       Icmp:
+        Code: -1
+        Type: 8
+
+# 4.1 NACL Outbound Rule to allow ICMP / Ping traffic to the private subnet 1.
+  PubNACLOutboundRuleICMPEcho2:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 131
+       Protocol: 1
+       Egress: true # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: !Ref PrivateSubnet2CIDR
+       Icmp:
+        Code: -1
+        Type: 8
+
+# 5. NACL Outbound Rule to allow Ephemeral ports return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  PubNACLOutboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 140
+       Protocol: 6
+       RuleAction: allow
+       Egress: true # Egress is true  means it is a outbound rules
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 32768
+         To: 65535
 
 #  creates an association between the public subnet AZ1 and the newly created network ACL.
   PublicSubnet1NetworkAclAssociation:
@@ -644,6 +899,45 @@ Resources:
        - Key: Name
          Value: Private1-Tier-ACL-AZ1
 
+# NACL entry to allow inbound HTTP traffic to the private subnet from the public subnet.
+  Private1NACLInboundRule80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 100
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet1CIDR
+       PortRange:
+         From: 80
+         To: 80
+
+# NACL entry to allow inbound SSH traffic to the private subnet from the public subnet.
+  Private1NACLInboundRule22:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 110
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet1CIDR
+       PortRange:
+         From: 22
+         To: 22
+
+# 4. NACL entry to allow inbound ICMP / Ping traffic from the Private 1 Subnet.
+  Private1NACLInboundRuleICMPEcho:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 120
+       Protocol: 1
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet1CIDR
+       Icmp:
+        Code: -1
+        Type: 8
+
 # create a Outbound Rule allow all outbound
   Private1NACLOutboundRule:
     Type: AWS::EC2::NetworkAclEntry
@@ -651,7 +945,7 @@ Resources:
        NetworkAclId: !Ref Private1NACL
        RuleNumber: 100
        Protocol: -1
-       Egress: true
+       Egress: true # Egress is true  means it is a outbound rules
        RuleAction: allow
        CidrBlock: 0.0.0.0/0 
 
@@ -674,16 +968,126 @@ Resources:
        - Key: Name
          Value: Private2-Tier-NACL-AZ2
 
-# create a Outbound Rule allow all outbound
-  Private2NACLOutboundRule:
+# NACL entry to allow inbound HTTP traffic to the private subnet from the public subnet.
+  Private2NACLInboundRulePort80:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
        RuleNumber: 100
-       Protocol: -1
-       Egress: true
+       Protocol: 6
        RuleAction: allow
-       CidrBlock: 0.0.0.0/0 
+       CidrBlock: !Ref PublicSubnet2CIDR
+       PortRange:
+         From: 80
+         To: 80
+
+# 2. NACL entry to allow inbound HTTP traffic to the public subnet.
+  Private2NACLInboundRulePort80public:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 110
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 3. NACL entry to allow inbound HTTPS traffic to the public subnet.
+  Private2NACLInboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 120
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 443
+         To: 443
+
+# 4. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  Private2NACLInboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 130
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 32768
+         To: 65535
+
+# 3. NACL entry to allow inbound HTTPS traffic to the public subnet.
+  Private2ACLInboundRulePort20:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 140
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet2CIDR
+       PortRange:
+         From: 22
+         To: 22
+
+# 1. NACL a Outbound Rule HTTP traffic to the private subnet
+  Private2NACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 100
+       Protocol: 6
+       Egress: true  # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 2. NACL a Outbound Rule HTTPS traffic to the private subnet
+  Private2NACLOutboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 110
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 443
+         To: 443
+
+# 3. NACL a Outbound Rule to Allows Ephemeral ports the private subnet
+  Private2NACLOutboundRulePortEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 125
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 32768
+         To: 65535
+
+# 4. NACL a Outbound Rule SSH traffic to the private subnet
+  Private2NACLOutboundRulePort22:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 130
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet2CIDR
+       PortRange:
+         From: 22
+         To: 22
 
 #  creates an association between the private subnet 2 AZ2 and the newly created network ACL.
   PrivateSubnet2NetworkAclAssociation:
@@ -705,7 +1109,7 @@ Resources:
          Value: Private3-Tier-ACL-AZ1
 
 # create a Outbound Rule allow all outbound
-  Private2NACLOutboundRule:
+  Private3NACLOutboundRule:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private3NACL
@@ -755,7 +1159,7 @@ Resources:
 ## Key Pair
 ###########
 
-# First KeyPair erstellt
+# First KeyPair
   NewKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
@@ -787,7 +1191,7 @@ Resources:
       VpcId: !Ref VPC
       SubnetIds:
         - !Ref PublicSubnet1
-        - !Ref PrivateSubnet2
+        - !Ref PublicSubnet2
       SecurityGroupIds:
         - !Ref SSMEndpointsSg
       VpcEndpointType: Interface
@@ -801,7 +1205,7 @@ Resources:
       VpcId: !Ref VPC
       SubnetIds:
         - !Ref PublicSubnet1
-        - !Ref PrivateSubnet2
+        - !Ref PublicSubnet2
       SecurityGroupIds:
         - !Ref SSMEndpointsSg
       VpcEndpointType: Interface
@@ -815,7 +1219,7 @@ Resources:
       VpcId: !Ref VPC
       SubnetIds:
         - !Ref PublicSubnet1
-        - !Ref PrivateSubnet2
+        - !Ref PublicSubnet2
       SecurityGroupIds:
         - !Ref SSMEndpointsSg
       VpcEndpointType: Interface
@@ -824,17 +1228,21 @@ Resources:
 ## S3 Public Bucket 
 ###################
 
-# S3 Public Bucket wird erstellt
+# S3 Public Bucket created with a bucket policy
   S3Bucket:
     Type: AWS::S3::Bucket
-    Description: "S3 Public bucket creation"
     Properties:
       BucketName: public-bucket-dam
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
   
-# creates an S3 bucket policy that allows any AWS principal to perform any action on objects within the public S3 bucket 
+# creates an S3 bucket policy that allows any AWS principal to perform get Object and the root user to perform get and put object
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -842,11 +1250,19 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Action: "*"
+          - Action: 
+            - "s3:GetObject"
+            - "s3:PutObject"
             Effect: Allow
             Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
-            Principal:
-              AWS: "*"
+            Principal: 
+               AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
+
+# Missing Public AccessS !!!
 
 ## S3 Bucket Private -> Nested Stack 
 ####################
@@ -854,11 +1270,13 @@ Resources:
   # Nesting a stack in a template s3bucket.yaml -> Giving the Parameters to the Nested Stack
   s3BucketModule:
     Type: AWS::CloudFormation::Stack
+    Condition: Wants3Bucket
+    DependsOn: IAMUsers
     Properties:
         Parameters:
-          s3BucketfirstName: private-bucket-dam
-          ValueEnviroment: !Ref EnvironmentName
-        TemplateURL: 'https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/s3bucket.yaml'
+          s3BucketfirstName: dam-private-bucket-fwakjjhjjh
+          ValueEnvironment: !Ref EnvironmentName
+        TemplateURL: templates/s3/s3bucket.yaml
 
 ## Flow Log Nested -> Giving the Parameters to the Nested Stack
 ##################
@@ -867,7 +1285,7 @@ Resources:
     Condition: WantFlowLog
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/flowlog.yaml
+      TemplateURL: templates/vpc/flowLog.yaml 
       Parameters:
         VPCModule: !Ref AWS::StackName
         # Using the function !If to set the value of "TrafficType" based on the value of "WantFlowLogRejectOnly".  If WantFlowLogRejectOnly is true, the function will return the string REJECT as the value . If WantFlowLogRejectOnly is false, ALL will be the value
@@ -884,13 +1302,18 @@ Resources:
     Condition: WantEC2
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/simpleec2.yaml
+      TemplateURL: templates/ec2/simpleEC2.yaml 
       Parameters:
         VPCModule: !Ref AWS::StackName
         VPCID: !Ref VPC
-        MynewKeyPair: !Ref NewKeyPair
-        Subnet4ec2: !Ref PublicSubnet1
+        MyNewKeyPair: !Ref KeyPairName
+        Subnet4ec2: !Ref PrivateSubnet2
+        # We use the intrinsic function !If to set the value of "InstanceType" based on the value of "WantProduction".  If WantProduction is true, the function will return the string t3.small as the value . If WantProduction is false 
         InstanceType: !If [WantProduction, t3.small, t3.micro]
+        DevInstanceProfile: !Ref DevInstanceProfile
+        # We will get the AvailabilityZone from the PublicSubnet1 AZ location
+        AvailabilityZone: !GetAtt PrivateSubnet2.AvailabilityZone
+        SecurityGroup: !Ref AppTierSG
 
 ## Simple 3 EC2 Nested -> Giving the Parameters to the Nested Stack
 ######################
@@ -898,30 +1321,64 @@ Resources:
   VPCEc3Instance:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
+#    DependsOn: VPCNatGateways
     Properties:
-      TemplateURL: https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/simpleec3.yaml
+      TemplateURL: templates/ec3/simpleEC3.yaml 
       Parameters:
         VPCModule: !Ref AWS::StackName
         VPCID: !Ref VPC
-        MynewKeyPair: !Ref NewKeyPair
+        MyNewKeyPair: !Ref KeyPairName
         Subnet4ec2: !Ref PublicSubnet2
-        InstanceType: !If [WantProduction, t2.small, t2.micro]
+        # We use the intrinsic function !If to set the value of "InstanceType" based on the value of "WantProduction".  If WantProduction is true, the function will return the string t3.medium as the value . If WantProduction is false, t3.small will be the value
+        InstanceType: !If [WantProduction, t3.medium, t3.small]
         DevInstanceProfile: !Ref DevInstanceProfile
-        DevInstanceSecurityGrp: !Ref DevInstanceSecurityGrp
-        IPEc2Instance: !GetAtt VPCEc2Instance.Outputs.PublicIPAddress
-        
+        DevInstanceSecurityGrp: !Ref PubTierSG
+        IPEc2Instance: !GetAtt VPCEc2Instance.Outputs.PrivateIpAddress
+        # We will get the AvailabilityZone from the PublicSubnet2 AZ location
+        AvailabilityZone: !GetAtt PublicSubnet2.AvailabilityZone
+
+## IAM User Nested -> Giving the Parameters to the Nested Stack
+######################
+
+  IAMUsers:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: IAMMonitoringGroup
+    Condition: WantIAM
+    Properties:
+      TemplateURL: templates/iam/user.yaml 
+      Parameters:
+        UserName: !Ref MonitoringUser
+        UserPassword: ABc123456789$
+        Groups: !Ref MonitoringGroup
+        TagValue: !Sub  ${EnvironmentName}-Monitoring-User
+
+## IAM Monitoring Group Nested -> Giving the Parameters to the Nested Stack
+######################
+
+  IAMMonitoringGroup:
+    Type: AWS::CloudFormation::Stack
+    Condition: WantIAM
+    Properties:
+      TemplateURL: templates/iam/group.yaml 
+      Parameters:
+        GroupName: !Ref MonitoringGroup    
+
 # When the Stack is Running, check your Outputs to get a better understanding with: aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile Swisscom       
 Outputs:
   VPCID:
     Description: A reference to the created VPC
     Value: !Ref VPC
-    Export:
-      Name: "VPCID"
     # In My Case its vpc-0425af0359ec28474
-
-  IPEc2InstanceID:
-    Description: The Public IP Address of the Ec2 Template
-    Value: !GetAtt VPCEc2Instance.Outputs.PublicIPAddress
+    Export:
+      Name: !Sub ${AWS::StackName}-ID
+      # My Case This Value is: VPC-DEV01-ID
+  
+  VPCID2:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+    # In My Case its vpc-0425af0359ec28474
+    Export:
+      Name: VPC2ID
 
   StackName:
     Description: The Name of the Stack we gave @ the Parameter --stack-name VPC-DEV01 
@@ -930,62 +1387,68 @@ Outputs:
       Name: "StackName"  
     # My Case This Value is: VPC-DEV01
 
-  Id:
-    Value: !Ref VPC
-    # In my Case: vpc-0425af0359ec28474 Same as AWS::StackId
-    Export:
-      Name: !Sub ${AWS::StackName}-Id
-    # In my Case VPC-DEV01-Id
-
   Region:
     Description: "Lab Region"
     Value: !Ref AWS::Region
   
   DevInstanceSecurityGrp:
-    Value: !Ref DevInstanceSecurityGrp
+    Value: !Ref AppTierSG
     Export:
-      Name: "DevInstanceSecurityGrp" 
-    # In my Case: vpc-0425af0359ec28474 Same as AWS::StackId
+      Name: !Sub ${AWS::StackName}-AppTierSG
     
   PublicSubnets:
     Description: A list of the public subnets
     Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
     Export:
-      Name: "PublicSubnets"  
+      Name: !Sub ${AWS::StackName}-PublicSubnets  
 
   PublicSubnet1:
     Description: A reference to the public subnet in the 1st Availability Zone
     Value: !Ref PublicSubnet1
     Export:
-      Name: "PublicSubnet1"  
+      Name: !Sub ${AWS::StackName}-PublicSubnet1  
 
   PublicSubnet2:
     Description: A reference to the public subnet in the 2nd Availability Zone
     Value: !Ref PublicSubnet2
     Export:
-      Name: "PublicSubnet2"  
+      Name: !Sub ${AWS::StackName}-PublicSubnet2
+
+  PublicSubnet2AZ:
+    Description: A reference to the public subnet2 Availability Zone
+    Value: !GetAtt PublicSubnet2.AvailabilityZone
+    Export:
+      Name: !Sub ${AWS::StackName}-AZofPublicSubnet2
 
   PrivateSubnets:
     Description: A list of the private subnets
-    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2, !Ref PrivateSubnet3, !Ref PrivateSubnet4 ]]
     Export:
-      Name: "PrivateSubnets"  
+      Name: !Sub ${AWS::StackName}-PrivateSubnets  
 
   PrivateSubnet1:
     Description: A reference to the private subnet in the 1st Availability Zone
     Value: !Ref PrivateSubnet1
     Export:
-      Name: "PrivateSubnet1" 
+      Name: !Sub ${AWS::StackName}-PrivateSubnet1
 
   PrivateSubnet2:
     Description: A reference to the private subnet in the 2nd Availability Zone
     Value: !Ref PrivateSubnet2
     Export:
-      Name: "PrivateSubnet2" 
+      Name: !Sub ${AWS::StackName}-PrivateSubnet2
 
-  NoIngressSecurityGroup:
-    Description: Security group with no ingress rule
-    Value: !Ref NoIngressSecurityGroup
+  PrivateSubnet3:
+    Description: A reference to the DB private subnet in the 1nd Availability Zone
+    Value: !Ref PrivateSubnet3
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnet3
+  
+  PrivateSubnet4:
+    Description: A reference to the private DB subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet4
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnet4
 
   PubNACL:
     Description: A reference to the public subnet NACL for both Availability Zone
@@ -999,15 +1462,33 @@ Outputs:
     Description: A reference to the private subnet NACL in the 2st Availability Zone
     Value: !Ref Private2NACL
 
+  NoIngressSecurityGroupID:
+    Description: Security group with no ingress rule
+    Value: !Ref NoIngressSecurityGroup
+
+  DevInstanceProfile:
+    Description: Security group with no ingress rule
+    Value: !Ref DevInstanceProfile
+    Export:
+      Name: !Sub ${AWS::StackName}-DevInstanceProfile
+
+  IPEc2InstanceID:
+    Condition: WantEC2
+    Description: The Public IP Address of the Ec2 Template
+    Value: !GetAtt VPCEc2Instance.Outputs.PrivateIpAddress
+
   S3Bucket:
     Description: Bucket Created using this template.
     Value: !Ref S3Bucket
     # In my Case : public-bucket-dam
 
-  s3BucketModule:
-    Description: s3BucketModule Created using this template.
-    Value: !Ref s3BucketModule
+  #s3BucketModule:
+  #  Description: s3BucketModule Created using this template.
+  #  Value: !Ref s3BucketModule
     # In my Case arn:aws:cloudformation:eu-central-2:931336182845:stack/VPC-DEV01-s3BucketModule-HYUB6WYNWXO3/a3a1c680-bc4f-11ed-b29f-0a221553cce2
+
+
+
 
     # Check if the stack we created via template is completed successfully: 
     # aws cloudformation list-stack-resources --stack-name VPC-DEV03

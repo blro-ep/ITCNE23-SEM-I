@@ -36,9 +36,16 @@ Resources:
             - "s3:GetObject"
             - "s3:PutObject"
             Effect: Allow
-            Resource: !Join [ "", [ !GetAtt OptS3Bucket.Arn, "/*" ]]
+            Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
             Principal: 
                AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join [ "", [ !GetAtt S3Bucket.Arn, "/*" ]]
+            
+            # The AWS account or AWS service that you want to allow to access your Amazon S3 bucket 
+    #           AWS: !Sub "arn:aws:iam::${AWS::AccountId}:Monitoring"
 
   ## S3 VPC Endpoint
   ##################

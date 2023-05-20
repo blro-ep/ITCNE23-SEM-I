@@ -1,0 +1,271 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Deploys a development Amazon Linux instance with an extra EBS Volume of 4GB and a PHP Website with instructions to connect to it over SSM 
+
+# Parameter given to the script
+Parameters:
+  VPCModule:
+    Type: String
+    Description: A reference to the main VPC Stack Name that contains the basic resources
+    MinLength: 1
+    MaxLength: 16
+    Default: VPC-DEV01
+  
+  OS:
+    Description: Operation System to use
+    Type: String
+    Default: Amazon
+    AllowedValues: [Ubuntu22, Ubuntu20, Amazon]
+    ConstraintDescription: must be Ubuntu22, Ubuntu20,or Amazon.
+  # 
+  EnvType:
+    Description: Specify the Environment type of the stack.
+    Type: String
+    Default: test
+    AllowedValues: [test, prod]
+    ConstraintDescription: Specify either test or productiv.
+
+  PublicKey4SSH:
+    Type: String
+    Description: Attach your SSH Public Key to connect to the Instance directly without a password
+    Default: 'AAAAB3NzaC1yc2EAAAADAQABAAABgQCtklPoEQHGiUSE8Fm/+HKd6eluz4WoRjukSJmeMsZhduukkQwMJHpMfdxGtde/VKSF2dJByW4pumy8J7X02t4xWGk3gI6DzTKLJyDSk39HuqBAuIsM4wJrhnDNiPssdq2FVA5olB+OFJhD8HVgM+PNrhmVA3OwPnMls23mGV+rtxS9mgBbzgk+Cbzz5QUZ57zvcRiDi+KrfeLTyExm/kk74IKV0NZU8xdDiwAgHf8+s30eYudUFpRZZ3D3k1Jq2QGzlsBw7WdjkhOW9MfsKYnIeFA4LCNIttJKasaGTPVUQray+px6zcRr7mdKAdxrl+CTq1R1TpQCiQjUbuTK/F2KX6my+8f++GGs7Emq7Jiiow2sURrlOJFEWCzkhszl2/aiM2+zwlZ0vy4azP22kVxqxDGexHPuOgNg8mzVXLes6wlVdxlDRb1KXviQ7H/q7AJTeYZ1UypVa5xHigFQnITkXIr3d3jkes/Wr6ZsxiJLRYO2uMDsVTLthd0jg1E3l8c= CORPROOT+TAAAMDA6@SWP-R914T5M0'
+
+  KeyPairName:
+    Description: >-
+      Enter a Public/private key pair. If you do not have one in this AWS Region,
+      create it before continuing
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Default: gmail
+
+# The Mappings section defines the AMI IDs (unique identifiers for Amazon Machine Images) for each region and instance type. in eu-centeral-1 and eu-central-2
+Mappings:
+  AMIMap:
+    eu-central-1:
+      Ubuntu22: ami-0ec7f9846da6b0f61
+      Ubuntu20: ami-0d497a49e7d359666
+      Amazon: ami-0b7fd829e7758b06d
+    eu-central-2:
+      Ubuntu22: ami-08c947c038321a605
+      Ubuntu20: ami-04fe12af5cb123aec
+      Amazon: ami-0a2877e34c231859d
+
+Conditions:
+  # The condition will be true if the value of the EnvType is prod / different way of writing a condition
+  WantProduction: !Equals
+    - !Ref EnvType
+    - prod
+
+Resources:
+
+# Secuirty Group 
+#################
+
+# Secuirty Group for Load Balancer Allows HTTP In and all Out
+  WebTierSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for web instances
+      GroupName: WebTierSecurityGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      VpcId:
+        !ImportValue 
+          Fn::Sub: '${VPCModule}-ID'
+      Tags:
+        - Key: StackName
+          Value: !Ref AWS::StackName
+
+  OutboundRule:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Security Group Rule between Instance and LB 
+      GroupId: !Ref WebTierSecurityGroup
+      IpProtocol: tcp 
+      FromPort: 80 
+      ToPort: 80
+      SourceSecurityGroupId: !Ref GrafanaSecurityGrp
+
+ # Security Group for Grafana Instance Allows HTTP und SSH In and all Out
+  GrafanaSecurityGrp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP and SSH In from LB Securtiy Group
+      GroupName: GrafanaSecurityGrp
+      VpcId:
+        !ImportValue 
+          Fn::Sub: '${VPCModule}-ID'
+      SecurityGroupIngress:
+        - Description: Allow SSH
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  InstanceSecurityGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and Load Balancer HTTP 
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 80 
+      ToPort: 80
+      SourceSecurityGroupId: !Ref WebTierSecurityGroup
+
+  InstanceSecurityGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and LB 
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 443 
+      ToPort: 443
+      CidrIp: 0.0.0.0/0
+
+# Load Balancer
+#######################
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets:
+        - !ImportValue
+            Fn::Sub: '${VPCModule}-PublicSubnet1'
+        - !ImportValue
+            Fn::Sub: '${VPCModule}-PublicSubnet2'
+      SecurityGroups:
+        - !Ref WebTierSecurityGroup
+      Tags:
+        - Key: Name
+          Value: GrafanaLoadBalancer
+        - Key: StackName
+          Value: !Ref AWS::StackName
+
+  TargetGroupLB:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 15
+      HealthyThresholdCount: 5
+      Matcher:
+        HttpCode: '200'
+      Name: GrafanaTargetGroup
+      Port: 80
+      Protocol: HTTP
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
+      UnhealthyThresholdCount: 3
+      TargetType: instance
+      Targets:
+        - Id: !Ref GrafanaInstance
+      VpcId:
+        !ImportValue
+          Fn::Sub: '${VPCModule}-ID'
+
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupLB
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+# Configuration for the provision of the ec2 instance
+  GrafanaInstance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      # Gets the AMI ID from the Mappings section based on the region and instance type specified in the FindInMap function "Amazon"
+      ImageId: !FindInMap [AMIMap, !Ref "AWS::Region", !Ref OS]
+      InstanceType: !If [WantProduction, t3.medium, t3.small]
+      KeyName: !Ref KeyPairName
+      # Import the Subnet from the Main Stack Template by Cross Stack Reference to the instance
+      SubnetId:
+        !ImportValue 
+          Fn::Sub: '${VPCModule}-PrivateSubnet2'
+      IamInstanceProfile:
+        !ImportValue 
+          Fn::Sub: '${VPCModule}-DevInstanceProfile'
+      # Attaches the Security Group to the instance
+      SecurityGroupIds: 
+        - !Ref GrafanaSecurityGrp
+      Tags: 
+        - Key: Name
+          Value: grafana-instance
+        - Key: DeployedWith
+          Value: Cloudformation
+    
+      # Passes the UserData script to the instance: Installing Apache and PHP, and creating a PHP script to display the instance ID and availability zone
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd php
+          sudo apt-get install -y prometheus-node-exporter
+          systemctl start httpd
+          systemctl enable httpd
+          usermod -a -G apache ec2-user
+          chown -R ec2-user:apache /var/www
+          chmod 2775 /var/www
+          find /var/www -type d -exec chmod 2775 {} \;
+          find /var/www -type f -exec chmod 0664 {} \;
+          # PHP script to display Instance ID and Availability Zone
+          cat << 'EOF' > /var/www/html/index.php
+            <!DOCTYPE html>
+            <html>
+            <body>
+              <center>
+              <?php
+              # Get the instance ID from meta-data and store it in the $instance_id variable
+              $url = "http://169.254.169.254/latest/meta-data/instance-id";
+              $instance_id = file_get_contents($url);
+              # Get the instance's availability zone from metadata and store it in the $zone variable
+              $url = "http://169.254.169.254/latest/meta-data/placement/availability-zone";
+              $zone = file_get_contents($url);
+              ?>
+              <h2>EC2 Instance ID: <?php echo $instance_id ?></h2>
+              <h2>Availability Zone: <?php echo $zone ?></h2>
+              <h3>!!Warning!! Deployment needs 5 min before Connection can be established with EC2 SSM Connection CMD:</h3>
+              <h2>aws ssm start-session --target <?php echo $instance_id ?> --profile Swisscom</h2>
+              </center>
+            </body>
+            </html>
+          EOF
+
+
+# Source -> https://harishkm.in/2020/08/03/how-to-get-the-ec2-instance-id-from-within-an-ec2-instance/
+
+Outputs:
+  WebsiteURLlocal:
+    Value: !Sub http://${GrafanaInstance.PrivateIp}
+    Description: Application URL
+  AppUrl:
+    Description: URL of the sample app.
+    Value: !Sub 'http://${LoadBalancer.DNSName}'
+
+  LoadBalancerDNS:
+    Value: !GetAtt LoadBalancer.DNSName
+    Description: The DNS name of the load balancer
+    
+  InstanceID:
+    Value: !Ref GrafanaInstance
+    Description: Shows you the Instance ID of the EC2
+    #i-04a3cc73a1c73cf94
+
+  SSMManager:
+    Value: !Sub aws ssm start-session --target ${GrafanaInstance} --profile gmail
+    Description: CMD Commend to Connect to the Linux Machine over Session Manager
+
+# Source Session Manager : https://catalog.workshops.aws/cfn101/en-US/basics/operations/session-manager 
+# Source User Data Parts : https://catalog.workshops.aws/cfn101/en-US/basics/operations/user-data 
+
+
+
+
+

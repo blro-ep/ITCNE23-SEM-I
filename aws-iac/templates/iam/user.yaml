@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: AWS CloudFormation template to create an IAM User and optionally attach it to a Group
+
+# Parameter given to the script
+Parameters:
+  UserName:
+    Description: Name for a new user
+    Type: String
+    AllowedPattern: "^[a-zA-Z][a-zA-Z0-9]{1,64}$"
+    ConstraintDescription: User name must be between 1 and 64 alphanumeric characters in length, starting with an uppercase or lowercase character of the alphabet.
+  UserPassword:
+    Description: Account password for a new user
+    Type: String    
+    NoEcho: 'true' # mask the parameter value as asterisks (*****) to prevent it from being displayed in the console, CLI, or API
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9!@#$%&]{8,32}$
+    ConstraintDescription: Password must be between 8 and 32 characters, start with lowercase or uppercase letter, and can be alphanumeric with the following special characters !@#$%&
+  Groups:
+    Description: 'Comma-delimited list of group names to which you want to add the user (optional)'
+    Type: CommaDelimitedList
+    Default: ''
+  TagValue:
+    Description: Tag value that identifies resources as a target for deployments
+    Type: String
+    Default: DoloresAbernathy
+
+## Check Group Input Parameter
+###################
+Conditions:
+  # check if at list one group was specified as an input parameter
+  hasGroups: 
+    # !Join ['', !Ref Groups] - join all group names into a single string ; !Equals [ !Join ['', !Ref Groups], '' ] - check if the string is empty ; !Not negates the result of the check, which means it will be true if the string is not empty
+    !Not [!Equals [ !Join ['', !Ref Groups], '' ] ]
+
+## IAM User 
+###################
+Resources:
+  User:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: !Ref UserName # gives the name to this user
+      LoginProfile: # sets the password for this user
+        Password: !Ref UserPassword
+      # When Condition hasGroup is true it will return the Groups value if not it will return a Empty String: !Ref "AWS::NoValue" 
+      Groups: !If [ hasGroups, !Ref Groups, !Ref "AWS::NoValue"] 
+      Tags:
+        - Key: Name
+          Value: !Ref TagValue
+
+## Outputs
+###################
+
+Outputs:
+  outputName:
+    Description: User name
+    Value: !Ref User
+  outputArn:
+    Description: User ARN
+    Value: !GetAtt User.Arn

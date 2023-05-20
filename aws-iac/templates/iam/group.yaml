@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  Create an IAM Group.
+  Embed two AWS managed policies
+  Creates a policy named inlineIAMReadPolicy and attaches it to the group
+
+# Parameter given to the script
+Parameters:
+  GroupName:
+    Description: IAM GroupName 
+    Type: String
+
+## IAM Group 
+###################
+Resources:
+  Group:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      GroupName: !Ref GroupName 
+      ManagedPolicyArns: # IAM managed policies that you want to attach to the group
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess # Provides read only access to Amazon EC2 via the AWS Management Console.
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess # Provides read only access to all buckets via the AWS Management Console.
+      Policies: # Inline policy documents that is embedded in the group
+        - PolicyName: inlineIAMReadPolicy # give a unique name to this policy
+          PolicyDocument: # JSON policy document
+            Version: '2012-10-17'
+            Statement: # provide write permissions to CloudWatch Logs
+              - Effect: Allow
+                Action:
+                  - 'iam:Get*'
+                  - 'iam:List*'
+                  - 'iam:Generate*'
+                Resource: '*'
+
+## Outputs
+###################
+
+Outputs:
+  outputName:
+    Description: Group name
+    Value: !Ref Group
+  outputARN:
+    Description: Group ARN
+    Value: !GetAtt Group.Arn                
