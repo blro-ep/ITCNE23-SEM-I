@@ -186,8 +186,6 @@ Github is used in this project to manage the monitoring setup.
 | Blackbox Exporter |   |  | 9115 | intern |
 | Alertmanager |   |  | 9093 | intern |
 | Grafan |   |   |  3000 | extern |
-| res |  |  |   |   |
-| res |  |  |   |   |
 
 ---
 
