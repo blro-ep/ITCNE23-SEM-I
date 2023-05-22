@@ -259,7 +259,5 @@ We have defined additional fields for planning.
 
 ---  
 
-## 7. Glossar
-
 
 
