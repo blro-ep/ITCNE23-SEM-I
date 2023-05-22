@@ -3,22 +3,14 @@
 # script for testing aws
 
 # variables
-AWS_IMAGE="ami-0d497a49e7d359666"
+AWS_IMAGE="ami-0ec7f9846da6b0f61"
 AWS_REGION="eu-central-1"
 INSTANCE_TYPE="t2.micro"
 KEY_PAIR_NAME="id_aws"
-SECURITY_GROUP_ID="sg-0039daece1b121b3d"
-SUBNET_ID="subnet-0048567060ec9a34f"
+SECURITY_GROUP_ID="sg-06007a2972577f41e"
+SUBNET_ID="subnet-0b146988807ff7349"
 
 
-# add inbound rules
-aws ec2 authorize-security-group-ingress \
-    --group-id $SECURITY_GROUP_ID \
-    --protocol tcp \
-    --port 22 \
-    --cidr 0.0.0.0/0 \
-    --query 'SecurityGroupRules[0].SecurityGroupRuleId' \
-    --output text
 
 # create ec2 instace
 aws ec2 run-instances \
@@ -28,5 +20,6 @@ aws ec2 run-instances \
     --instance-type $INSTANCE_TYPE \
     --key-name $KEY_PAIR_NAME \
     --security-group-ids $SECURITY_GROUP_ID \
-    --subnet-id $SUBNET_ID
+    --subnet-id $SUBNET_ID \
+    --user-data file://cloud-config-podman.yaml
    
