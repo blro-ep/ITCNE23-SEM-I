@@ -62,6 +62,16 @@ When the task has been completed, we can move the card to the "Done" column to i
 
 The "Backlog" column can be seen as a holding area for tasks that are waiting to be added to the board or moved to the "To Do" column. It is a useful tool for planning future work and ensure for a steady flow of tasks moving through the workflow. 
 
+### Sprint completion
+- 1. Sprint / 15.05.2023
+![1.Sprint](images/sprint-1.png)
+
+- 2. Sprint / 14.06.2023
+
+- 3. Sprint / 05.07.2023
+
+- 4. Sprint / 12.07.2023
+
 
 ## 02 Communication Collaboration
 

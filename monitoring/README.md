@@ -181,13 +181,11 @@ Github is used in this project to manage the monitoring setup.
 
 | Application | DST | SRC | Port | INT/EXT |
 |---|---|---|---|---|
-| Prometheus |  2 |  3 | 9090 | intern |
+| Prometheus |  |  | 9090 | intern |
 | Node Exporter|   |   | 9100 |  intern |
 | Blackbox Exporter |   |  | 9115 | intern |
 | Alertmanager |   |  | 9093 | intern |
 | Grafan |   |   |  3000 | extern |
-| res |  |  |   |   |
-| res |  |  |   |   |
 
 ---
 
@@ -211,12 +209,23 @@ Github is used in this project to manage the monitoring setup.
 ## 5. Appreciation (SWOT-Analysis)
 
 ### 5.1 Strengths
+- No license costs due to open source products
+- Easy installation due to cloud-init
+- Provider independent
 
 ### 5.2 Weaknesses
+- Cloud-init only tested on Ubuntu 22.04
+- Cloud-init code for Debian derivatives only
 
 ### 5.3 Opportunities
+- Improving AWS know-how through the IaC Project from Dany
+- Improving know-how for project management with Github
+- Gained know-how can be used in business
 
 ### 5.4 Threats
+- Monitoring setup is too static (IP addresses)
+- There is not enough time for project management and practical implementation
+- The two projects Iac / Monitoring do not work together
 
 ---
 
@@ -249,8 +258,6 @@ We have defined additional fields for planning.
   - End Date of a Task
 
 ---  
-
-## 7. Glossar
 
 
 

@@ -22,10 +22,6 @@ runcmd:
   - sudo apt-get install -y python3-pip
   - sudo apt-get install -y podman
   - sudo pip3 install podman-compose
-#  - podman run -dt --name prometheus -p 9090:9090 docker.io/prom/prometheus
-#  - podman run -dt --name alertmanager -p 9093:9093 docker.io/prom/alertmanager
-#  - podman run -dt --name blackbox -p 9115:9115 docker.io/prom/blackbox-exporter
-#  - podman run -dt --name grafana -p 3000:3000  docker.io/grafana/grafana-enterprise
   - cd /opt/ITCNE23-SEM-I/monitoring/podman
   - sudo podman-compose up -d
   
