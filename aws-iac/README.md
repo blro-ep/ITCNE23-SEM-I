@@ -8,7 +8,7 @@ TBZ Semster Arbeit Dany / Roger
 * 00 - [Summary](#01-Summary)
 * 01 - [Introduction IAC](#01-Introduction-IAC)
 * 02 - [AWS CloudFormation Cheat Sheet](#02-AWS-CloudFormation-Cheat-Sheet)
-* 03 - [Project Overview](#04-Project-Overview)
+* 03 - [Project](#04-Project)
 * 04 - [How to Deploy](#03-How-to-Deploy)
 * 05 - [AWS Well Architected Framework ](#03-AWS-Well-Architected-Framework)
 * 05 - [Conclusion](#05-Conclusion)
@@ -74,6 +74,7 @@ TBZ Semster Arbeit Dany / Roger
 
 > This project aims to demonstrate multiple approaches for connecting different CloudFormation scripts together and the implementation will be extensively explained > and commented on to make each step easy to understand. 
 
+![Drawio](images/AWSInfra01.png)
 
 ## 02 AWS CloudFormation Cheat Sheet
 
@@ -86,18 +87,17 @@ This AWS CloudFormation Cheat Sheet is a quick, self-made reference guide that w
 - [**Short Cheat Sheet PDF**](cheatsheet_aws-cloudformation.pdf)
 
 For keeping the scop of this project reasonable, the guide is described just in YAML and with man practical examples from the Template, it's designed to help you to understand the fundamentals and the possibility's of CloudFormation.
-## 03 Project Overview 
+## 03 Project  
 
-Here is an overview of the AWS infrastructure that will be deployed for the project
+Here is the full project planning overview of the AWS infrastructure that will be used for the project.
 
-![Drawio](images/AWSInfra01.png)
+- [**AWS IAC project planning**](awsproject.md)
 
 ## 04 How to Deploy 
 
 Here i will describe how the Template can be deployed via AWS CLI 
  
 ![DeployCLI](images/deploy.png)  
-
 
 
 - [**How to Deploy via CLI**](howtodeploy.md)
@@ -109,8 +109,6 @@ By using the Framework you will learn architectural best practices for designing
 > The AWS Well-Architected Framework describes key concepts, design principles, and architectural best practices for designing and running workloads in the cloud.
 
 - [**AWS Well Architected Framework**](best_practice.md)
-
-
 
 ## 05 Conclusion
 

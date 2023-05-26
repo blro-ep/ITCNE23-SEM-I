@@ -143,7 +143,7 @@ aws s3 ls --profile Swisscom
 > This allows the CloudFormation template to be deployed without having to manually upload the different yaml code files to S3 separately. 
 ```
 $ aws cloudformation package \
-    --template-file cloudformation_VPC_3.yaml \
+    --template-file cloudformation_VPC.yaml \
     --output-template packaged.yaml \
     --s3-bucket devdeploysemzh \
     --profile cloudformation-user
@@ -156,6 +156,8 @@ $ aws cloudformation package \
 ## 03 Deployment
 
 # Stack deploy --capabilities CAPABILITY_IAM -disable-rollback ohne NAT Gateway      --capabilities CAPABILITY_NAMED_IAM \ - stack contains IAM resources with custom names
+
+--parameter-overrides file://parameter.json  \
 ```
 aws cloudformation deploy \
     --template-file packaged.yaml \
@@ -163,7 +165,6 @@ aws cloudformation deploy \
     --capabilities CAPABILITY_IAM \
     --capabilities CAPABILITY_NAMED_IAM \
     --role-arn arn:aws:iam::824877243403:role/cloudformation-role \
-    --parameter-overrides file://parameter.json  \
     --profile cloudformation-user
 ```
 GMAIL VERSION NO ROLE
@@ -279,6 +280,6 @@ aws cloudformation create-change-set \
 # Connect to Instance via SSM
 aws ssm start-session --target i-001a13efc13b29e24 --profile Swisscom
 
-
-Quelle: https://aws.nz/best-practice/cloudformation-service-roles/
-Quelle: https://tomgregory.com/creating-aws-cloudformation-resources-using-the-service-role/
+- [**Best Practice**](https://aws.nz/best-practice/cloudformation-service-roles/)
+  
+- [**Best Resources**](https://tomgregory.com/creating-aws-cloudformation-resources-using-the-service-role/)

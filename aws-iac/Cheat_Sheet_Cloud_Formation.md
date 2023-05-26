@@ -271,8 +271,7 @@ explicitly define resource creation order
 ----
 
 ## Circular Dependencies
-Error "Circular dependency between resources: "
-
+Error "Circular dependency between resources: 
 ![Circular Dependency](images/circular.png)
 
 
@@ -461,21 +460,18 @@ aws cloudformation create-stack \
 Source: 
 
 - [**CloudFormation 101**](https://catalog.workshops.aws/cfn101/en-US/basics/templates)
-
-template anatomy: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html
-
-Pseudo Parameter: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
-
-Ref: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html
-
-!Sub: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
-
-!Join: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-join.html
-Conditions: https://catalog.workshops.aws/cfn101/en-US/intermediate/templates/conditions
-Mapping: https://catalog.workshops.aws/cfn101/en-US/basics/templates/mappings
-Pass variable : https://repost.aws/knowledge-center/cloudformation-nested-stacks-values
-Mapping: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html
-CircularDependency: https://aws.amazon.com/blogs/infrastructure-and-automation/handling-circular-dependency-errors-in-aws-cloudformation/
+- [**template anatomy:**](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html)
+- [**AWS CloudFormation Cheat Sheet**](https://www.bluematador.com/blog/aws-cloudformation-cheat-sheet)
+- [**Pseudo Parameter**](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html)
+- [**!Ref:**](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html)
+- [**!Sub:**](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html)
+- [**!Join:**](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-join.html)
+- [**Conditions:**](https://catalog.workshops.aws/cfn101/en-US/intermediate/templates/conditions)
+- [**Mapping:**](https://catalog.workshops.aws/cfn101/en-US/basics/templates/mappings)
+- [**Pass variable :**](https://repost.aws/knowledge-center/cloudformation-nested-stacks-values)
+- [**Mapping:**](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html)
+- [**CircularDependency:**](https://aws.amazon.com/blogs/infrastructure-and-automation/handling-circular-dependency-errors-in-aws-cloudformation/)
+ 
 
 ---
 

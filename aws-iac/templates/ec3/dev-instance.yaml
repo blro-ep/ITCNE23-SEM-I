@@ -87,6 +87,7 @@ Resources:
           #!/bin/bash
           yum update -y
           yum install -y httpd php
+          
           systemctl start httpd
           systemctl enable httpd
           usermod -a -G apache ec2-user
@@ -108,12 +109,14 @@ Resources:
               $url = "http://169.254.169.254/latest/meta-data/placement/availability-zone";
               $zone = file_get_contents($url);
               ?>
+              <h2>EC2 Instance Name: dev-instance</h2>
               <h2>EC2 Instance ID: <?php echo $instance_id ?></h2>
               <h2>Availability Zone: <?php echo $zone ?></h2>
               <h3>!!Warning!! Deployment needs 5 min before Connection can be established with EC2 SSM Connection CMD:</h3>
-              <h2>aws ssm start-session --target <?php echo $instance_id ?> --profile gmail</h2>
-              <h2>Connect to the other Ec2 Instance directly over SSH</h2>
-              <h2> ssh ec2-user@${IPEc2Instance}</h2>
+              <h2>Connect to the basic-instance in the Private Network Ec2 directly over SSM</h2>
+              <h2>aws ssm start-session --target ${IPEc2Instance} --profile gmail</h2>
+              <h2>Connect to the dev-instance Ec2 Instance in the Public Network</h2>
+              <h2> aws ssm start-session --target<?php echo $instance_id ?>--profile gmail</h2>
               </center>
             </body>
             </html>
@@ -127,7 +130,7 @@ Outputs:
     Value: !GetAtt DevInstance.PublicIp
 
   IPEc2InstanceID:
-    Description: The Public IP Address of the Ec2 Template
+    Description: The Private IP Address of the basic-instance
     Value: !Ref IPEc2Instance
 
   WebsiteURL:
@@ -142,6 +145,11 @@ Outputs:
   SSMManager:
     Value: !Sub aws ssm start-session --target ${DevInstance} --profile gmail
     Description: CMD Commend to Connect to the Linux Machine over Session Manager
+
+  SubnetIds:
+    Value: !Ref Subnet4ec2
+    Description: Shows the Subnet ID of the EC2
+
 
 # Source Session Manager : https://catalog.workshops.aws/cfn101/en-US/basics/operations/session-manager 
 # Source User Data Parts : https://catalog.workshops.aws/cfn101/en-US/basics/operations/user-data 

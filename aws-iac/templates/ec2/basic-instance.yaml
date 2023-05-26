@@ -74,6 +74,7 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #cloud-config
+          apt-get install -y prometheus-node-exporter
           users:
             - name: bob
 

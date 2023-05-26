@@ -1,4 +1,17 @@
 # Offene Fragen
+9090 / 3000 Port von Aussen auf server zugreine
+
+9100 Port Exporter muss offen sein und prometeu node exporter
+
+
+OPEN PORT For yum update -y
+from Private Network !!
+ON NACL AND SG 
+
+
+Make SSH connection to Instances possible 
+Private2NACLInboundRulePort80public: -> Neeeed or not ? both private networks
+
 
 Passing Parameter to ec3 
 Use Secrets Manager and Parameter store : https://catalog.workshops.aws/cfn101/en-US/intermediate/templates/dynamic-references
