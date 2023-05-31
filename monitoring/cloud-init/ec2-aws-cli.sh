@@ -3,9 +3,9 @@
 # script for testing aws
 
 # variables
-AWS_IMAGE="ami-0ec7f9846da6b0f61"
-AWS_REGION="eu-central-1"
-INSTANCE_TYPE="t2.micro"
+AWS_IMAGE="ami-04dbb668869bef978"
+AWS_REGION="eu-central-2"
+INSTANCE_TYPE="t3.micro"
 KEY_PAIR_NAME="id_aws"
 SECURITY_GROUP_ID="sg-06007a2972577f41e"
 SUBNET_ID="subnet-0b146988807ff7349"
