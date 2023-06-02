@@ -1505,7 +1505,7 @@ Resources:
        RuleNumber: 120
        Protocol: 6
        RuleAction: allow
-       CidrBlock: !Ref Private2Subnet2CIDR
+       CidrBlock: !Ref PrivateSubnet2CIDR
        PortRange:
          From: 22
          To: 22
@@ -1730,7 +1730,7 @@ Resources:
 ## Simple EC2 Nested -> Giving the Parameters to the Nested Stack
 ####################
 
-  VPCEc2Instance:
+  VPCBASICInstance:
     Condition: WantEC2
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -1750,7 +1750,7 @@ Resources:
 ## Simple 3 EC2 Nested -> Giving the Parameters to the Nested Stack
 ######################
 
-  VPCEc3Instance:
+  VPCDEVInstance:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -1764,7 +1764,8 @@ Resources:
         InstanceType: !If [WantProduction, t3.medium, t3.small]
         DevInstanceProfile: !Ref DevInstanceProfile
         DevInstanceSecurityGrp: !Ref PubTierSG
-        IPEc2Instance: !GetAtt VPCEc2Instance.Outputs.PrivateIpAddress
+        IPEc2Instance: !GetAtt VPCBASICInstance.Outputs.PrivateIpAddress
+        DevInstanceID: !GetAtt VPCBASICInstance.Outputs.InstanceID
         # We will get the AvailabilityZone from the PublicSubnet2 AZ location
         AvailabilityZone: !GetAtt PublicSubnet2.AvailabilityZone
 
@@ -1906,7 +1907,7 @@ Outputs:
   IPEc2InstanceID:
     Condition: WantEC2
     Description: The Public IP Address of the Ec2 Template
-    Value: !GetAtt VPCEc2Instance.Outputs.PrivateIpAddress
+    Value: !GetAtt VPCBASICInstance.Outputs.PrivateIpAddress
 
   S3Bucket:
     Description: Bucket Created using this template.

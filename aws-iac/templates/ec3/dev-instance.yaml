@@ -27,7 +27,12 @@ Parameters:
     Description: The Size of the Instance
   IPEc2Instance:
     Type: String
-    Description: The Public IP Address of the Ec2 Template
+    Description: The Public IP Address of the Basic Ec2 Template
+  DevInstanceID:
+    Type: String
+    Description: The ID of the Basic Ec2 Template
+
+    
   AvailabilityZone:
     Type: String
     Description: The AvailabilityZone the Instance and Volume will be hosted
@@ -85,8 +90,8 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          yum update -y
-          yum install -y httpd php
+          apt-get update -y
+          apt-get install -y httpd php
           
           systemctl start httpd
           systemctl enable httpd
@@ -114,9 +119,9 @@ Resources:
               <h2>Availability Zone: <?php echo $zone ?></h2>
               <h3>!!Warning!! Deployment needs 5 min before Connection can be established with EC2 SSM Connection CMD:</h3>
               <h2>Connect to the basic-instance in the Private Network Ec2 directly over SSM</h2>
-              <h2>aws ssm start-session --target ${IPEc2Instance} --profile gmail</h2>
+              <h2>aws ssm start-session --target ${DevInstanceID} --profile gmail</h2>
               <h2>Connect to the dev-instance Ec2 Instance in the Public Network</h2>
-              <h2> aws ssm start-session --target<?php echo $instance_id ?>--profile gmail</h2>
+              <h2> aws ssm start-session --target <?php echo $instance_id ?> --profile gmail</h2>
               </center>
             </body>
             </html>

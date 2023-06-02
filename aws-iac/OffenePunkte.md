@@ -1,7 +1,7 @@
 # Offene Fragen
 9090 / 3000 Port von Aussen auf server zugreine
 
-9100 Port Exporter muss offen sein und prometeu node exporter
+9100 Node Exporter muss offen sein und prometeu node exporter
 
 
 OPEN PORT For yum update -y
