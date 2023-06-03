@@ -28,7 +28,7 @@ runcmd:
   - sudo apt-get install -y stress-ng
   - sudo pip3 install podman-compose
   - [ bash, /opt/ITCNE23-SEM-I/monitoring/cloud-init/ec2-aws-set-pub-ip.sh ]
-  - [ bash, /opt/ITCNE23-SEM-I/monitoring/cloud-init/ec2-aws-set-pub-ip.sh ]
+  - [ bash, /opt/ITCNE23-SEM-I/monitoring/cloud-init/ec2-aws-get-secret.sh ]
   - cd /opt/ITCNE23-SEM-I/monitoring/podman
   - podman-compose up -d
   
