@@ -84,11 +84,15 @@ Table of the Port Matrix
 | 80 | HTTP | Subnet1 | Internet | Needed for the Loadbalancer |
 | 80 | HTTP | Internet | Subnet1 | Needed for the Ubuntu Update |
 | 443 | HTTPS | Subnet1 | Internet | Needed for yum update |
+| 587 | SMTP | Subnet2 | Internet | SMTP Gmail |
 | 1024 - 65535 | HTTP | Subnet1 | Internet | Needed for yum update |
 | 1024 - 65535 | HTTP | Subnet1 | Internet | Needed for yum update |
 | 3000 | TCP | Internet | Subnet2 | Needed for Grafana Dashboard |
-| 9090 | TCP | Internet | Subnet2 | Needed for Grafana Dashboard |
+| 9090 | TCP | Internet | Subnet2 | Needed for Prometheus Dashboard |
+| 9093 | TCP | Internet | Subnet2 | Needed for Alertmanager Dashboard |
 | 9100 | TCP | VPC | VPC | Needed for Prometeo Node exporter |
+| 9115 | TCP | Internet | Subnet2 | Needed for Blackbox Dashboard |
+
 
 ## 04 Dependencies
 

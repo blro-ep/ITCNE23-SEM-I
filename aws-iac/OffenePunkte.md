@@ -4,6 +4,7 @@
 9100 Node Exporter muss offen sein und prometeu node exporter
 
 
+
 OPEN PORT For yum update -y
 from Private Network !!
 ON NACL AND SG 

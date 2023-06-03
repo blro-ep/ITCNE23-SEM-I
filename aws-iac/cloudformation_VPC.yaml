@@ -674,6 +674,9 @@ Resources:
 # Inbound Roules
 ################
 
+# Intern rules 
+##############
+
 # 1.NACL entry to allow inbound SSH traffic to the public subnet.
   PubNACLInboundRulePort22:
     Type: AWS::EC2::NetworkAclEntry
@@ -700,39 +703,12 @@ Resources:
          From: 22
          To: 22
 
-
-# 2. NACL entry to allow inbound HTTP traffic to the public subnet.
-  PubNACLInboundRulePort80:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref PubNACL
-       RuleNumber: 110
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 80
-         To: 80
-
-# 3. NACL entry to allow inbound HTTPS traffic to the public subnet.
-  PubNACLInboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref PubNACL
-       RuleNumber: 120
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 443
-         To: 443
-
-# 4. NACL entry to allow inbound ICMP / Ping traffic from the Private 1 Subnet.
+# 2. NACL entry to allow inbound ICMP / Ping traffic from the Private 1 Subnet.
   PubNACLInboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
-       RuleNumber: 130
+       RuleNumber: 110
        Protocol: 1
        RuleAction: allow
        CidrBlock: !Ref PrivateSubnet1CIDR
@@ -740,12 +716,12 @@ Resources:
         Code: -1
         Type: 8
 
-# 4.1 NACL entry to allow inbound ICMP / Ping traffic from the Private 2 Subnet.
+# 2.1 NACL entry to allow inbound ICMP / Ping traffic from the Private 2 Subnet.
   PubNACLInboundRuleICMPEchoPrivateSubnet2:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
-       RuleNumber: 131
+       RuleNumber: 111
        Protocol: 1
        RuleAction: allow
        CidrBlock: !Ref PrivateSubnet2CIDR
@@ -753,8 +729,37 @@ Resources:
         Code: -1
         Type: 8
 
-# 5. NACL entry to allow inbound Prometheus traffic to the public subnet.
-  PubNACLInboundRulePort9090:
+# 3. NACL entry to allow inbound Node Exporter traffic to the public subnet from the VPC 
+  PubNACLInboundRulePort9100:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 120
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: !Ref VpcCIDR
+       PortRange:
+         From: 9100
+         To: 9100
+
+# Internet Rules
+################         
+
+# 4. NACL entry to allow inbound HTTP traffic to the public subnet.
+  PubNACLInboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 130
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 5. NACL entry to allow inbound HTTPS traffic to the public subnet.
+  PubNACLInboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
@@ -763,25 +768,24 @@ Resources:
        RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
-         From: 9090
-         To: 9090
+         From: 443
+         To: 443
 
-# 6. NACL entry to allow inbound Node Exporter traffic to the public subnet.
-  PubNACLInboundRulePort9100:
+# 6. NACL entry to allow inbound Prometheus traffic to the public subnet.
+  PubNACLInboundRulePort9090:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
        RuleNumber: 150
        Protocol: 6
        RuleAction: allow
-       CidrBlock: !Ref VpcCIDR
+       CidrBlock: 0.0.0.0/0
        PortRange:
-         From: 9100
-         To: 9100
+         From: 9090
+         To: 9090
 
-# 7. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
-  # The RFC 6056 says that the range for ephemeral ports should be 1024–65535 
-  PubNACLInboundRuleEphemeral:
+# 7. NACL entry to allow inbound Grafana traffic to the public subnet.
+  PubNACLInboundRulePort3000:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
@@ -790,10 +794,53 @@ Resources:
        RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
+         From: 3000
+         To: 3000
+
+# 8. NACL entry to allow inbound Blackbox traffic to the public subnet from the internet
+  PubNACLInboundRulePort9115:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 170
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 9115
+         To: 9115
+
+# 9. NACL entry to allow inbound Alertmanager traffic to the public subnet from the Internet
+  PubNACLInboundRulePort9093:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 180
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 9093
+         To: 9093
+
+# 10. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  # The RFC 6056 says that the range for ephemeral ports should be 1024–65535 
+  PubNACLInboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 200
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
          From: 1024
          To: 65535
 
 # Outbound Roules
+################
+
+# Intern Rules
 ################
 
 # 1.NACL entry to allow Outbound SSH traffic to the Private Subnet.
@@ -824,40 +871,12 @@ Resources:
          From: 22
          To: 22
 
-# 2. NACL Outbound Rule to allow HTTP traffic to everywhere
-  PubNACLOutboundRulePort80:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref PubNACL
-       RuleNumber: 110
-       Protocol: 6
-       Egress: true # Egress is true  means it is a outbound rules
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 80
-         To: 80
-
-# 3. NACL Outbound Rule to allow HTTPS traffic to everywhere
-  PubNACLOutboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref PubNACL
-       RuleNumber: 120
-       Protocol: 6
-       Egress: true # Egress is true  means it is a outbound rules
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 443
-         To: 443
-
-# 4. NACL Outbound Rule to allow ICMP / Ping traffic to the private subnet 2.
+# 2. NACL Outbound Rule to allow ICMP / Ping traffic to the private subnet 2.
   PubNACLOutboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
-       RuleNumber: 130
+       RuleNumber: 110
        Protocol: 1
        Egress: true # Egress is true  means it is a outbound rules
        RuleAction: allow
@@ -866,12 +885,12 @@ Resources:
         Code: -1
         Type: 8
 
-# 4.1 NACL Outbound Rule to allow ICMP / Ping traffic to the private subnet 1.
+# 2.1 NACL Outbound Rule to allow ICMP / Ping traffic to the private subnet 1.
   PubNACLOutboundRuleICMPEcho2:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
-       RuleNumber: 131
+       RuleNumber: 111
        Protocol: 1
        Egress: true # Egress is true  means it is a outbound rules
        RuleAction: allow
@@ -880,21 +899,52 @@ Resources:
         Code: -1
         Type: 8
 
-# 5. NACL Outbound Rule to allow Ephemeral ports return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
-  PubNACLOutboundRuleEphemeral:
+# 3. NACL Outbound to allow inbound Node Exporter traffic to the public subnet.
+  PubNACLOutboundRulePort9100:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 120
+       Protocol: 6
+       RuleAction: allow
+       Egress: true # Egress is true  means it is a outbound rules
+       CidrBlock: !Ref VpcCIDR
+       PortRange:
+         From: 9100
+         To: 9100
+
+# Extern Rules
+################
+
+# 4. NACL Outbound Rule to allow HTTP traffic to everywhere
+  PubNACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 130
+       Protocol: 6
+       Egress: true # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 5. NACL Outbound Rule to allow HTTPS traffic to everywhere
+  PubNACLOutboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
        RuleNumber: 140
        Protocol: 6
-       RuleAction: allow
        Egress: true # Egress is true  means it is a outbound rules
+       RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
-         From: 1024
-         To: 65535
+         From: 443
+         To: 443
 
-# 6. NACL entry to allow outbound Prometheus traffic to the public subnet.
+# 6. NACL Outbound to allow outbound Prometheus traffic to the public subnet.
   PubNACLOutboundRulePort9090:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -908,8 +958,8 @@ Resources:
          From: 9090
          To: 9090
 
-# 7. NACL entry to allow inbound Node Exporter traffic to the public subnet.
-  PubNACLOutboundRulePort9100:
+# 7. NACL Outbound to allow outbound Grafana traffic to the internet
+  PubNACLOutboundRulePort3000:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref PubNACL
@@ -917,10 +967,66 @@ Resources:
        Protocol: 6
        RuleAction: allow
        Egress: true # Egress is true  means it is a outbound rules
-       CidrBlock: !Ref VpcCIDR
+       CidrBlock: 0.0.0.0/0
        PortRange:
-         From: 9100
-         To: 9100
+         From: 3000
+         To: 3000
+
+# 8. NACL Outbound to allow outbound Blackbox traffic to the public subnet to the internet
+  PubNACLOutboundRulePort9115:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 170
+       Protocol: 6
+       RuleAction: allow
+       Egress: true # Egress is true  means it is a outbound rules
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 9115
+         To: 9115
+
+# 9. NACL Outbound to allow outbound Alertmanager traffic to the public subnet from the Internet
+  PubNACLOutboundRulePort9093:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 180
+       Protocol: 6
+       RuleAction: allow
+       Egress: true # Egress is true  means it is a outbound rules
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 9093
+         To: 9093
+
+# 10. NACL a Outbound Rule SMTP traffic to the Internet
+  PubNACLOutboundRulePortPort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 190
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 587
+         To: 587
+
+# 11. NACL Outbound Rule to allow Ephemeral ports return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  PubNACLOutboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref PubNACL
+       RuleNumber: 200
+       Protocol: 6
+       RuleAction: allow
+       Egress: true # Egress is true  means it is a outbound rules
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 1024
+         To: 65535
 
 #  creates an association between the public subnet AZ1 and the newly created network ACL.
   PublicSubnet1NetworkAclAssociation:
@@ -951,6 +1057,9 @@ Resources:
 # Inbound Roules
 ################
 
+# Intern rules
+##############
+
 # 1. NACL entry to allow inbound HTTP traffic to the private subnet from the public subnet.
   Private1NACLInboundRule80:
     Type: AWS::EC2::NetworkAclEntry
@@ -964,51 +1073,12 @@ Resources:
          From: 80
          To: 80
 
-# 2. NACL entry to allow inbound HTTP traffic 
-  Private1NACLInboundRulePort80public:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private1NACL
-       RuleNumber: 110
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 80
-         To: 80
-
-# 3. NACL entry to allow inbound HTTPS traffic
-  Private1NACLInboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private1NACL
-       RuleNumber: 120
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 443
-         To: 443
-
-# 4. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
-  Private1NACLInboundRuleEphemeral:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private1NACL
-       RuleNumber: 131
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 1024
-         To: 65535
-
 # 2. NACL entry to allow inbound SSH traffic to the private subnet from the public subnet.
   Private1NACLInboundRule22:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 140
+       RuleNumber: 110
        Protocol: 6
        RuleAction: allow
        CidrBlock: !Ref PublicSubnet1CIDR
@@ -1021,7 +1091,7 @@ Resources:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 150
+       RuleNumber: 120
        Protocol: 1
        RuleAction: allow
        CidrBlock: !Ref PublicSubnet1CIDR
@@ -1034,7 +1104,7 @@ Resources:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 160
+       RuleNumber: 130
        Protocol: 6
        RuleAction: allow
        CidrBlock: !Ref VpcCIDR
@@ -1042,57 +1112,60 @@ Resources:
          From: 9100
          To: 9100
 
-# Outbound Roules
+# Internet Rules
 ################
 
-# 1. NACL a Outbound Rule HTTP traffic to the private subnet
-  Private1NACLOutboundRulePort80:
+# 5. NACL entry to allow inbound HTTP traffic 
+  Private1NACLInboundRulePort80public:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 100
+       RuleNumber: 140
        Protocol: 6
-       Egress: true  # Egress is true  means it is a outbound rules
        RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
          From: 80
          To: 80
 
-# 2. NACL a Outbound Rule HTTPS traffic to the private subnet
-  Private1NACLOutboundRulePort443:
+# 6. NACL entry to allow inbound HTTPS traffic
+  Private1NACLInboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 110
+       RuleNumber: 150
        Protocol: 6
-       Egress: true  # Egress is true for outbound rules
        RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
          From: 443
          To: 443
 
-# 3. NACL a Outbound Rule to Allows Ephemeral ports the private subnet
-  Private1NACLOutboundRulePortEphemeral:
+# 7. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  Private1NACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 125
+       RuleNumber: 200
        Protocol: 6
-       Egress: true  # Egress is true for outbound rules
        RuleAction: allow
        CidrBlock: 0.0.0.0/0
        PortRange:
          From: 1024
          To: 65535
 
-# 4. NACL a Outbound Rule SSH traffic to the private subnet
+# Outbound Roules
+################
+
+# Intern Rules
+################
+
+# 1. NACL a Outbound Rule SSH traffic to the private subnet
   Private1NACLOutboundRulePort22:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 130
+       RuleNumber: 110
        Protocol: 6
        Egress: true  # Egress is true for outbound rules
        RuleAction: allow
@@ -1101,12 +1174,12 @@ Resources:
          From: 22
          To: 22
 
-# 5. NACL entry to allow outbound Node Exporter traffic to the public subnet.
+# 2. NACL entry to allow outbound Node Exporter traffic to the public subnet.
   Private1NACLOutboundRulePort9100:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 140
+       RuleNumber: 120
        Protocol: 6
        Egress: true  # Egress is true for outbound rules
        RuleAction: allow
@@ -1115,12 +1188,12 @@ Resources:
          From: 9100
          To: 9100
 
-# 6. NACL entry to allow inbound ICMP / Ping traffic from the Public Subnet.
+# 3. NACL entry to allow inbound ICMP / Ping traffic from the Public Subnet.
   Private1NACLOutboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private1NACL
-       RuleNumber: 150
+       RuleNumber: 130
        Protocol: 1
        Egress: true  # Egress is true for outbound rules
        RuleAction: allow
@@ -1128,6 +1201,65 @@ Resources:
        Icmp:
         Code: -1
         Type: 8
+
+# Internet Facing
+#################
+
+# 4. NACL a Outbound Rule HTTP traffic to the private subnet
+  Private1NACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 140
+       Protocol: 6
+       Egress: true  # Egress is true  means it is a outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 5. NACL a Outbound Rule HTTPS traffic to the private subnet
+  Private1NACLOutboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 150
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 443
+         To: 443
+
+# 6. NACL a Outbound Rule SMTP traffic to the Internet
+  Private1NACLOutboundRulePort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 160
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 587
+         To: 587
+
+# 7. NACL a Outbound Rule to Allows Ephemeral ports the private subnet
+  Private1NACLOutboundRulePortEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private1NACL
+       RuleNumber: 200
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 1024
+         To: 65535
 
 #  creates an association between the private subnet 1 AZ1 and the newly created network ACL.
   PrivateSubnet1NetworkAclAssociation:
@@ -1151,51 +1283,15 @@ Resources:
 # Inbound Roules
 ################
 
-# 1. NACL entry to allow inbound HTTP traffic 
-  Private2NACLInboundRulePort80:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private2NACL
-       RuleNumber: 100
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 80
-         To: 80
+# Intern Rules
+################
 
-# 2. NACL entry to allow inbound HTTPS traffic
-  Private2NACLInboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private2NACL
-       RuleNumber: 110
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 443
-         To: 443
-
-# 3. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
-  Private2NACLInboundRuleEphemeral:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private2NACL
-       RuleNumber: 121
-       Protocol: 6
-       RuleAction: allow
-       CidrBlock: 0.0.0.0/0
-       PortRange:
-         From: 1024
-         To: 65535
-
-# 4. NACL entry to allow inbound HTTPS traffic to the public subnet.
+# 1. NACL entry to allow inbound HTTPS traffic to the public subnet.
   Private2ACLInboundRulePort20:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
-       RuleNumber: 130
+       RuleNumber: 110
        Protocol: 6
        RuleAction: allow
        CidrBlock: !Ref PublicSubnet2CIDR
@@ -1203,12 +1299,12 @@ Resources:
          From: 22
          To: 22
 
-# 5. NACL entry to allow inbound Node Exporter traffic to the public subnet.
+# 2. NACL entry to allow inbound Node Exporter traffic to the public subnet.
   Private2NACLInboundRulePort9100:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
-       RuleNumber: 140
+       RuleNumber: 120
        Protocol: 6
        RuleAction: allow
        CidrBlock: !Ref VpcCIDR
@@ -1216,12 +1312,12 @@ Resources:
          From: 9100
          To: 9100
 
-# 6. NACL entry to allow inbound ICMP / Ping traffic from the Public Subnet.
+# 3. NACL entry to allow inbound ICMP / Ping traffic from the Public Subnet.
   Private2NACLInboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
-       RuleNumber: 150
+       RuleNumber: 130
        Protocol: 1
        RuleAction: allow
        CidrBlock: !Ref PublicSubnet2CIDR
@@ -1229,15 +1325,106 @@ Resources:
         Code: -1
         Type: 8
 
+# Internet Rules
+################
+
+# 4. NACL entry to allow inbound HTTP traffic 
+  Private2NACLInboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 140
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 80
+         To: 80
+
+# 5. NACL entry to allow inbound HTTPS traffic
+  Private2NACLInboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 150
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 443
+         To: 443
+
+# 7. NACL entry to Allows Ephemeral ports inbound return IPv4 traffic from the internet (that is, for requests that originate in the subnet), see Ephemeral ports.
+  Private2NACLInboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 200
+       Protocol: 6
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 1024
+         To: 65535
+
 # Outbound Roules
 ################
 
-# 1. NACL a Outbound Rule HTTP traffic to the private subnet
+# Intern Rules
+###############
+
+# 1. NACL a Outbound Rule SSH traffic to the private subnet
+  Private2NACLOutboundRulePort22:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 110
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet2CIDR
+       PortRange:
+         From: 22
+         To: 22
+
+# 2. NACL entry to allow outbound Node Exporter traffic to the public subnet.
+  Private2NACLOutboundRulePort9100:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 120
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: !Ref VpcCIDR
+       PortRange:
+         From: 9100
+         To: 9100
+
+# 3. NACL entry to allow inbound ICMP / Ping traffic from the Public Subnet.
+  Private2NACLOutboundRuleICMPEcho:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 130
+       Protocol: 1
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: !Ref PublicSubnet2CIDR
+       Icmp:
+        Code: -1
+        Type: 8
+
+# Internet Facing
+#################
+
+
+# 4. NACL a Outbound Rule HTTP traffic to the internet
   Private2NACLOutboundRulePort80:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
-       RuleNumber: 100
+       RuleNumber: 140
        Protocol: 6
        Egress: true  # Egress is true  means it is a outbound rules
        RuleAction: allow
@@ -1246,12 +1433,12 @@ Resources:
          From: 80
          To: 80
 
-# 2. NACL a Outbound Rule HTTPS traffic to the private subnet
+# 5. NACL a Outbound Rule HTTPS traffic to allow it out of the private subnet
   Private2NACLOutboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
-       RuleNumber: 110
+       RuleNumber: 150
        Protocol: 6
        Egress: true  # Egress is true for outbound rules
        RuleAction: allow
@@ -1260,12 +1447,26 @@ Resources:
          From: 443
          To: 443
 
-# 3. NACL a Outbound Rule to Allows Ephemeral ports the private subnet
+# 6. NACL a Outbound Rule SMTP traffic to the Internet
+  Private2NACLOutboundRulePort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+       NetworkAclId: !Ref Private2NACL
+       RuleNumber: 160
+       Protocol: 6
+       Egress: true  # Egress is true for outbound rules
+       RuleAction: allow
+       CidrBlock: 0.0.0.0/0
+       PortRange:
+         From: 587
+         To: 587
+
+# 6. NACL a Outbound Rule to Allows Ephemeral ports out of the private subnet
   Private2NACLOutboundRulePortEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
        NetworkAclId: !Ref Private2NACL
-       RuleNumber: 125
+       RuleNumber: 200
        Protocol: 6
        Egress: true  # Egress is true for outbound rules
        RuleAction: allow
@@ -1273,48 +1474,6 @@ Resources:
        PortRange:
          From: 1024
          To: 65535
-
-# 4. NACL a Outbound Rule SSH traffic to the private subnet
-  Private2NACLOutboundRulePort22:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private2NACL
-       RuleNumber: 130
-       Protocol: 6
-       Egress: true  # Egress is true for outbound rules
-       RuleAction: allow
-       CidrBlock: !Ref PublicSubnet2CIDR
-       PortRange:
-         From: 22
-         To: 22
-
-# 5. NACL entry to allow outbound Node Exporter traffic to the public subnet.
-  Private2NACLOutboundRulePort9100:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private2NACL
-       RuleNumber: 140
-       Protocol: 6
-       Egress: true  # Egress is true for outbound rules
-       RuleAction: allow
-       CidrBlock: !Ref VpcCIDR
-       PortRange:
-         From: 9100
-         To: 9100
-
-# 6. NACL entry to allow inbound ICMP / Ping traffic from the Public Subnet.
-  Private2NACLOutboundRuleICMPEcho:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-       NetworkAclId: !Ref Private2NACL
-       RuleNumber: 150
-       Protocol: 1
-       Egress: true  # Egress is true for outbound rules
-       RuleAction: allow
-       CidrBlock: !Ref PublicSubnet2CIDR
-       Icmp:
-        Code: -1
-        Type: 8
 
 #  creates an association between the private subnet 2 AZ2 and the newly created network ACL.
   PrivateSubnet2NetworkAclAssociation:
