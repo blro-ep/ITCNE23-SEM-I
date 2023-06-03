@@ -60,6 +60,29 @@ Resources:
 # Secuirty Group 
 #################
 
+# Creates security group for prod EFS.
+  EFSSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "security group for the prod EFS"
+      GroupName: "EFS-SG"
+      VpcId:
+        !ImportValue 
+          Fn::Sub: '${VPCModule}-ID'
+      SecurityGroupIngress: 
+        - 
+          SourceSecurityGroupId: !Ref GrafanaSecurityGrp
+          Description: "servers to connect to efs"
+          FromPort: 2049
+          IpProtocol: "tcp"
+          ToPort: 2049
+      Tags:
+        - Key: Environment
+          Value: Monitoring
+        - Key: StackName
+          Value: !Ref AWS::StackName
+
+
 # Secuirty Group for Load Balancer Allows HTTP and Grafana In 
   WebTierSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -75,6 +98,18 @@ Resources:
           FromPort: 3000
           ToPort: 3000
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 9090
+          ToPort: 9090
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 9115
+          ToPort: 9115
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 9093
+          ToPort: 9093
+          CidrIp: 0.0.0.0/0
       VpcId:
         !ImportValue 
           Fn::Sub: '${VPCModule}-ID'
@@ -82,7 +117,7 @@ Resources:
         - Key: StackName
           Value: !Ref AWS::StackName
 
-# Inbound Rule
+# Outbound Rule
 ##############
 
 # Outbound rule in a security group to allow TCP traffic on port 80 from the security group "GrafanaSecurityGrp" to the security group "WebTierSecurityGroup". And is written seperate to eliminate problems with circular dependencies!
@@ -96,9 +131,6 @@ Resources:
       ToPort: 80
       SourceSecurityGroupId: !Ref GrafanaSecurityGrp
 
-# Outbound Rule
-##############
-
 # Outbound rule in a security group to allow TCP traffic on port 3000 (Grafana)from the security group "GrafanaSecurityGrp" to the security group "WebTierSecurityGroup". And is written seperate to eliminate problems with circular dependencies!
   OutboundRule3000:
     Type: AWS::EC2::SecurityGroupEgress
@@ -108,6 +140,36 @@ Resources:
       IpProtocol: tcp 
       FromPort: 3000 
       ToPort: 3000
+      SourceSecurityGroupId: !Ref GrafanaSecurityGrp
+
+  OutboundRule9090:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Security Group Rule between Instance and LB 
+      GroupId: !Ref WebTierSecurityGroup
+      IpProtocol: tcp 
+      FromPort: 9090 
+      ToPort: 9090
+      SourceSecurityGroupId: !Ref GrafanaSecurityGrp
+
+  OutboundRule9093:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Security Group Rule between Instance and LB 
+      GroupId: !Ref WebTierSecurityGroup
+      IpProtocol: tcp 
+      FromPort: 9093 
+      ToPort: 9093
+      SourceSecurityGroupId: !Ref GrafanaSecurityGrp
+
+  OutboundRule9115:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Security Group Rule between Instance and LB 
+      GroupId: !Ref WebTierSecurityGroup
+      IpProtocol: tcp 
+      FromPort: 9115 
+      ToPort: 9115
       SourceSecurityGroupId: !Ref GrafanaSecurityGrp
 
 # Grafana SG
@@ -145,11 +207,41 @@ Resources:
   InstanceSecurityGroupIngress3000:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      Description: Security Group Rule between Instance and LB 
+      Description: Security Group Rule between Instance and LB for Grafana
       GroupId: !Ref GrafanaSecurityGrp
       IpProtocol: tcp 
       FromPort: 3000 
       ToPort: 3000
+      SourceSecurityGroupId: !Ref WebTierSecurityGroup
+
+  InstanceSecurityGroupIngress9090:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and LB for Prometheus
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 9090 
+      ToPort: 9090
+      SourceSecurityGroupId: !Ref WebTierSecurityGroup
+
+  InstanceSecurityGroupIngress9115:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and LB for Alertmanager 
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 9115 
+      ToPort: 9115
+      SourceSecurityGroupId: !Ref WebTierSecurityGroup
+
+  InstanceSecurityGroupIngress9093:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and LB for Alertmanager 
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 9093 
+      ToPort: 9093
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
   InstanceSecurityGroupIngressHTTPS:
@@ -160,7 +252,7 @@ Resources:
       IpProtocol: tcp 
       FromPort: 443 
       ToPort: 443
-      CidrIp: 0.0.0.0/0
+      SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
 # Load Balancer
 #######################
@@ -182,7 +274,11 @@ Resources:
         - Key: StackName
           Value: !Ref AWS::StackName
 
-  TargetGroupLB:
+# Target Groups
+###############
+
+# Target Group for Grafana
+  TargetGroupLB3000:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 30
@@ -192,7 +288,7 @@ Resources:
       Matcher:
         HttpCode: '200'
       Name: GrafanaTargetGroup
-      Port: 80
+      Port: 3000
       Protocol: HTTP
       TargetGroupAttributes:
       - Key: deregistration_delay.timeout_seconds
@@ -205,43 +301,144 @@ Resources:
         !ImportValue
           Fn::Sub: '${VPCModule}-ID'
 
-  Listener:
+# Target Group for Prometheus
+  TargetGroupLB9090:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 15
+      HealthyThresholdCount: 5
+      Matcher:
+        HttpCode: '200'
+      Name: PrometheusTargetGroup
+      Port: 9090
+      Protocol: HTTP
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
+      UnhealthyThresholdCount: 3
+      TargetType: instance
+      Targets:
+        - Id: !Ref GrafanaInstance
+      VpcId:
+        !ImportValue
+          Fn::Sub: '${VPCModule}-ID'
+
+# Target Group for Blackbox
+  TargetGroupLB9115:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 15
+      HealthyThresholdCount: 5
+      Matcher:
+        HttpCode: '200'
+      Name: BlackboxTargetGroup
+      Port: 9115
+      Protocol: HTTP
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
+      UnhealthyThresholdCount: 3
+      TargetType: instance
+      Targets:
+        - Id: !Ref GrafanaInstance
+      VpcId:
+        !ImportValue
+          Fn::Sub: '${VPCModule}-ID'
+
+# Target Group for Alertmanager
+  TargetGroupLB9093:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 15
+      HealthyThresholdCount: 5
+      Matcher:
+        HttpCode: '200'
+      Name: AlertmanagerTargetGroup
+      Port: 9093
+      Protocol: HTTP
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
+      UnhealthyThresholdCount: 3
+      TargetType: instance
+      Targets:
+        - Id: !Ref GrafanaInstance
+      VpcId:
+        !ImportValue
+          Fn::Sub: '${VPCModule}-ID'
+
+# Listeners
+###############
+
+# Listener Redirect 80 -> 3000
+  Listener80to3000:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig:
+            Host: '#{host}'
+            Path: '/#{path}'
+            Port: '3000'
+            Protocol: HTTP
+            Query: '#{query}'
+            StatusCode: HTTP_301
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+# Listener Grafana 3000
+  Listener3000:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref TargetGroupLB
-      #    Protocol: "HTTP"
-      #    Port: 80
-      #    Host: "#{host}"
-      #    Path: "/#{path}"
-      #    Query: "#{query}"
-      #    StatusCode: "HTTP_301"
+          TargetGroupArn: !Ref TargetGroupLB3000
       LoadBalancerArn: !Ref LoadBalancer
       Port: 3000
       Protocol: HTTP
 
-# Creates security group for prod EFS.
-  EFSSG:
-    Type: "AWS::EC2::SecurityGroup"
+# Listener Prometheus 9090
+  Listener9090:
+    Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      GroupDescription: "security group for the prod EFS"
-      GroupName: "EFS-SG"
-      VpcId:
-        !ImportValue 
-          Fn::Sub: '${VPCModule}-ID'
-      SecurityGroupIngress: 
-        - 
-          SourceSecurityGroupId: !Ref GrafanaSecurityGrp
-          Description: "servers to connect to efs"
-          FromPort: 2049
-          IpProtocol: "tcp"
-          ToPort: 2049
-      Tags:
-        - Key: Environment
-          Value: Monitoring
-        - Key: StackName
-          Value: !Ref AWS::StackName
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupLB9090
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 9090
+      Protocol: HTTP
+
+# Listener Alertmanager 9093
+  Listener9093:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupLB9093
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 9093
+      Protocol: HTTP
+
+# Listener Blackbox 9115
+  Listener9115:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroupLB9115
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 9115
+      Protocol: HTTP
+
+# EFS File System 
+##################
 
   EFSFileSystem:
       Type: AWS::EFS::FileSystem
@@ -278,6 +475,8 @@ Resources:
             !ImportValue 
               Fn::Sub: '${VPCModule}-PrivateSubnet2'
 
+# Ec2 Instance
+###############
 
 # Configuration for the provision of the ec2 instance
   GrafanaInstance:
@@ -306,11 +505,11 @@ Resources:
       # Passes the UserData script to the instance: Installing Apache and PHP, and creating a PHP script to display the instance ID and availability zone
       UserData:
         Fn::Base64: !Sub |
-          #!/bin/bash
+          #cloud-config
           package_upgrade: true
 
           ssh_authorized_keys:
-            - <your key>
+            - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDtN+sKx8MaNh5gpulK9plpe1bxHtYfSlj2WOvMM8cjXzUMRxxIxxPivAohTZYsCW9OwK376GclZd17RqDfx9ifoa1rUpQnyZ1ckB4Xw5zZA+bZintl1L0OAwzTmaITXbly7913BNjkiQ9Vyy3gYwYqEKrmQPfhaWKG3oWCWhQHBE9nllYPtnIspupeEGRaS1rJL1NZH7nRE+5dQMXnIr3pRUDbX0q2WXodYtVuUVaujYCGWDTLzgrLgVWRix165pMfXXJ80wmZCz8JC/vcM7veKiKRtbeTHJSMnxCxN9MpKe/PZqLtS3WywzHkBqF2s208SC0bvfUpxrAKGzUresUWT6+EgeoBDs7IsSwFekAerckSMH0CWXdL0triE52gQK+7mWKPh6vvzONngNiwKQuOD6lnbaVuK2DrJ/Oi4aT2+eonA2ovFCP4BHTgSwc/VVh3++Fu944ZsJOV6zK50uopfCVcrjZ7vs2y15DgwrtARQkaSZVIEwVgZG7FN2n4AEkSvotpElxLNuLbmoKimQdJy96YZYcN2skkOVaaPa1zvB18cT/V5+1ctGJ1rG7jrzkoaATjt4DHEONGfNT5VjE5CYteEExmI9uzEpEuKY+jBWbtRily49ESSEZQd3aCS8svDe8jxvs9zC9N7pzh+5O9PgJsUkyHLJANOJNrWyeOYw== outside@XPS
 
           packages:
             - apt-transport-https
@@ -330,15 +529,8 @@ Resources:
             - sudo apt-get install -y python3-pip
             - sudo apt-get install -y podman
             - sudo pip3 install podman-compose
-          #  - podman run -dt --name prometheus -p 9090:9090 docker.io/prom/prometheus
-          #  - podman run -dt --name alertmanager -p 9093:9093 docker.io/prom/alertmanager
-          #  - podman run -dt --name blackbox -p 9115:9115 docker.io/prom/blackbox-exporter
-          #  - podman run -dt --name grafana -p 3000:3000  docker.io/grafana/grafana-enterprise
             - cd /opt/ITCNE23-SEM-I/monitoring/podman
-            - sudo podman-compose up -d
-
-
-# Source -> https://harishkm.in/2020/08/03/how-to-get-the-ec2-instance-id-from-within-an-ec2-instance/
+            - podman-compose up -d
 
 Outputs:
   WebsiteURLlocal:
@@ -348,7 +540,6 @@ Outputs:
   AppUrl:
     Description: URL of the sample app.
     Value: !Sub 'http://${LoadBalancer.DNSName}'
-
 
   LoadBalancerDNS:
     Value: !GetAtt LoadBalancer.DNSName

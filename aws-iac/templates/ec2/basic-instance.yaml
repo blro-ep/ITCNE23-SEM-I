@@ -25,7 +25,8 @@ Parameters:
   # Will get the latest ami from the Parameter Store
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Default: '/aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id'
+    #Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
   AvailabilityZone:
     Type: String
     Description: The AvailabilityZone the Instance and Volume will be hosted
@@ -74,14 +75,19 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #cloud-config
-          apt-get install -y prometheus-node-exporter
-          users:
-            - name: bob
+          repo_update: true
+          repo_upgrade: all
+
+
 
 Outputs:
   PrivateIpAddress:
     Description: The public IP address of the deployed instance
     Value: !GetAtt DevInstance.PrivateIp
+  
+  InstanceID:
+    Description: The public IP address of the deployed instance
+    Value: !Ref DevInstance
 
   SSMManager:
     Value: !Sub aws ssm start-session --target ${DevInstance} --profile gmail
