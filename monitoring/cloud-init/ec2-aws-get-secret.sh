@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get secret for gmail 
-AWS_SECRET_MAILADDRESS=$($(aws secretsmanager get-secret-value --region eu-central-2 --secret-id prometheus_alertmanager | jq -r '.SecretString | fromjson | .email'))
+AWS_SECRET_MAILADDRESS=$(aws secretsmanager get-secret-value --region eu-central-2 --secret-id prometheus_alertmanager | jq -r '.SecretString | fromjson | .email')
 AWS_SECRET_GMAILPW=$(aws secretsmanager get-secret-value --region eu-central-2 --secret-id prometheus_alertmanager | jq -r '.SecretString | fromjson | .password')
 
 # set secret for alertmanager
