@@ -3,40 +3,41 @@
 ![Prometheus](images/prometheus-icon.png)
 
 ## Table of conten
-* 1     - [Summary](#1-summary)
-* 2     - [Introduction](#2-introduction)
-* 2.1   - [Initial-Position](#21-initial-position)
-* 2.2   - [Mission](#22-mission)
-* 2.2.1 - [Monitoring Overview](#221-monitoring-overview)
-* 2.3   - [Sources](#23-sources)
-* 2.3.1 - [Podman](#231-podman)
-* 2.3.2 - [Docker Images](#232-docker-official-image)
-* 2.3.3 - [Node-Exporter](#233-node-exporter)
-* 2.3.4 - [Apache-Exporter](#234-apache-exporter)
-* 2.3.5 - [Multipass](#235-multipass)
-* 2.3.6 - [git](#236-git)
-* 2.3.7 - [Drawio](#237-drawio)
-* 3     - [SEUSAG](#3-seusag)
-* 3.1   - [System Boundary / Interface](#31-system-boundary--interface)
-* 3.2   - [Influencing Factors](#32-influencing-factors)
-* 3.3   - [Sub- and Partsystems](#33-sub--and-part-systems)
-* 3.4   - [System Boundary](#34-system-boundary)
-* 3.5   - [Influencing Factors and Restrictions](#35-influencing-factors-and-restrictions)
-* 3.6   - [Subsystem](#36-subsystem)
-* 3.7   - [Inferfaces](#37-interfaces)
-* 3.7.1 - [Portmatrix](#371-portmatrix)
-* 4     - [Project Goals](#4-project-goals)
-* 4.1   - [Procedural Goals](#41-procedural-goals)
-* 4.2   - [System Golas](#42-system-goals)
-* 5     - [Appreciation](#5-appreciation-swot-analysis)
-* 5.1   - [Strengths](#51-strengths)
-* 5.2   - [Weaknesses](#52-weaknesses)
-* 5.3   - [Opportunities](#53-opportunities)
-* 5.4   - [Threats](#54-threats)
-* 6     - [Project Planning](#6-project-planning)
-* 6.1   - [Project Management Tools](#61-projectmanagement-tools)
-* 6.2   - [Tasks](#62-tasks)
-* 7     - [Glossar](#7-glossar)
+* 1       - [Summary](#1-summary)
+* 2       - [Introduction](#2-introduction)
+* 2.1     - [Initial-Position](#21-initial-position)
+* 2.2     - [Mission](#22-mission)
+* 2.2.1   - [Monitoring Overview](#221-monitoring-overview)
+* 2.3     - [Sources](#23-sources)
+* 2.3.1   - [Podman](#231-podman)
+* 2.3.2   - [Docker Images](#232-docker-official-image)
+* 2.3.3   - [Node-Exporter](#233-node-exporter)
+* 2.3.4   - [Apache-Exporter](#234-apache-exporter)
+* 2.3.5   - [Multipass](#235-multipass)
+* 2.3.6   - [git](#236-git)
+* 2.3.7   - [Drawio](#237-drawio)
+* 3       - [SEUSAG](#3-seusag)
+* 3.1     - [System Boundary / Interface](#31-system-boundary--interface)
+* 3.2     - [Influencing Factors](#32-influencing-factors)
+* 3.3     - [Sub- and Partsystems](#33-sub--and-part-systems)
+* 3.4     - [System Boundary](#34-system-boundary)
+* 3.5     - [Influencing Factors and Restrictions](#35-influencing-factors-and-restrictions)
+* 3.6     - [Subsystem](#36-subsystem)
+* 3.7     - [Inferfaces](#37-interfaces)
+* 3.7.1   - [Portmatrix](#371-portmatrix)
+* 3.7.1.1 - [Instance Prometheus / Grafana](#3711-instance-prometheus--grafana)
+* 3.7.1.2 - [Instance to Monitor](#3712-instances-to-monitor)
+* 4       - [Project Goals](#4-project-goals)
+* 4.1     - [Procedural Goals](#41-procedural-goals)
+* 4.2     - [System Golas](#42-system-goals)
+* 5       - [Appreciation](#5-appreciation-swot-analysis)
+* 5.1     - [Strengths](#51-strengths)
+* 5.2     - [Weaknesses](#52-weaknesses)
+* 5.3     - [Opportunities](#53-opportunities)
+* 5.4     - [Threats](#54-threats)
+* 6       - [Project Planning](#6-project-planning)
+* 6.1     - [Project Management Tools](#61-projectmanagement-tools)
+* 6.2     - [Tasks](#62-tasks)
 
 ---
 
@@ -178,15 +179,23 @@ Github is used in this project to manage the monitoring setup.
 | S3 | Promethes / Alertmanager | Prometheus pushes the alerts to the alert manager, from where they are sent. |
 
 #### 3.7.1 Portmatrix
+##### 3.7.1.1 Instance Prometheus / Grafana
+| Application | Port | Direction |
+|---|---|---|
+| Prometheus | 9090 | inbound |
+| Node Exporter | 9100 |  inbound |
+| Blackbox Exporter | 9115 | inboud |
+| Alertmanager | 9093 | inbound |
+| Grafan |  3000 | inbound |
+| SSH | 22 | inbound |
+| http | 80 | outbound |
+| https | 443 | outbound |
+| smtp | 587 | outbound |
 
-| Application | DST | SRC | Port | INT/EXT |
-|---|---|---|---|---|
-| Prometheus |  |  | 9090 | intern |
-| Node Exporter|   |   | 9100 |  intern |
-| Blackbox Exporter |   |  | 9115 | intern |
-| Alertmanager |   |  | 9093 | intern |
-| Grafan |   |   |  3000 | extern |
-
+###### 3.7.1.2 Instances to monitor
+| Application | Port | Direction |
+|---|---|---|
+| Node_Exporter | 9100 | inbound |
 ---
 
 ## 4. Project goals
