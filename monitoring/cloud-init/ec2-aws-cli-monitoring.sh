@@ -18,4 +18,4 @@ aws ec2 run-instances \
     --security-group-ids $SECURITY_GROUP_ID \
     --subnet-id $SUBNET_ID \
     --iam-instance-profile Name="monitoring" \
-    --user-data file://cloud-config-podman.yaml
+    --user-data file://cloud-init-podman.yaml
