@@ -10,10 +10,12 @@ route:
 receivers:
 - name: 'email'
   email_configs:
-  - to: 'regormulb@gmail.com'
-    from: 'regormulb@gmail.com'
+  - to: 'xxx@gmail.com'
+    from: 'xxx@gmail.com'
     smarthost: smtp.gmail.com:587
-    auth_username: 'regormulb@gmail.com'
-    auth_identity: 'regormulb@gmail.com'
+    auth_username: 'xxx@gmail.com'
+    auth_identity: 'xxx@gmail.com'
     auth_password: 'xxxxxxxxxxx'
     send_resolved: true
+
+    
