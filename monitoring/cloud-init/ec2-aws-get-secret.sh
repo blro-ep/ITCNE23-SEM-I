@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get secret for gmail 
-AWS_SECRET_GMAIL=$(aws secretsmanager get-secret-value --region eu-central-2 --secret-id test | jq -r '.SecretString | fromjson | .regormulb@gmail.com')
+AWS_SECRET_GMAIL=$(aws secretsmanager get-secret-value --region eu-central-2 --secret-id prometheus_alertmanager | jq -r '.SecretString | fromjson | .email')
 
 # set secret for alertmanager
 sudo sed -i "s/xxxxxxxxxxx/$AWS_SECRET_GMAIL/g" /opt/ITCNE23-SEM-I/monitoring/alertmanager/alertmanager.yml
