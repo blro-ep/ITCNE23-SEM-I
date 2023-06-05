@@ -527,6 +527,11 @@ Resources:
           ToPort: 443
           IpProtocol: tcp
           CidrIp: 0.0.0.0/0
+        - Description: 'allow Node Exporter from instance'
+          FromPort: 9100
+          ToPort: 9100
+          IpProtocol: tcp
+          CidrIp: !Ref VpcCIDR
   
   PubTierSGIngressicmp:
     Type: AWS::EC2::SecurityGroupIngress
@@ -551,7 +556,13 @@ Resources:
       Tags:
         - Key: Name
           Value: AppTierSG
-
+      SecurityGroupIngress:
+        - Description: 'allow Node Exporter from instance'
+          FromPort: 9100
+          ToPort: 9100
+          IpProtocol: tcp
+          CidrIp: !Ref VpcCIDR
+    
   # creates an inbound rule to allow HTTP traffic (port 80) from PubTierSG to security group AppTierSG
   AppTierSGIngressPort80:
     Type: AWS::EC2::SecurityGroupIngress
@@ -594,8 +605,8 @@ Resources:
       IpProtocol: icmp 
       FromPort: 8 
       ToPort: -1
-      SourceSecurityGroupId: !Ref PubTierSG 
- 
+      SourceSecurityGroupId: !Ref PubTierSG
+
  # DB Tier Security Group
  #######################
 
@@ -615,7 +626,12 @@ Resources:
           FromPort: 22
           ToPort: 22
           SourceSecurityGroupId: !Ref AppTierSG
-
+        - Description: 'allow Node Exporter from instance'
+          FromPort: 9100
+          ToPort: 9100
+          IpProtocol: tcp
+          CidrIp: !Ref VpcCIDR
+          
   # Security Group for EFS Mount Target to AppTierSG
   EFSMountTargetSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'

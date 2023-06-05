@@ -509,6 +509,12 @@ Resources:
         ToPort: 443
         IpProtocol: tcp
         CidrIp: 0.0.0.0/0
+      - Description: allow Node Exporter from instance
+        FromPort: 9100
+        ToPort: 9100
+        IpProtocol: tcp
+        CidrIp:
+          Ref: VpcCIDR
   PubTierSGIngressicmp:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -530,6 +536,13 @@ Resources:
       Tags:
       - Key: Name
         Value: AppTierSG
+      SecurityGroupIngress:
+      - Description: allow Node Exporter from instance
+        FromPort: 9100
+        ToPort: 9100
+        IpProtocol: tcp
+        CidrIp:
+          Ref: VpcCIDR
   AppTierSGIngressPort80:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -591,6 +604,12 @@ Resources:
         ToPort: 22
         SourceSecurityGroupId:
           Ref: AppTierSG
+      - Description: allow Node Exporter from instance
+        FromPort: 9100
+        ToPort: 9100
+        IpProtocol: tcp
+        CidrIp:
+          Ref: VpcCIDR
   EFSMountTargetSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -660,36 +679,12 @@ Resources:
       PortRange:
         From: 22
         To: 22
-  PubNACLInboundRulePort80:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: PubNACL
-      RuleNumber: 110
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 80
-        To: 80
-  PubNACLInboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: PubNACL
-      RuleNumber: 120
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 443
-        To: 443
   PubNACLInboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: PubNACL
-      RuleNumber: 130
+      RuleNumber: 110
       Protocol: 1
       RuleAction: allow
       CidrBlock:
@@ -702,7 +697,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: PubNACL
-      RuleNumber: 131
+      RuleNumber: 111
       Protocol: 1
       RuleAction: allow
       CidrBlock:
@@ -710,7 +705,32 @@ Resources:
       Icmp:
         Code: -1
         Type: 8
-  PubNACLInboundRulePort9090:
+  PubNACLInboundRulePort9100:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      CidrBlock:
+        Ref: VpcCIDR
+      PortRange:
+        From: 9100
+        To: 9100
+  PubNACLInboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 130
+      Protocol: 6
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+  PubNACLInboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
@@ -720,9 +740,9 @@ Resources:
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
-        From: 9090
-        To: 9090
-  PubNACLInboundRulePort9100:
+        From: 443
+        To: 443
+  PubNACLInboundRulePort9090:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
@@ -730,17 +750,52 @@ Resources:
       RuleNumber: 150
       Protocol: 6
       RuleAction: allow
-      CidrBlock:
-        Ref: VpcCIDR
+      CidrBlock: 0.0.0.0/0
       PortRange:
-        From: 9100
-        To: 9100
-  PubNACLInboundRuleEphemeral:
+        From: 9090
+        To: 9090
+  PubNACLInboundRulePort3000:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: PubNACL
       RuleNumber: 160
+      Protocol: 6
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 3000
+        To: 3000
+  PubNACLInboundRulePort9115:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 170
+      Protocol: 6
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 9115
+        To: 9115
+  PubNACLInboundRulePort9093:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 180
+      Protocol: 6
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 9093
+        To: 9093
+  PubNACLInboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 200
       Protocol: 6
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
@@ -775,38 +830,12 @@ Resources:
       PortRange:
         From: 22
         To: 22
-  PubNACLOutboundRulePort80:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: PubNACL
-      RuleNumber: 110
-      Protocol: 6
-      Egress: true
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 80
-        To: 80
-  PubNACLOutboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: PubNACL
-      RuleNumber: 120
-      Protocol: 6
-      Egress: true
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 443
-        To: 443
   PubNACLOutboundRuleICMPEcho:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: PubNACL
-      RuleNumber: 130
+      RuleNumber: 110
       Protocol: 1
       Egress: true
       RuleAction: allow
@@ -820,7 +849,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: PubNACL
-      RuleNumber: 131
+      RuleNumber: 111
       Protocol: 1
       Egress: true
       RuleAction: allow
@@ -829,19 +858,46 @@ Resources:
       Icmp:
         Code: -1
         Type: 8
-  PubNACLOutboundRuleEphemeral:
+  PubNACLOutboundRulePort9100:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 120
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock:
+        Ref: VpcCIDR
+      PortRange:
+        From: 9100
+        To: 9100
+  PubNACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 130
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+  PubNACLOutboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: PubNACL
       RuleNumber: 140
       Protocol: 6
-      RuleAction: allow
       Egress: true
+      RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
-        From: 1024
-        To: 65535
+        From: 443
+        To: 443
   PubNACLOutboundRulePort9090:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -855,7 +911,7 @@ Resources:
       PortRange:
         From: 9090
         To: 9090
-  PubNACLOutboundRulePort9100:
+  PubNACLOutboundRulePort3000:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
@@ -864,11 +920,62 @@ Resources:
       Protocol: 6
       RuleAction: allow
       Egress: true
-      CidrBlock:
-        Ref: VpcCIDR
+      CidrBlock: 0.0.0.0/0
       PortRange:
-        From: 9100
-        To: 9100
+        From: 3000
+        To: 3000
+  PubNACLOutboundRulePort9115:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 170
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 9115
+        To: 9115
+  PubNACLOutboundRulePort9093:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 180
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 9093
+        To: 9093
+  PubNACLOutboundRulePortPort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 190
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 587
+        To: 587
+  PubNACLOutboundRuleEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 200
+      Protocol: 6
+      RuleAction: allow
+      Egress: true
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
   PublicSubnet1NetworkAclAssociation:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
@@ -904,48 +1011,12 @@ Resources:
       PortRange:
         From: 80
         To: 80
-  Private1NACLInboundRulePort80public:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: Private1NACL
-      RuleNumber: 110
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 80
-        To: 80
-  Private1NACLInboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: Private1NACL
-      RuleNumber: 120
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 443
-        To: 443
-  Private1NACLInboundRuleEphemeral:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: Private1NACL
-      RuleNumber: 131
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 1024
-        To: 65535
   Private1NACLInboundRule22:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 140
+      RuleNumber: 110
       Protocol: 6
       RuleAction: allow
       CidrBlock:
@@ -958,7 +1029,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 150
+      RuleNumber: 120
       Protocol: 1
       RuleAction: allow
       CidrBlock:
@@ -971,7 +1042,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 160
+      RuleNumber: 130
       Protocol: 6
       RuleAction: allow
       CidrBlock:
@@ -979,40 +1050,37 @@ Resources:
       PortRange:
         From: 9100
         To: 9100
-  Private1NACLOutboundRulePort80:
+  Private1NACLInboundRulePort80public:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 100
+      RuleNumber: 140
       Protocol: 6
-      Egress: true
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
         From: 80
         To: 80
-  Private1NACLOutboundRulePort443:
+  Private1NACLInboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 110
+      RuleNumber: 150
       Protocol: 6
-      Egress: true
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
         From: 443
         To: 443
-  Private1NACLOutboundRulePortEphemeral:
+  Private1NACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 125
+      RuleNumber: 200
       Protocol: 6
-      Egress: true
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
@@ -1023,7 +1091,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 130
+      RuleNumber: 110
       Protocol: 6
       Egress: true
       RuleAction: allow
@@ -1037,7 +1105,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 140
+      RuleNumber: 120
       Protocol: 6
       Egress: true
       RuleAction: allow
@@ -1051,7 +1119,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private1NACL
-      RuleNumber: 150
+      RuleNumber: 130
       Protocol: 1
       Egress: true
       RuleAction: allow
@@ -1060,6 +1128,58 @@ Resources:
       Icmp:
         Code: -1
         Type: 8
+  Private1NACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private1NACL
+      RuleNumber: 140
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+  Private1NACLOutboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private1NACL
+      RuleNumber: 150
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 443
+        To: 443
+  Private1NACLOutboundRulePort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private1NACL
+      RuleNumber: 160
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 587
+        To: 587
+  Private1NACLOutboundRulePortEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private1NACL
+      RuleNumber: 200
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
   PrivateSubnet1NetworkAclAssociation:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
@@ -1075,48 +1195,12 @@ Resources:
       Tags:
       - Key: Name
         Value: Private2-Tier-NACL-AZ2
-  Private2NACLInboundRulePort80:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: Private2NACL
-      RuleNumber: 100
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 80
-        To: 80
-  Private2NACLInboundRulePort443:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: Private2NACL
-      RuleNumber: 110
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 443
-        To: 443
-  Private2NACLInboundRuleEphemeral:
-    Type: AWS::EC2::NetworkAclEntry
-    Properties:
-      NetworkAclId:
-        Ref: Private2NACL
-      RuleNumber: 121
-      Protocol: 6
-      RuleAction: allow
-      CidrBlock: 0.0.0.0/0
-      PortRange:
-        From: 1024
-        To: 65535
   Private2ACLInboundRulePort20:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 130
+      RuleNumber: 110
       Protocol: 6
       RuleAction: allow
       CidrBlock:
@@ -1129,7 +1213,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 140
+      RuleNumber: 120
       Protocol: 6
       RuleAction: allow
       CidrBlock:
@@ -1142,7 +1226,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 150
+      RuleNumber: 130
       Protocol: 1
       RuleAction: allow
       CidrBlock:
@@ -1150,40 +1234,37 @@ Resources:
       Icmp:
         Code: -1
         Type: 8
-  Private2NACLOutboundRulePort80:
+  Private2NACLInboundRulePort80:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 100
+      RuleNumber: 140
       Protocol: 6
-      Egress: true
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
         From: 80
         To: 80
-  Private2NACLOutboundRulePort443:
+  Private2NACLInboundRulePort443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 110
+      RuleNumber: 150
       Protocol: 6
-      Egress: true
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
         From: 443
         To: 443
-  Private2NACLOutboundRulePortEphemeral:
+  Private2NACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 125
+      RuleNumber: 200
       Protocol: 6
-      Egress: true
       RuleAction: allow
       CidrBlock: 0.0.0.0/0
       PortRange:
@@ -1194,7 +1275,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 130
+      RuleNumber: 110
       Protocol: 6
       Egress: true
       RuleAction: allow
@@ -1208,7 +1289,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 140
+      RuleNumber: 120
       Protocol: 6
       Egress: true
       RuleAction: allow
@@ -1222,7 +1303,7 @@ Resources:
     Properties:
       NetworkAclId:
         Ref: Private2NACL
-      RuleNumber: 150
+      RuleNumber: 130
       Protocol: 1
       Egress: true
       RuleAction: allow
@@ -1231,6 +1312,58 @@ Resources:
       Icmp:
         Code: -1
         Type: 8
+  Private2NACLOutboundRulePort80:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private2NACL
+      RuleNumber: 140
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 80
+        To: 80
+  Private2NACLOutboundRulePort443:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private2NACL
+      RuleNumber: 150
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 443
+        To: 443
+  Private2NACLOutboundRulePort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private2NACL
+      RuleNumber: 160
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 587
+        To: 587
+  Private2NACLOutboundRulePortEphemeral:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Private2NACL
+      RuleNumber: 200
+      Protocol: 6
+      Egress: true
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 1024
+        To: 65535
   PrivateSubnet2NetworkAclAssociation:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
@@ -1613,7 +1746,7 @@ Resources:
     Condition: WantEC2
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/c8144cf8ea4844b362bd4ad17a355d50.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/f6791e0638cc446746d9832cdab611ab.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1640,7 +1773,7 @@ Resources:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/896b9d0f7e43ad1872f64073af59eda9.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/7452f3d3565508b98945e941aa2a68c3.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName

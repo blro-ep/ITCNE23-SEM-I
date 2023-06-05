@@ -272,7 +272,7 @@ explicitly define resource creation order
 
 ## Circular Dependencies
 Error "Circular dependency between resources: 
-![Circular Dependency](images/circular.png)
+![Circular Dependency](images/cir.png)
 
 
 **Example not working**
@@ -428,12 +428,14 @@ aws cloudformation validate-template --template-body file://cloudformation_VPC_2
 ```
 
 If successful, CloudFormation will send you a response with a list of parameters, template description and capabilities.
+
 ----
 
 ## Deploy Stack 
 The aws cloudformation deploy  command is used to deploy CloudFormation templates using the CLI.
 
 **Example**
+
 When using the CLI, you are also required to acknowledge this stack might create resources that can affect IAM permissions
 --capabilities CAPABILITY_IAM
 
