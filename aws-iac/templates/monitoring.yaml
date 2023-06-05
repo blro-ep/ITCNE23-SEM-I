@@ -533,23 +533,38 @@ Resources:
             - podman-compose up -d
 
 Outputs:
-  WebsiteURLlocal:
-    Value: !Sub http://${GrafanaInstance.PrivateIp}
-    Description: Application URL
-  
-  AppUrl:
-    Description: URL of the sample app.
-    Value: !Sub 'http://${LoadBalancer.DNSName}'
 
+  # Outputs the Load Balancer DNS name and the Grafana URL
   LoadBalancerDNS:
     Value: !GetAtt LoadBalancer.DNSName
     Description: The DNS name of the load balancer
+  
+  # Outputs the Prometheus URL on Port 9090
+  PrometheusUrl:
+    Description: URL of the Prometheus Server
+    Value: !Sub 'http://${LoadBalancer.DNSName}:9090'
+
+  # Outputs the Alertmanager URL on Port 9093
+  AlertmanagerUrl:
+    Description: URL of the Alertmanager Server
+    Value: !Sub 'http://${LoadBalancer.DNSName}:9093'
+
+  # Outputs the Blackbox Exporter URL on Port 9093
+  BlackboxUrl:
+    Description: URL of the Blackbox Exporter Server
+    Value: !Sub 'http://${LoadBalancer.DNSName}:9115'
+
+  # Outputs the Grafana URL in the Private Subnet
+  WebsiteURLlocal:
+    Value: !Sub http://${GrafanaInstance.PrivateIp}
+    Description: Application URL
     
   InstanceID:
     Value: !Ref GrafanaInstance
     Description: Shows you the Instance ID of the EC2
     #i-04a3cc73a1c73cf94
 
+  # The command to connect to the instance over Session Manager
   SSMManager:
     Value: !Sub aws ssm start-session --target ${GrafanaInstance} --profile gmail
     Description: CMD Commend to Connect to the Linux Machine over Session Manager

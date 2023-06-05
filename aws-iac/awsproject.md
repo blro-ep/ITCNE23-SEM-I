@@ -6,8 +6,8 @@ Definition IAC Project
 
 * 01 - [SMART Objectives](#03-SMART-Objectives)
 * 02 - [Seusag](#04-Seusag)
-* 03 - [Port Matrix](#06-Port-Matrix)
-* 04 - [Dependencies](#06-Dependencies)
+* 03 - [Port Matrix](#03-Port-Matrix)
+* 04 - [Dependencies](#04-Dependencies)
 
 
 ## 01 SMART Objectives

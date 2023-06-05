@@ -8,7 +8,9 @@ AWS how to deploy
 * 03 - [Deployment](#03-Deployment)
 * 04 - [Stack Information](#04-Stack-Information)
 * 05 - [Update stack ](#05-Update-stack)
-* 06 - [Delete stack](#05-Delete-stack)
+* 06 - [Termination Protection](#06-Termination-Protection)
+* 07 - [Delete stack](#05-Delete-stack)
+
 
 
 ## 01 AWS CLI Access
@@ -172,9 +174,9 @@ aws cloudformation deploy \
     --capabilities CAPABILITY_IAM \
     --capabilities CAPABILITY_NAMED_IAM \
     --role-arn arn:aws:iam::824877243403:role/cloudformation-role \
-    --enable-termination-protection \
     --profile cloudformation-user
 ```
+
 To check the status of the stack creation you can use the following command:
 
 ```
@@ -189,7 +191,7 @@ Before we deploy the Monitoring Stack we can validate the template with the foll
 aws cloudformation validate-template --template-body file://templates/monitoring.yaml --profile cloudformation-user
 ```
 
-### Monitoring Stack deploy with CLI
+### Deploy the Monitoring Stack with AWS cli
 
 Here we will deploy the Monitoring Stack with the following command:
 
@@ -210,7 +212,7 @@ To disable the FlowLog Parameter we can use the following flag:
 To disable the SimpleEc3Instance Parameter we can use the following flag:
 > --parameters ParameterKey=SimpleEc3Instance,ParameterValue=false \
 
-In this case we create a new stack with the name MonitoringStack directly from the template file and don't need to package it first, because we don't have any nested templates.
+**In this case we create a new stack with the name MonitoringStack directly from the template file and don't need to package it first, because we don't have any nested templates.**
 
 ```
 # Stack erstellen --capabilities CAPABILITY_IAM 
@@ -245,6 +247,16 @@ aws cloudformation wait stack-create-complete \
     --profile cloudformation-user
 ```
 
+**Via Console its possible to see the Stack Events in the CloudFormation Service**
+
+> Specially the Outputs of the different Stacks are important to know for the next steps.
+
+Here we can see the command to connect to the Dev Instance and the URL of the Webpage
+![DEV Instance Stack Output](images/devinstance.png)  
+
+Here we can see the command to connect to the Monitoring Instance and the URL of the Loadbalancer
+![Monitoring Stack Output](images/monitoringstack.png)  
+
 ## 05 Update stack 
 
 If you want to update the stack you can use the following command:
@@ -264,7 +276,30 @@ aws cloudformation update-stack
     --profile cloudformation-user
 ```
 
-## 06 Delete stack
+## 06 Termination Protection
+
+To enable the termination protection of the stack we can use the following command:
+
+> This is specially important on the Main Stack to prevent the deletion of the stack by accident.
+
+Here we need elevated rights to do it and we use the gmail profile to do it.
+```
+aws cloudformation update-termination-protection \
+    --stack-name VPC-DEV01 \
+    --enable-termination-protection \
+    --profile gmail
+```
+
+## 07 Delete stack
+
+Before we delete the stack we need to disable the termination protection of the stack with the following command:
+
+```
+aws cloudformation update-termination-protection \
+    --stack-name VPC-DEV01 \
+    --no-enable-termination-protection \
+    --profile gmail
+```
 
 Stack löschen  mit --retain-resources option 
 

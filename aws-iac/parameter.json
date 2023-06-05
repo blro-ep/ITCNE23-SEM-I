@@ -1,0 +1,14 @@
+[
+    {
+        "ParameterKey": "NatGateways",
+        "ParameterValue": "false"
+    },
+    {
+        "ParameterKey": "FlowLog",
+        "ParameterValue": "false"
+    },
+    {
+        "ParameterKey": "s3Bucket",
+        "ParameterValue": "false"
+    }
+]

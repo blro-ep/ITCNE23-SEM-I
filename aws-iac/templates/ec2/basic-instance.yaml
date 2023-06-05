@@ -92,6 +92,11 @@ Resources:
             - sudo ufw allow 'Apache'
 
 Outputs:
+
+  WebsiteURL:
+    Value: !Sub http://${DevInstance.PrivateIp}
+    Description: Application URL
+
   PrivateIpAddress:
     Description: The public IP address of the deployed instance
     Value: !GetAtt DevInstance.PrivateIp
