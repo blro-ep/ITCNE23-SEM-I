@@ -610,22 +610,6 @@ Resources:
         IpProtocol: tcp
         CidrIp:
           Ref: VpcCIDR
-  EFSMountTargetSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security Group allowing traffic between EFS Mount Targets
-        and Amazon EC2 instances
-      VpcId:
-        Ref: VPC
-      Tags:
-      - Key: Name
-        Value: EFSMountTargetSecurityGroup
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        SourceSecurityGroupId:
-          Ref: AppTierSG
-        FromPort: 80
-        ToPort: 80
   Ec2SSMRole:
     Type: AWS::IAM::Role
     Properties:
@@ -1773,7 +1757,7 @@ Resources:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/8d7becaa7c5b015584220fabade1bdf5.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/f38ef6d97f3802736573b045bcc58215.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1856,6 +1840,13 @@ Outputs:
     Export:
       Name:
         Fn::Sub: ${AWS::StackName}-AppTierSG
+  VpcCIDR:
+    Description: A reference to the VPC CIDR
+    Value:
+      Ref: VpcCIDR
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-VpcCIDR
   PublicSubnets:
     Description: A list of the public subnets
     Value:

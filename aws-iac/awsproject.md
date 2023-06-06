@@ -7,8 +7,8 @@ Definition IAC Project
 * 01 - [SMART Objectives](#03-SMART-Objectives)
 * 02 - [Seusag](#04-Seusag)
 * 03 - [Port Matrix](#03-Port-Matrix)
-* 04 - [Dependencies](#04-Dependencies)
-
+* 04 - [Security Groups](#05-Security-Groups)
+* 05 - [Dependencies](#05-Dependencies)
 
 ## 01 SMART Objectives
 
@@ -76,7 +76,7 @@ And by implementing its user data in CloudFormation, I will integrate this monit
 Here is a diagram showing the port matrix for the IaC part of the project.
 ![grafana](images/AWSInfraPort.png)
 
-Table of the Port Matrix
+**Table of the Port Matrix**
 
 | Port | Protocol | Source | DestinationCidrBlock | Description | 
 | ---     | --- | ---  | --- | --- |
@@ -93,8 +93,13 @@ Table of the Port Matrix
 | 9100 | TCP | VPC | VPC | Needed for Prometeo Node exporter |
 | 9115 | TCP | Internet | Subnet2 | Needed for Blackbox Dashboard |
 
+## 04 Security Groups
 
-## 04 Dependencies
+Here is a diagram showing the Security Groups for the IaC part of the project.
+![grafana](images/AWSInfraSG.png)
+
+
+## 05 Dependencies
 
 ### IaC Cross Stack Dependencies
 
