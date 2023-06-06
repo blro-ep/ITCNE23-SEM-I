@@ -184,12 +184,6 @@ Resources:
       VpcId:
         !ImportValue 
           Fn::Sub: '${VPCModule}-ID'
-      SecurityGroupIngress:
-        - Description: Allow SSH
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
 
 # Inbound Rule
 ##############
@@ -253,6 +247,18 @@ Resources:
       FromPort: 443 
       ToPort: 443
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
+
+  InstanceSecurityGroupIngress9100:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and LB 
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 9100 
+      ToPort: 9100
+      SourceSecurityGroupId: 
+        - !ImportValue 
+            Fn::Sub: '${VPCModule}-VpcCIDR'
 
 # Load Balancer
 #######################
