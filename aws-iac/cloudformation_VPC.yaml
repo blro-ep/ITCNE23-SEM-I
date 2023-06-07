@@ -631,21 +631,17 @@ Resources:
           ToPort: 9100
           IpProtocol: tcp
           CidrIp: !Ref VpcCIDR
-          
-  # Security Group for EFS Mount Target to AppTierSG
-  EFSMountTargetSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
+
+  DBTierSGIngressicmp:
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      GroupDescription: Security Group allowing traffic between EFS Mount Targets and Amazon EC2 instances
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: EFSMountTargetSecurityGroup
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          SourceSecurityGroupId: !Ref AppTierSG
-          FromPort: 80
-          ToPort: 80
+      Description: Security Group Inbound Rule between DB Tier and App Tier 
+      GroupId: !Ref DBTierSG
+      IpProtocol: icmp 
+      FromPort: 8 
+      ToPort: -1
+      SourceSecurityGroupId: !Ref AppTierSG
+
 
 ## Roles 
 ########
@@ -2002,7 +1998,13 @@ Outputs:
     Value: !Ref AppTierSG
     Export:
       Name: !Sub ${AWS::StackName}-AppTierSG
-    
+
+  VpcCIDR:
+    Description: A reference to the VPC CIDR
+    Value: !Ref VpcCIDR
+    Export:
+      Name: !Sub ${AWS::StackName}-VpcCIDR
+
   PublicSubnets:
     Description: A list of the public subnets
     Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]

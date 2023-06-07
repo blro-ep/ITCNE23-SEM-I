@@ -66,6 +66,9 @@ Resources:
     Properties:
       GroupDescription: "security group for the prod EFS"
       GroupName: "EFS-SG"
+      Tags:
+        - Key: Name
+          Value: EFSSG
       VpcId:
         !ImportValue 
           Fn::Sub: '${VPCModule}-ID'
@@ -73,8 +76,8 @@ Resources:
         - 
           SourceSecurityGroupId: !Ref GrafanaSecurityGrp
           Description: "servers to connect to efs"
-          FromPort: 2049
-          IpProtocol: "tcp"
+          FromPort: 2049      # NFS Port
+          IpProtocol: tcp
           ToPort: 2049
       Tags:
         - Key: Environment
@@ -82,6 +85,16 @@ Resources:
         - Key: StackName
           Value: !Ref AWS::StackName
 
+# Outbound Rule for EFS
+  OutboundRuleefsg2049:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Security Group Rule between Instance and EFS 
+      GroupId: !Ref EFSSG
+      IpProtocol: tcp 
+      FromPort: 2049 
+      ToPort: 2049
+      SourceSecurityGroupId: !Ref GrafanaSecurityGrp
 
 # Secuirty Group for Load Balancer Allows HTTP and Grafana In 
   WebTierSecurityGroup:
@@ -89,6 +102,10 @@ Resources:
     Properties:
       GroupDescription: Security group for web instances
       GroupName: WebTierSecurityGroup
+      Tags:
+        - Key: Name
+          Value: WebTierSG
+      # Inbound Rule for Web Tier Security Group
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -110,6 +127,29 @@ Resources:
           FromPort: 9093
           ToPort: 9093
           CidrIp: 0.0.0.0/0
+      # Outbound Rule for Web Tier Security Group
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 9090
+          ToPort: 9090
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 9115
+          ToPort: 9115
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 9093
+          ToPort: 9093
+          CidrIp: 0.0.0.0/0
+
       VpcId:
         !ImportValue 
           Fn::Sub: '${VPCModule}-ID'
@@ -181,19 +221,17 @@ Resources:
     Properties:
       GroupDescription: Allow HTTP and SSH In from LB Securtiy Group
       GroupName: GrafanaSecurityGrp
+      Tags:
+        - Key: Name
+          Value: GrafanaSG
       VpcId:
         !ImportValue 
           Fn::Sub: '${VPCModule}-ID'
-      SecurityGroupIngress:
-        - Description: Allow SSH
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
 
 # Inbound Rule
 ##############
 
+# Inbound Rule for HTTP
   InstanceSecurityGroupIngressHTTP:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -204,6 +242,18 @@ Resources:
       ToPort: 80
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
+# Inbound Rule for NFS
+  InstanceSecurityGroupIngressNFS:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Rule between Instance and NFS
+      GroupId: !Ref GrafanaSecurityGrp
+      IpProtocol: tcp 
+      FromPort: 2049 
+      ToPort: 2049
+      SourceSecurityGroupId: !Ref EFSSG
+
+# Inbound Rule for Grafana Dashboard
   InstanceSecurityGroupIngress3000:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -214,6 +264,7 @@ Resources:
       ToPort: 3000
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
+# Inbound Rule for Prometheus Dashboard
   InstanceSecurityGroupIngress9090:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -224,6 +275,7 @@ Resources:
       ToPort: 9090
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
+# Inbound Rule for Alertmanager Dashboard
   InstanceSecurityGroupIngress9115:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -234,6 +286,7 @@ Resources:
       ToPort: 9115
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
+# Inbound Rule for Alertmanager Dashboard
   InstanceSecurityGroupIngress9093:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -244,15 +297,17 @@ Resources:
       ToPort: 9093
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 
-  InstanceSecurityGroupIngressHTTPS:
+  InstanceSecurityGroupIngress9100:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       Description: Security Group Rule between Instance and LB 
       GroupId: !Ref GrafanaSecurityGrp
       IpProtocol: tcp 
-      FromPort: 443 
-      ToPort: 443
-      SourceSecurityGroupId: !Ref WebTierSecurityGroup
+      FromPort: 9100 
+      ToPort: 9100
+      CidrIp:
+       !ImportValue 
+        Fn::Sub: '${VPCModule}-VpcCIDR'
 
 # Load Balancer
 #######################
@@ -535,7 +590,7 @@ Resources:
 Outputs:
 
   # Outputs the Load Balancer DNS name and the Grafana URL
-  LoadBalancerDNS:
+  GrafanaUrl:
     Value: !GetAtt LoadBalancer.DNSName
     Description: The DNS name of the load balancer
   

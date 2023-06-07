@@ -335,6 +335,31 @@ Error "Circular dependency between resources:
 ```
 ----
 
+## Array
+
+With an array you can create multiple resources with the same properties
+You use it by adding a "-" in front of the resource
+
+**Example of an Array**
+``` 
+
+      CidrIp:
+        - !ImportValue 
+            Fn::Sub: '${VPCModule}-VpcCIDR'
+        - !ImportValue 
+            Fn::Sub: '${VPCModule}-VpcCIDR2'
+``` 
+
+**Example without Array**
+``` 
+
+      CidrIp:
+        !ImportValue 
+          Fn::Sub: '${VPCModule}-VpcCIDR'
+``` 
+
+---
+
 ## Nested stacks 
 Reusing common template patterns using nested stacks is efficient and considered a best practice in CloudFormation
 
