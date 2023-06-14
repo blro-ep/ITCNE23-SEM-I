@@ -9,7 +9,7 @@ Implemenatin User Data to ec2 über github -> Dany
 
 * 01 - [Our Kanban Board Explained](#01-Our-Kanban-Board-Explained)
 * 02 - [Communication Collaboration](#02-Communication-Collaboration)
-
+* 02 - [Testing](#03-Testing)
 
 ## 01 Our Kanban Board Explained
 In order to visualize and manage our workflow in agile project, we are going to use the kanban board directly in Github as our project management tool.
@@ -117,4 +117,4 @@ Use a Git repository to make project collaboration as agile and lean as possible
 | Description | Test Step | Expected Result | Status | Screen |
 | ---     | ---   | ---     | ---   |  ---   |
 | `Fehlermanagement`| Script ohne Argumente Ausführen | Warnhinweis mindestens zwei Argumente benötigt| OK | [Screenshot](images/collaboration.png) |
-| `Fehlermanagement`| Script mit einem Argumente Ausführen | Warnhinweis mindestens zwei Argumente benötigt| OK | [Screenshot](images/collaboration.png) |
+| `Fehlermanagement`| Script mit einem Argumente Ausführen | Warnhinweis mindestens zwei Argumente benötigt| OK | 7 |
