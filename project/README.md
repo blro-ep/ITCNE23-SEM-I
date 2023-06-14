@@ -62,18 +62,37 @@ The "Backlog" column can be seen as a holding area for tasks that are waiting to
 - 1. Sprint / 15.05.2023
 ![1.Sprint](images/sprint-1.png)
 
-#### Kep
+**Keep**
+Die Entscheidung das Projekt in Github zu Dokumentieren war sehr gut. 
+Das Projekt konnte in einzelen Task aufgeteilt werden und bietet mit dem Kanbanboard, Roudmap, Taskliste eine gute und schnelle übersicht zum Projekt.
+Durch github kann unabhänging von einander am Projekt gearbeitet werden und sämtliche Schritte können mit den Commits nachvollzogen werden.
+Die Umstellung von Docker auf Podman im POC (Input von Marcello) hat gut funktioniert. 
 
+**Drop**
+Das Inhaltsverzeichnis in den github Readme files würden wir nicht mehr so umsetzten. Es ist bei Anpassung umständliche und aufwendig.
 
-#### Drop
-
-#### Dry
-
+**Try**
+Schneller auf Erfahrungen von anderen zurück greifen (Dozenten / Arbeitskollegen).
+Lösung suchen, welche das Inhaltsverzeichnis von den Github Readme files automatisch aufbereitet.
 
 - 2. Sprint / 14.06.2023
-![2.Sprint](images/sprint-2.png)
+![2.Sprint](images/sprint-2.png)**
+
+**Keep**
+Die Zusammenarbeit in den Teilprojekten (IaC / Monitoring) hat gut funktioniert. 
+Schnittstellen wurden zusammen besprochen und in Tasks aufgeteilt.
+Visualisierungen des Netzwerk, Sicherheitsgruppen und Monitoring Overview war sehr hilfreich für das allgemeine Verständnis.
+
+**Drop***
+Am Ursprungstask festhalten und zusätzliche Features gut hinterfragen, welche nicht im Task enthalten sind. Diese können schnell zu einem grossen Mehraufwand führen.
+
+**Try**
+Die Tasks besser priorisieren und allenfalls ins Backlog verschieben.
+
 
 - 3. Sprint / 05.07.2023
+
+
 
 - 4. Sprint / 12.07.2023
 
