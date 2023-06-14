@@ -62,7 +62,16 @@ The "Backlog" column can be seen as a holding area for tasks that are waiting to
 - 1. Sprint / 15.05.2023
 ![1.Sprint](images/sprint-1.png)
 
+#### Kep
+
+
+#### Drop
+
+#### Dry
+
+
 - 2. Sprint / 14.06.2023
+![2.Sprint](images/sprint-2.png)
 
 - 3. Sprint / 05.07.2023
 
