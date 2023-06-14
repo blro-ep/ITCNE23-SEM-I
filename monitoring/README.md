@@ -25,8 +25,6 @@
 * 3.6     - [Subsystem](#36-subsystem)
 * 3.7     - [Inferfaces](#37-interfaces)
 * 3.7.1   - [Portmatrix](#371-portmatrix)
-* 3.7.1.1 - [Instance Prometheus / Grafana](#3711-instance-prometheus--grafana)
-* 3.7.1.2 - [Instance to Monitor](#3712-instances-to-monitor)
 * 4       - [Project Goals](#4-project-goals)
 * 4.1     - [Procedural Goals](#41-procedural-goals)
 * 4.2     - [System Golas](#42-system-goals)
@@ -179,7 +177,7 @@ Github is used in this project to manage the monitoring setup.
 | S3 | Promethes / Alertmanager | Prometheus pushes the alerts to the alert manager, from where they are sent. |
 
 #### 3.7.1 Portmatrix
-##### 3.7.1.1 Instance Prometheus / Grafana
+
 | Application | Port | Direction |
 |---|---|---|
 | Prometheus | 9090 | inbound |
@@ -192,10 +190,6 @@ Github is used in this project to manage the monitoring setup.
 | https | 443 | outbound |
 | smtp | 587 | outbound |
 
-###### 3.7.1.2 Instances to monitor
-| Application | Port | Direction |
-|---|---|---|
-| Node_Exporter | 9100 | inbound |
 ---
 
 ## 4. Project goals
