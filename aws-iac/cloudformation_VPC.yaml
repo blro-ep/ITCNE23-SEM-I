@@ -1850,7 +1850,7 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: public-bucket-dam
+      BucketName: public-bucket-dam-fr
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -2096,7 +2096,7 @@ Outputs:
 
   IPEc2InstanceID:
     Condition: WantEC2
-    Description: The Public IP Address of the Ec2 Template
+    Description: The Public IP Address of the Apache Server
     Value: !GetAtt VPCBASICInstance.Outputs.PrivateIpAddress
 
   S3Bucket:

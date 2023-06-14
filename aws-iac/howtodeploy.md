@@ -33,7 +33,7 @@ Linux: sudo apt install awscli
 6. Open a Console and confiuate your newest CLI Profile like follow:
 
 ```
-$ aws configure --profile Swisscom
+$ aws configure --profile gmail
 AWS Access Key ID [None]: ASIA5RV7WLQ6W6AJUFWH
 AWS Secret Access Key [None]: /qCS6sU0fYzmG1L8R1mK07nbIVblqh437HVV
 Default region name [None]: eu-central-2
@@ -389,15 +389,29 @@ aws cloudformation deploy \
     --profile cloudformation-user
 ```
 
+5. Be aware of the following error message:
+
+If you directly create a stack in a region, you must wait a few minutes before creating the same stack in a different region.
+This is the *[s3 Bucket](https://www.cloudvedas.com/2017/06/solved-conflicting-conditional.html)*.
+
+6. Deploy the Monitoring Stack to eu-central-1
+
+```
+aws cloudformation create-stack \
+    --stack-name MonitoringStack \
+    --template-body file://templates/monitoring.yaml \
+    --role-arn arn:aws:iam::824877243403:role/cloudformation-role \
+    --profile cloudformation-user
+```
 
 --------------
 ## 10 etc. 
 
 ### config File auf S3 Laden 
 
-> aws s3 cp simpleec2.yaml s3://config-bucket-931336182845 --profile Swisscom
+> aws s3 cp simpleec2.yaml s3://config-bucket-931336182845 --profile gmail
 
-> aws s3 cp simpleec3.yaml s3://config-bucket-931336182845 --profile Swisscom
+> aws s3 cp simpleec3.yaml s3://config-bucket-931336182845 --profile gmail
 
 
 ### Change Set erstellen 
@@ -420,7 +434,7 @@ aws cloudformation create-change-set \
 
 ### Connect to Instance via SSM
 
-aws ssm start-session --target i-001a13efc13b29e24 --profile Swisscom
+aws ssm start-session --target i-001a13efc13b29e24 --profile gmail
 
 ### Sources
 
