@@ -126,7 +126,9 @@ Use a Git repository to make project collaboration as agile and lean as possible
 | `Grafan`| Check that the Grafana UI is reachable | UI reachable | UI reachable | [Screenshot](images) |
 | `Blackbox-Exporter`| Check that the Blackbox-Exporter UI is reachable and Probes are available | UI reachable | UI reachable | [Screenshot](images/check-blackbox_exporter-UI.png) |
 | `Alertmanager`| Check that the Alertmanager UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-alertmanager-UI.png) |
-| `Alertmanager`| Add gmailaddress / password to the config | Send email alerts | Send email alerts | [Screenshot](images/send-smtp-alerts.png) |
+| `Alertmanager`| Add gmailaddress / password to the config | Send email alerts | Send email alerts | [Screenshot](images/send-smtp-alerts.png
+
+) |
 | `Prometheus`| Add new targets to the prometheus config | after container restart up | after container restart up | [Screenshot](images/add-targets-prometheus.png) |
 | `Podman`| Reload the new config via podman-compose | 4 Containers UP  | 4 Containers UP | [Screenshot](images/restart-container-podman-compose.png) |
 | `EC2 Instance`| Generate CPU load to test the Grafana Dashboard and the Alertmanager | Trigger Alert  | Trigger Alert  | [Screenshot-1](images/generate-cpu-load.png) <br> [Screenshot-2](images/grafan-cpu-load.png) <br> [Screenshot-3](images/firing-cpu-alert.png) <br> [Screenshot-4](images/resolved-cpu-alert.png) |
