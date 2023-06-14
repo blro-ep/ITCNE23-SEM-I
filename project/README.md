@@ -9,7 +9,8 @@ Implemenatin User Data to ec2 über github -> Dany
 
 * 01 - [Our Kanban Board Explained](#01-Our-Kanban-Board-Explained)
 * 02 - [Communication Collaboration](#02-Communication-Collaboration)
-* 03 - [Testing](#03-Testing)
+* 03 - [Sprint Completion](#03-sprint-completion)
+* 04 - [Testing](#04-testing)
 
 ## 01 Our Kanban Board Explained
 In order to visualize and manage our workflow in agile project, we are going to use the kanban board directly in Github as our project management tool.
@@ -58,7 +59,19 @@ When the task has been completed, we can move the card to the "Done" column to i
 
 The "Backlog" column can be seen as a holding area for tasks that are waiting to be added to the board or moved to the "To Do" column. It is a useful tool for planning future work and ensure for a steady flow of tasks moving through the workflow. 
 
-### Sprint completion
+
+## 02 Communication Collaboration
+
+![MSTeams](images/msteams_logo.png)
+
+In order to ensure total transparency for the auditors, the project communication will be carried out via a dedicated teams channel "ITCNE23-SEM-I communication".
+
+Allows the sharing of updates and discussion of project related issues in a centralised and organised manner for effective communication between us.
+
+![Collaboration](images/collaboration.png)**Collaboration**
+Use a Git repository to make project collaboration as agile and lean as possible and define clear system boundaries.
+
+## 03 Sprint completion
 **1. Sprint / 15.05.2023**
 ![1.Sprint](images/sprint-1.png)
 
@@ -97,19 +110,7 @@ Die Tasks besser priorisieren und allenfalls ins Backlog verschieben.
 **4. . Sprint / 12.07.2023**
 
 
-## 02 Communication Collaboration
-
-![MSTeams](images/msteams_logo.png)
-
-In order to ensure total transparency for the auditors, the project communication will be carried out via a dedicated teams channel "ITCNE23-SEM-I communication".
-
-Allows the sharing of updates and discussion of project related issues in a centralised and organised manner for effective communication between us.
-
-![Collaboration](images/collaboration.png)**Collaboration**
-Use a Git repository to make project collaboration as agile and lean as possible and define clear system boundaries.
-
-
-## 03 Testing
+## 04 Testing
 
 ![Testing](images/testing.png)
 
