@@ -108,3 +108,13 @@ Allows the sharing of updates and discussion of project related issues in a cent
 ![Collaboration](images/collaboration.png)**Collaboration**
 Use a Git repository to make project collaboration as agile and lean as possible and define clear system boundaries.
 
+
+## 03 Testing
+
+![Testing](images/testing.png)
+
+
+| Description | Test Step | Expected Result | Status | Screen |
+| ---     | ---   | ---     | ---   |  ---   |
+| `Fehlermanagement`| Script ohne Argumente Ausführen | Warnhinweis mindestens zwei Argumente benötigt| OK | [Screenshot](images/collaboration.png) |
+| `Fehlermanagement`| Script mit einem Argumente Ausführen | Warnhinweis mindestens zwei Argumente benötigt| OK | [Screenshot](images/collaboration.png) |

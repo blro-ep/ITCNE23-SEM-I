@@ -9,8 +9,9 @@ AWS how to deploy
 * 04 - [Stack Information](#04-Stack-Information)
 * 05 - [Update stack ](#05-Update-stack)
 * 06 - [Termination Protection](#06-Termination-Protection)
-* 07 - [Delete stack](#05-Delete-stack)
-
+* 07 - [IAM User for Roger](#07-IAM-User-for-Roger)
+* 08 - [Delete stack](#08-Delete-stack)
+* 09 - [etc.](#09-etc.)
 
 
 ## 01 AWS CLI Access
@@ -48,11 +49,11 @@ aws configure list-profiles
 
 ## 02 Prerequisite
 
-### IAM CloudFormation user (best Pracitce)
+### IAM CloudFormation User
 
 Setting up an IAM user for CloudFormation is best Practice to improve security, access control and accountability for your AWS resources. 
 
-> It is a part of AWS Well Architect Framwork for using CloudFormation and allows you to track and audit actions performed, while allowing you to fine-grained access control based on roles, groups and policy.
+> It is a part of AWS Well Architect Framework for using CloudFormation and allows you to track and audit actions performed, while allowing you to fine-grained access control based on roles, groups and policy.
 
 
 1. We’ll start by creating a iam user
@@ -107,7 +108,7 @@ Here we will attach the newly created role a policy to have AdministratorAccess 
 aws iam put-role-policy \
     --role-name cloudformation-role \
     --policy-name cloudformation-policy \
-    --policy-document file://cloudformation-role-policy.txt \    !! Achtung HIER WIRD Neu einfach AdministratorAccess gegeben !!
+    --policy-document file://cloudformation-role-policy.txt \
     --profile gmail
 ```
 
@@ -122,6 +123,12 @@ Example
 arn:aws:iam::824877243403:role/cloudformation-role
 ```
 
+
+1. Create a new keypair for the EC2 instances named gmail
+
+```
+aws ec2 create-key-pair --key-name gmail
+```
 
 ### CLI S3 Bucket erstellen 
 
@@ -138,7 +145,7 @@ $ aws s3api create-bucket \
 ### Test funktionalität s3 Bucket Listing:
 
 ```
-aws s3 ls --profile Swisscom
+aws s3 ls --profile gmail
 ```
 
 ### Cloud Formation Package erstellen:
@@ -146,6 +153,7 @@ aws s3 ls --profile Swisscom
 9. To make the deployment of our Template more convenient, we can use the Cloud Formation Package CLI commend
 
 > This allows the CloudFormation template to be deployed without having to manually upload the different yaml code files to S3 separately. 
+
 ```
 $ aws cloudformation package \
     --template-file cloudformation_VPC.yaml \
@@ -215,7 +223,7 @@ To disable the SimpleEc3Instance Parameter we can use the following flag:
 **In this case we create a new stack with the name MonitoringStack directly from the template file and don't need to package it first, because we don't have any nested templates.**
 
 ```
-# Stack erstellen --capabilities CAPABILITY_IAM 
+# Stack erstellen 
 aws cloudformation create-stack \
     --stack-name MonitoringStack \
     --template-body file://templates/monitoring.yaml \
@@ -289,8 +297,33 @@ aws cloudformation update-termination-protection \
     --enable-termination-protection \
     --profile gmail
 ```
+## 07 IAM User for Roger
 
-## 07 Delete stack
+So Roger is able to troubleshoot the Monitoring Stack we need to create a IAM User for him.
+
+1. We follow the steps 1 - 3 in [IAM CloudFormation User](#02-Prerequisite) to create a User with Access key for Roger
+2. Attaching a Inline Policy to the newly created user (roger-user-policy.txt)
+
+This policy allows roger to , read information from the CloudFormation Stacks and work with the SSM, with no resource restrictions.
+   
+```
+aws iam put-user-policy \
+    --user-name roger \
+    --policy-name roger-user-policy \
+    --policy-document file://roger-user-policy.txt \
+    --profile gmail
+```
+
+3. We send the Access Key and Secret Key to Roger
+4. With following command Roger is able to see the Stack Information
+
+```
+aws cloudformation describe-stacks --stack-name MonitoringStack --profile roger
+```
+
+1. In Outputs of the Monitoring Stack Roger can see all the information he needs to connect to the Monitoring Instance and the URL.
+
+## 08 Delete stack
 
 Before we delete the stack we need to disable the termination protection of the stack with the following command:
 
@@ -310,9 +343,55 @@ aws cloudformation delete-stack \
     --role-arn arn:aws:iam::824877243403:role/cloudformation-role \
     --profile cloudformation-user
 ```
+## 09 Deploy to a different region
+
+To deploy the stack to a different region we need to change the region in the command and the region in the template file.
+
+1. Change the region in the command to eu-central-1
+![DEV Instance Stack Output](images/cliprofileregion.png)  
+
+2. Create a new keypair in eu-central-1
+
+```
+aws ec2 create-key-pair --key-name gmail
+```
+
+3. create a new bucket in eu-central-1
+
+```
+$ aws s3api create-bucket \
+    --bucket devdeploysemfr \
+    --region eu-central-1 \
+    --create-bucket-configuration LocationConstraint=eu-central-1 \
+    --profile gmail 
+```
+
+3. Upload the template file to the new bucket
+
+```
+$ aws cloudformation package \
+    --template-file cloudformation_VPC.yaml \
+    --output-template packaged.yaml \
+    --s3-bucket devdeploysemfr \
+    --profile cloudformation-user
+```
+
+4. Deploy the stack to eu-central-1
+
+```
+aws cloudformation deploy \
+    --template-file packaged.yaml \
+    --stack-name VPC-DEV01 \
+    --capabilities CAPABILITY_IAM \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --role-arn arn:aws:iam::824877243403:role/cloudformation-role \
+    --s3-bucket devdeploysemfr \
+    --profile cloudformation-user
+```
+
 
 --------------
-## ÜBRIGES 
+## 10 etc. 
 
 ### config File auf S3 Laden 
 

@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:ListStacks",
+                "cloudformation:DescribeStackResource",
+                "cloudformation:DescribeStacks",
+                "s3:PutObject",
+                "s3:GetObject",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:TagResource",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:ListChangeSets",
+                "cloudformation:ListStackResources",
+                "ssm:StartSession",
+                "ssm:DescribeSessions",
+                "ssm:GetConnectionStatus",
+                "ssm:DescribeInstanceProperties",
+                "ec2:DescribeInstances"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

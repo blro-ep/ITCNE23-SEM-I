@@ -560,6 +560,7 @@ Resources:
       # Passes the UserData script to the instance: Installing Apache and PHP, and creating a PHP script to display the instance ID and availability zone
       UserData:
         Fn::Base64: !Sub |
+          ## template: jinja
           #cloud-config
           package_upgrade: true
 
@@ -572,6 +573,7 @@ Resources:
             - curl
             - gnupg
             - lsb-release
+            - libyajl2
 
           runcmd:
             - cd /opt
@@ -579,11 +581,17 @@ Resources:
             - sudo mkdir -p /etc/apt/keyrings
             - sudo curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
             - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg] https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
+            - sudo apt-get update && sudo apt-get upgrade -y
             - sudo apt-get install -y prometheus-node-exporter
             - sudo apt-get install -y containernetworking-plugins
             - sudo apt-get install -y python3-pip
             - sudo apt-get install -y podman
+            - sudo apt-get install -y jq
+            - sudo apt-get install -y awscli
+            - sudo apt-get install -y stress-ng
             - sudo pip3 install podman-compose
+            - sudo sed -i "s/xxx.xxx.xxx.xxx/{{ ds.meta_data.local_ipv4 }}/g" /opt/ITCNE23-SEM-I/monitoring/prometheus/prometheus.yml
+            # - [ bash, /opt/ITCNE23-SEM-I/monitoring/cloud-init/ec2-aws-get-secret.sh ]
             - cd /opt/ITCNE23-SEM-I/monitoring/podman
             - podman-compose up -d
 

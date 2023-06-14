@@ -331,7 +331,7 @@ Resources:
     Condition: WantNatGateways
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/d4b68337cea90add2efddb13cd91e7cd.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/d4b68337cea90add2efddb13cd91e7cd.template
       Parameters:
         Subnet1Nat:
           Ref: PublicSubnet1
@@ -610,6 +610,17 @@ Resources:
         IpProtocol: tcp
         CidrIp:
           Ref: VpcCIDR
+  DBTierSGIngressicmp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Security Group Inbound Rule between DB Tier and App Tier
+      GroupId:
+        Ref: DBTierSG
+      IpProtocol: icmp
+      FromPort: 8
+      ToPort: -1
+      SourceSecurityGroupId:
+        Ref: AppTierSG
   Ec2SSMRole:
     Type: AWS::IAM::Role
     Properties:
@@ -774,6 +785,18 @@ Resources:
       PortRange:
         From: 9093
         To: 9093
+  PubNACLInboundRulePort587:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: PubNACL
+      RuleNumber: 190
+      Protocol: 6
+      RuleAction: allow
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 587
+        To: 587
   PubNACLInboundRuleEphemeral:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -1705,15 +1728,15 @@ Resources:
     DependsOn: IAMUsers
     Properties:
       Parameters:
-        s3BucketfirstName: dam-private-bucket-fwakjjhjjh
+        s3BucketfirstName: dam-private-bucket-testbucket
         ValueEnvironment:
           Ref: EnvironmentName
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/b72f4b62b64d0605a54e3bf476fc405c.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/b72f4b62b64d0605a54e3bf476fc405c.template
   FlowLogModule:
     Condition: WantFlowLog
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/97a0a707aafb361773bba87a95ef03bc.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/97a0a707aafb361773bba87a95ef03bc.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1730,7 +1753,7 @@ Resources:
     Condition: WantEC2
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/c535450983bb036841c4a53e4cfceec7.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/c535450983bb036841c4a53e4cfceec7.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1757,7 +1780,7 @@ Resources:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/f38ef6d97f3802736573b045bcc58215.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/f38ef6d97f3802736573b045bcc58215.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1793,7 +1816,7 @@ Resources:
     DependsOn: IAMMonitoringGroup
     Condition: WantIAM
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/409d44ff190c0176d9b5ec3ddb880872.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/409d44ff190c0176d9b5ec3ddb880872.template
       Parameters:
         UserName:
           Ref: MonitoringUser
@@ -1806,7 +1829,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: WantIAM
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/6d36c385695b7e398199ce8c07396b39.template
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/6d36c385695b7e398199ce8c07396b39.template
       Parameters:
         GroupName:
           Ref: MonitoringGroup
