@@ -238,35 +238,6 @@ Github is used in this project to manage the monitoring setup.
 
 ---
 
-## 6. Project planning
-Agile project management is used for project planning. We use the tools provided by Github.
-
-### 6.1 Projectmanagement tools
-We use the following project management tools.
-- Kanbanboard
-- Roadmap
-- Tasklist
-
- These are available in the following public Github repository.
- - [@TBZ-SemesterWork](https://github.com/users/blro-ep/projects/4)
-
-### 6.2 Tasks
-We have defined additional fields for planning.
-- Status
-  - Todo - This item hasn't been started
-  - In Progress - This is actively being worked on
-  - Done - This has been completed
-  - Backlog - List of tasks still to be scheduled
-- Priority
-  - A - Must Do, high priority, very important, critical items, with close deadlines or high level importance to them
-  - B - Should Do, medium priority, quite important over time , not as critical as “A” items, but still important to spend time doing.
-  - C - Nice To Do, low priority at this time, low consequences if left undone at this moment.
-- Start Date
-  - Start Date of a Task
-- End Date
-  - End Date of a Task
-
----  
-
-
-
+## 6. Projectmanagement
+The project management documentation can be found under the following link:
+- [**Project Documentation**](../project/README.md)
