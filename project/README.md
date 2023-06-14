@@ -82,6 +82,7 @@ Lösung suchen, welche das Inhaltsverzeichnis von den Github Readme files automa
 Die Zusammenarbeit in den Teilprojekten (IaC / Monitoring) hat gut funktioniert. 
 Schnittstellen wurden zusammen besprochen und in Tasks aufgeteilt.
 Visualisierungen des Netzwerk, Sicherheitsgruppen und Monitoring Overview war sehr hilfreich für das allgemeine Verständnis.
+Das verwenden von Jinja-Templates beim erzeugen der Monitoring Instanze für das Auslesen der IP Adresses. 
 
 **Drop***
 Am Ursprungstask festhalten und zusätzliche Features gut hinterfragen, welche nicht im Task enthalten sind. Diese können schnell zu einem grossen Mehraufwand führen.
@@ -120,3 +121,13 @@ Use a Git repository to make project collaboration as agile and lean as possible
 | `Region`| Deploy IaC in eu-central-1 | Stack complete| Stack complete | [Screenshot](images/regionf.png) |
 | `Region`| Deploy monitoring in eu-central-1 | Stack complete| Stack complete | [Screenshot](images/regionfm.png) |
 | `Region`| Deploy monitoring in eu-central-2 | Stack complete| Stack complete | [Screenshot](images/regionzm.png) |
+| `Podman`| Check the Podman Containers are running | 4 Containers UP | 4 Containers UP | [Screenshot](images/check-podman-containers.png) |
+| `Prometheus`| Check that the Prometheus is reachable and the targets are up | UI is reachable | UI is reachable | [Screenshot](images/check-prometheus-UI-targets.png) |
+| `Grafan`| Check that the Grafana UI is reachable | UI reachable | UI reachable | [Screenshot](images) |
+| `Blackbox-Exporter`| Check that the Blackbox-Exporter UI is reachable and Probes are available | UI reachable | UI reachable | [Screenshot](images/check-blackbox_exporter-UI.png) |
+| `Alertmanager`| Check that the Alertmanager UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-alertmanager-UI.png) |
+| `Alertmanager`| Add gmailaddress / password to the config | Send email alerts | Send email alerts | [Screenshot](images/send-smtp-alerts.png) |
+| `Prometheus`| Add new targets to the prometheus config | after container restart up | after container restart up | [Screenshot](images/add-targets-prometheus.png) |
+| `Podman`| Reload the new config via podman-compose | 4 Containers UP  | 4 Containers UP | [Screenshot](images/restart-container-podman-compose.png) |
+| `EC2 Instance`| Generate CPU load to test the Grafana Dashboard and the Alertmanager | Trigger Alert  | Trigger Alert  | [Screenshot-1](images/generate-cpu-load.png) <br> [Screenshot-2](images/grafan-cpu-load.png) <br> [Screenshot-3](images/firing-cpu-alert.png) <br> [Screenshot-4](images/resolved-cpu-alert.png) |
+| `EC2 Instance`| Stop apache service to check Blackbox-Exporter and the Alertmanager | Trigger Alert  | Trigger Alert  | [Screenshot-1](images/stop-apache-service.png) <br> [Screenshot-2](images/not-reachable-url.png) <br> [Screenshot-3](images/firing-url-alert.png) <br> [Screenshot-4](images/resolved-url-alert.png) |
