@@ -98,7 +98,9 @@ Visualisierungen des Netzwerk, Sicherheitsgruppen und Monitoring Overview war se
 Das verwenden von Jinja-Templates beim erzeugen der Monitoring Instanze für das Auslesen der IP Adresses. 
 
 **Drop***
-Am Ursprungstask festhalten und zusätzliche Features gut hinterfragen, welche nicht im Task enthalten sind. Diese können schnell zu einem grossen Mehraufwand führen.
+Am Ursprungstask festhalten und zusätzliche Features gut hinterfragen, welche nicht im Task enthalten sind. Diese können schnell zu einem grossen Mehraufwand führen.<br>
+Aufgrund der Komplexität wurde eine Integration des SecretsManager in das IaC Projekt verzichtet. Eine Lösung wurde jedoch gefunden und ist im [Task-26](https://github.com/blro-ep/ITCNE23-SEM-I/issues/26) dokumentiert.
+
 
 **Try**
 Die Tasks besser priorisieren und allenfalls ins Backlog verschieben.
