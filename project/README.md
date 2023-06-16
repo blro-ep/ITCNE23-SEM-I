@@ -1,10 +1,6 @@
 Definition Lean / Agile Project
 ==== 
 
-Roger stellt die User data für Grafana und DB Server berreit. 
-
-Implemenatin User Data to ec2 über github -> Dany 
-
 ## Table of Content
 
 * 01 - [Our Kanban Board Explained](#01-Our-Kanban-Board-Explained)
@@ -28,7 +24,6 @@ We choose a lean and simple kanban board design, where the following columns rep
 ![Kanbandboard](images/kanbanboard.png)
 
 When there is a new task or work item that needs to be completed, we first open a new "issue" in the ITCNE23-SEM-1 Github repository. 
-
 In this "issue" we contain information about the task, such as its Title, assignees, label, milestone, priority, start date, end date and any notes or details related to the task.
 
 ![issue](images/kanbanissue.png)
@@ -52,11 +47,8 @@ In order to ensure that the project is on track and to measure its progress, we 
 ```
 
 When the "issue" is opened, it automatically appears in the kanban board "Todo" column.
-
 From there, we can then move the card to the "In Progress" column to show that we are actively working on it.
-
 When the task has been completed, we can move the card to the "Done" column to indicate that it has been completed. You will also be able to add any additional notes or comments about the task or issues that arose.
-
 The "Backlog" column can be seen as a holding area for tasks that are waiting to be added to the board or moved to the "To Do" column. It is a useful tool for planning future work and ensure for a steady flow of tasks moving through the workflow. 
 
 
@@ -65,7 +57,6 @@ The "Backlog" column can be seen as a holding area for tasks that are waiting to
 ![MSTeams](images/msteams_logo.png)
 
 In order to ensure total transparency for the auditors, the project communication will be carried out via a dedicated teams channel "ITCNE23-SEM-I communication".
-
 Allows the sharing of updates and discussion of project related issues in a centralised and organised manner for effective communication between us.
 
 ![Collaboration](images/collaboration.png)**Collaboration**
@@ -119,7 +110,6 @@ Better document the findings from the sprint (Keep / Drop / Try).
 ## 04 Testing
 
 ![Testing](images/testing.png)
-
 
 | Description | Test Step | Expected Result | Status | Screen |
 | ---     | ---   | ---     | ---   |  ---   |
