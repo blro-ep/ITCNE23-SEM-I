@@ -9,12 +9,11 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          - xxx.xxx.xxx.xxx:9093
+          - xxx.xxx.xxx.xxx:9093  # Alertmanager's IP address
 
-# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# Load alert rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
   - "rules.yml"
-  # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
@@ -25,16 +24,16 @@ scrape_configs:
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
 
-    static_configs:
-      - targets: ['xxx.xxx.xxx.xxx:9100']
+    static_configs: # 
+      - targets: ['xxx.xxx.xxx.xxx:9100'] # IP addresses of the servers to be monitored
 
   - job_name: 'blackbox https'
     metrics_path: /probe
     params:
       module: [http_2xx]
     static_configs:
-      - targets:
-        - https://www.google.com    # Target to probe with https.
+      - targets: # URLs to probe with Blackbox-Exporter
+        - https://www.google.com    
         - https://tbz.ch
         - https://swisscom.com
     relabel_configs:
@@ -43,4 +42,4 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: xxx.xxx.xxx.xxx:9115  # The blackbox exporter's real hostname:port.
+        replacement: xxx.xxx.xxx.xxx:9115  # Blackbox-Exporter IP address

@@ -10,6 +10,7 @@
 * 2.2.1   - [Monitoring Overview](#221-monitoring-overview)
 * 2.3     - [Sources](#23-sources)
 * 2.3.1   - [Podman](#231-podman)
+* 2.3.1.1 - [Podman-Compose](#2311-podman-compose)
 * 2.3.2   - [Docker Images](#232-docker-official-image)
 * 2.3.3   - [Node-Exporter](#233-node-exporter)
 * 2.3.4   - [Apache-Exporter](#234-apache-exporter)
@@ -73,6 +74,9 @@ A short software description and a link to the official website can be found in 
 
 #### 2.3.1 Podman
 - [Podman](https://github.com/containers/podman.io)
+
+##### 2.3.1.1 Podman-compose
+- [Podman-Compose](https://github.com/containers/podman-compose)
 
 #### 2.3.2 Docker Official Image
 - [Prometheus](https://hub.docker.com/r/prom/prometheus)
@@ -163,7 +167,7 @@ Podman (Pod Manager) is a fully featured container engine. Podman provides a Doc
 *At the suggestion of the lecturer Calisto Marcello, Docker was replaced with Podman.*
 
 #### 3.6.6 Github
-GGitHub is an Internet hosting service for software development and version control using Git. It provides the distributed version control of Git plus access control, bug tracking, software feature requests, task management, continuous integration, and wikis for every project.
+GitHub is an Internet hosting service for software development and version control using Git. It provides the distributed version control of Git plus access control, bug tracking, software feature requests, task management, continuous integration, and wikis for every project.
 
 Github is used in this project to manage the monitoring setup.
 

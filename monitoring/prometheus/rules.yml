@@ -2,25 +2,27 @@ groups:
 - name: example
   rules:
 
-  # Alert for any instance that is unreachable for x minutes.
+  # Alert rule for any instance that is unreachable for x minutes.
   - alert: InstanceDown
     expr: up == 0
     for: 1m
     labels:
-      severity: page
+      severity: critical
     annotations:
       summary: "Instance {{ $labels.instance }} down"
       description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minutes."     
 
+  # Alert rule for URLs that cannot be reached from the Blackbox-Exporter for x minutes
   - alert: URLnotReachable
     expr: probe_success{job=~"blackbox http|blackbox https"} == 0
     for: 1m
     labels:
-      severity: page
+      severity: critical
     annotations:
       summary: "URL {{ $labels.instance }} down"
       description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minutes."      
 
+  # Alert rule when memory utilization is greater than 75% for x minutes
   - alert: HostOutOfMemory
     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 25
     for: 1m
@@ -30,6 +32,7 @@ groups:
       summary: Host out of memory (instance {{ $labels.instance }})
       description: "Node memory is filling up (< 25% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
+# Alert rule when CPU utilization is greater than 75% for x minutes
   - alert: HostHighCpuLoad
     expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 75
     for: 1m
