@@ -72,38 +72,41 @@ Allows the sharing of updates and discussion of project related issues in a cent
 Use a Git repository to make project collaboration as agile and lean as possible and define clear system boundaries.
 
 ## 03 Sprint completion
+
 **1. Sprint / 15.05.2023**
 ![1.Sprint](images/sprint-1.png)
 
 **Keep**
-Die Entscheidung das Projekt in Github zu Dokumentieren war sehr gut. 
-Das Projekt konnte in einzelen Task aufgeteilt werden und bietet mit dem Kanbanboard, Roudmap, Taskliste eine gute und schnelle übersicht zum Projekt.
-Durch github kann unabhänging von einander am Projekt gearbeitet werden und sämtliche Schritte können mit den Commits nachvollzogen werden.
-Die Umstellung von Docker auf Podman im POC (Input von Marcello) hat gut funktioniert. 
+The decision to document the project in Github was a good one.
+The project could be divided into individual tasks and offers a good and quick overview of the project with the Kanban board, roadmap and task list.
+With github, you can work on the project independently of each other and all steps can be traced with the commits.
+Switching from Docker to Podman in the POC (input from Marcello) worked well.
 
 **Drop**
-Das Inhaltsverzeichnis in den github Readme files würden wir nicht mehr so umsetzten. Es ist bei Anpassung umständliche und aufwendig.
+In another project, we will create github's table of contents differently. This version is too complex and not flexible.
 
 **Try**
-Schneller auf Erfahrungen von anderen zurück greifen (Dozenten / Arbeitskollegen).
-Lösung suchen, welche das Inhaltsverzeichnis von den Github Readme files automatisch aufbereitet.
+ Access the experiences of faculty and peers faster before investing too much time in a task.
+ Finding a solution for reading the IP address when starting up the monitoring instances.
+ Find a solution for setting passwords so they are not visible in the git repo.
 
 **2. Sprint / 14.06.2023**
 ![2.Sprint](images/sprint-2.png)
 
 **Keep**
-Die Zusammenarbeit in den Teilprojekten (IaC / Monitoring) hat gut funktioniert. 
-Schnittstellen wurden zusammen besprochen und in Tasks aufgeteilt.
-Visualisierungen des Netzwerk, Sicherheitsgruppen und Monitoring Overview war sehr hilfreich für das allgemeine Verständnis.
-Das verwenden von Jinja-Templates beim erzeugen der Monitoring Instanze für das Auslesen der IP Adresses. 
+The cooperation in the sub-projects (IaC / Monitoring) worked well.
+Interfaces were discussed together and divided into tasks.
+Visualizations of the network, security groups and monitoring overview was very helpful for general understanding.
+Using Jinja templates when creating the monitoring instance for reading the IP addresses.
 
 **Drop***
-Am Ursprungstask festhalten und zusätzliche Features gut hinterfragen, welche nicht im Task enthalten sind. Diese können schnell zu einem grossen Mehraufwand führen.<br>
-Aufgrund der Komplexität wurde eine Integration des SecretsManager in das IaC Projekt verzichtet. Eine Lösung wurde jedoch gefunden und ist im [Task-26](https://github.com/blro-ep/ITCNE23-SEM-I/issues/26) dokumentiert.
+Stick to the original task and carefully question additional features that are not included in the task. These can quickly lead to a great deal of additional work.<br>
+A solution for the password problem was found using Secret Manager. Due to the complexity, there is no integration in IaC. The task goes into the backlog. A possible solution is documented in [Task-26](https://github.com/blro-ep/ITCNE23-SEM-I/issues/26).
 
 
 **Try**
-Die Tasks besser priorisieren und allenfalls ins Backlog verschieben.
+Prioritize the tasks better and move them to the backlog if necessary.
+Better document the findings from the sprint (Keep / Drop / Try).
 
 
 **3. Sprint / 05.07.2023**
@@ -124,8 +127,8 @@ Die Tasks besser priorisieren und allenfalls ins Backlog verschieben.
 | `Region`| Deploy monitoring in eu-central-1 | Stack complete| Stack complete | [Screenshot](images/regionfm.png) |
 | `Region`| Deploy monitoring in eu-central-2 | Stack complete| Stack complete | [Screenshot](images/regionzm.png) |
 | `Podman`| Check the Podman Containers are running | 4 Containers UP | 4 Containers UP | [Screenshot](images/check-podman-containers.png) |
-| `Prometheus`| Check that the Prometheus is reachable and the targets are up | UI is reachable | UI is reachable | [Screenshot](images/check-prometheus-UI-targets.png) |
-| `Grafan`| Check that the Grafana UI is reachable | UI reachable | UI reachable | [Screenshot](images) |
+| `Prometheus`| Check that the Prometheus UI is reachable and the targets are up | UI is reachable, targets up | UI is reachable, targets up | [Screenshot](images/check-prometheus-UI-targets.png) |
+| `Grafan`| Check that the Grafana UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-grafana-UI.png) <br> [Setup](images/Grafana-Setup.mp4) |
 | `Blackbox-Exporter`| Check that the Blackbox-Exporter UI is reachable and Probes are available | UI reachable | UI reachable | [Screenshot](images/check-blackbox_exporter-UI.png) |
 | `Alertmanager`| Check that the Alertmanager UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-alertmanager-UI.png) |
 | `Alertmanager`| Add gmailaddress / password to the config | Send email alerts | Send email alerts | [Screenshot-1](images/set-smtp-settings.png) <br> [Screenshot-2](images/send-smtp-alerts.png) |
