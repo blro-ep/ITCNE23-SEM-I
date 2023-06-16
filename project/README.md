@@ -80,7 +80,7 @@ Use a Git repository to make project collaboration as agile and lean as possible
 The decision to document the project in Github was a good one.
 The project could be divided into individual tasks and offers a good and quick overview of the project with the Kanban board, roadmap and task list.
 With github, you can work on the project independently of each other and all steps can be traced with the commits.
-Switching from Docker to Podman in the POC (input from Marcello) worked well.
+Switching from Docker to Podman in the POC (input from Marcello) worked well. Learned that podman / podman-compose can be operated using the same commands as docker. There were problems restarting the containers with Podman-Compose, but this could be fixed with an update from version 3.4.4 (Ubuntu Repo) to 4.5.1.
 
 **Drop**
 In another project, we will create github's table of contents differently. This version is too complex and not flexible.
@@ -97,7 +97,8 @@ In another project, we will create github's table of contents differently. This 
 The cooperation in the sub-projects (IaC / Monitoring) worked well.
 Interfaces were discussed together and divided into tasks.
 Visualizations of the network, security groups and monitoring overview was very helpful for general understanding.
-Using Jinja templates when creating the monitoring instance for reading the IP addresses.
+The first solution to reading the IP address from generating the Monitoring Instances was only with cloud-init, which still required a bash script. Using Jinja templates was the better solution.
+Through the testing I got to know the stress-ng program, which can be used to generate load on an ec2 instance.
 
 **Drop***
 Stick to the original task and carefully question additional features that are not included in the task. These can quickly lead to a great deal of additional work.<br>
@@ -135,4 +136,5 @@ Better document the findings from the sprint (Keep / Drop / Try).
 | `Prometheus`| Add new targets to the prometheus config | after container restart up | after container restart up | [Screenshot](images/add-targets-prometheus.png) |
 | `Podman`| Reload the new config via podman-compose | 4 Containers UP  | 4 Containers UP | [Screenshot](images/restart-container-podman-compose.png) |
 | `EC2 Instance`| Generate CPU load to test the Grafana Dashboard and the Alertmanager | Trigger Alert  | Trigger Alert  | [Screenshot-1](images/generate-cpu-load.png) <br> [Screenshot-2](images/grafan-cpu-load.png) <br> [Screenshot-3](images/firing-cpu-alert.png) <br> [Screenshot-4](images/resolved-cpu-alert.png) |
+| `EC2 Instance`| Generate MEM load to test the Grafana Dashboard and the Alertmanager | Trigger Alert  | Trigger Alert  | [Screenshot-1](images/generate-mem-load.png) <br> [Screenshot-2](images/grafan-mem-load.png) <br> [Screenshot-3](images/firing-mem-alert.png) <br> [Screenshot-4](images/resolved-mem-alert.png) |
 | `EC2 Instance`| Stop apache service to check Blackbox-Exporter and the Alertmanager | Trigger Alert  | Trigger Alert  | [Screenshot-1](images/stop-apache-service.png) <br> [Screenshot-2](images/not-reachable-url.png) <br> [Screenshot-3](images/firing-url-alert.png) <br> [Screenshot-4](images/resolved-url-alert.png) |
