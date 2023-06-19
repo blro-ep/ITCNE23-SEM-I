@@ -8,10 +8,10 @@ TBZ Semster Arbeit Dany / Roger
 * 00 - [Summary](#01-Summary)
 * 01 - [Introduction IAC](#01-Introduction-IAC)
 * 02 - [AWS CloudFormation Cheat Sheet](#02-AWS-CloudFormation-Cheat-Sheet)
-* 03 - [Project](#04-Project)
-* 04 - [How to Deploy](#03-How-to-Deploy)
-* 05 - [AWS Well Architected Framework ](#03-AWS-Well-Architected-Framework)
-* 05 - [Conclusion](#05-Conclusion)
+* 03 - [Project](#03-Project)
+* 04 - [How to Deploy](#04-How-to-Deploy)
+* 05 - [AWS Well Architected Framework ](#05-AWS-Well-Architected-Framework)
+* 05 - [Conclusion](#06-Conclusion)
 
 ## 00 Summary
 
@@ -85,8 +85,6 @@ This AWS CloudFormation Cheat Sheet is a quick, self-made reference guide that w
 
 ![Short Table Version](images/cheat_logo.png)  
 
-- [**Short Cheat Sheet PDF**](cheatsheet_aws-cloudformation.pdf)
-
 For keeping the scop of this project reasonable, the guide is described just in YAML and with man practical examples from the Template, it's designed to help you to understand the fundamentals and the possibility's of CloudFormation.
 ## 03 Project  
 
@@ -137,9 +135,9 @@ Spare capacity for adding subnets to support your environment as it grows.
 
 **Gateway and  Endpoint**
 
-This endpoint's provides a secure, reliable connection to Amazon S3, EC2Messages, SSMMessages and SSMVPCManager without requiring an internet gateway, NAT gateway, or virtual private gateway.
+> This endpoint's provides a secure, reliable connection to Amazon S3, EC2Messages, SSMMessages and SSMVPCManager without requiring an internet gateway, NAT gateway, or virtual private gateway.
 
-- SSM Manager allowes you to manage your EC2 instances instances through a hybrid environment by using **Systems Manager** without the need for SSH or RDP connections.
+- SSM Manager allows you to manage your EC2 instances instances through a hybrid environment by using **Systems Manager** without the need for SSH or RDP connections.
 - Place your product instances in private subnets, and route private subnet traffic through **NAT gateways** that are configured in public subnets
 - Integrate AWS Flow Logs with Amazon CloudWatch Logs to monitor the network traffic in your VPC.
 
@@ -163,7 +161,7 @@ This endpoint's provides a secure, reliable connection to Amazon S3, EC2Messages
 - Isolate different types of resources into separate security groups
 - Limit Outbound Traffic: Restrict outbound traffic to only the necessary ports
 
-## 05 Conclusion
+## 06 Conclusion
 
 - Comming Soon
 - Tagging

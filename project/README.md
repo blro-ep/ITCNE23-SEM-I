@@ -73,7 +73,8 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - With github, you can work on the project independently of each other and all steps can be traced with the commits.<br>
 - Switching from Docker to Podman in the POC (input from Marcello) worked well. Learned that podman / podman-compose can be operated using the same commands as docker. There were problems restarting the containers with Podman-Compose, but this could be fixed with an update from version 3.4.4 (Ubuntu Repo) to 4.5.1. .<br>
 - I have learnt that the formation of Yaml can be a big pain in the ass and that there are good plugins for Visual Studio Code that can help with this.<br>
-- Creating a cheatsheet takes a lot of time, but it is well worth every minute of it.<br>
+- Creating a cheat sheet takes a lot of time, but it is well worth every minute of it.<br>
+- I learned how to deploy templates via AWS CLI.
 
 **Drop**
 - In another project, we will create github's table of contents differently. This version is too complex and not flexible.<br>
@@ -95,6 +96,7 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - Through the testing I got to know the stress-ng program, which can be used to generate load on an ec2 instance.<br>
 - Spending a lot of time with Cloudformation and other services was very helpful for the AWS architect exam.<br>
 - AWS docs was very helpful in solving problems.<br>
+- I learned what Circular Dependencies are and how to avoid them.<br>
 
 **Drop**
 - Stick to the original task and carefully question additional features that are not included in the task. These can quickly lead to a great deal of additional work.<br>

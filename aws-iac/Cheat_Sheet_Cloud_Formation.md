@@ -1,14 +1,5 @@
-Cloud Formation
+Cloud Formation Cheat Sheet
 ====
-
-## Best Pracice Use Case 
-***
-Use CloudFormation to make changes to your landscape rather than going directly into the resources.
-Make use of Change Sets to identify potential trouble spots in your updates.
-Use Stack Policies to explicitly protect sensitive portions of your stack.
-Use a version control system such as CodeCommit or GitHub to track changes to templates.
-
-
 
 ## 01 Anatomy
 
@@ -135,6 +126,7 @@ PublicSubnets:
 # Here we use the Ref function with the Partition parameter and the AWS::AccountId pseudo parameter (a fix System Parameter).
 # In our Case: arn:aws:s3:::elasticbeanstalk-*-::AWS::id-0425af0359ec28474
 ```
+----
 
 ![!Ref](images/sub.png)**!Sub**
 
@@ -198,7 +190,6 @@ The !GetAtt function takes two parameters: the logical name of the resource and 
     Properties:
       AllocationId: !GetAtt NatGateway1EIP.AllocationId
 ``` 
-----
 
 ## Conditions 
 Conditions let's you make your template more reusable. 
@@ -224,7 +215,6 @@ Resource:
     Type: AWS::CloudFormation::Stack
     Properties:
 ``` 
-----
 
 ## Outputs
 Outputs enable you to get access to information about resources within a stack
@@ -252,7 +242,6 @@ Outputs:
       Name: !Sub ${AWS::StackName}-Id
     # In my Case VPC-DEV01-Id
 ``` 
-----
 
 ## Resource Dependencies
 explicitly define resource creation order
@@ -268,10 +257,10 @@ explicitly define resource creation order
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 ``` 
-----
 
 ## Circular Dependencies
 Error "Circular dependency between resources: 
+
 ![Circular Dependency](images/cir.png)
 
 
@@ -303,7 +292,7 @@ Error "Circular dependency between resources:
           SourceSecurityGroupId: !Ref WebTierSecurityGroup
 ``` 
 
-**Example working**
+**Solution working**
 ```
   GrafanaSecurityGrp:
     Type: AWS::EC2::SecurityGroup
@@ -333,7 +322,6 @@ Error "Circular dependency between resources:
       ToPort: 80
       SourceSecurityGroupId: !Ref WebTierSecurityGroup
 ```
-----
 
 ## Array
 
@@ -358,8 +346,6 @@ You use it by adding a "-" in front of the resource
           Fn::Sub: '${VPCModule}-VpcCIDR'
 ``` 
 
----
-
 ## Nested stacks 
 Reusing common template patterns using nested stacks is efficient and considered a best practice in CloudFormation
 
@@ -376,7 +362,7 @@ Reusing common template patterns using nested stacks is efficient and considered
           ValueEnviroment: !Ref EnvironmentName
         TemplateURL: 'https://config-bucket-931336182845.s3.eu-central-2.amazonaws.com/s3bucket.yaml'
 ``` 
-## Pass variables from another nested stack 
+## Passing variables from another nested stack
 Grab Output from one Nested Stack and pass it to another Nested Stack
 
 **Example**
@@ -414,7 +400,6 @@ Outputs:
     Description: The Public IP Address of the Ec2 Template
     Value: !GetAtt VPCEc2Instance.Outputs.PublicIPAddress
 ```
-----
 
 ## Mappings 
 Mapping is nothing alse than a simple lookup table. 
@@ -441,7 +426,6 @@ Resources:
       InstanceType: t2.micro
 ```
 
-
 # CLI
 
 ## Validating a template
@@ -454,24 +438,27 @@ aws cloudformation validate-template --template-body file://cloudformation_VPC_2
 
 If successful, CloudFormation will send you a response with a list of parameters, template description and capabilities.
 
-----
-
 ## Deploy Stack 
-The aws cloudformation deploy  command is used to deploy CloudFormation templates using the CLI.
+
+> The aws cloudformation deploy  command is used to deploy CloudFormation templates using the CLI.
 
 **Example**
 
 When using the CLI, you are also required to acknowledge this stack might create resources that can affect IAM permissions
---capabilities CAPABILITY_IAM
+
+> --capabilities CAPABILITY_IAM
 
 Stack will not be deleted when failed to Deploy
---disable-rollback
+
+> --disable-rollback
 
 Parameter NatGateways set to false 
---parameters ParameterKey=NatGateways,ParameterValue=false
+
+> --parameters ParameterKey=NatGateways,ParameterValue=false
 
 Different AWS CLI profiles can be created in the ~/.aws/credentials File
---profile Swisscom
+
+> --profile Swisscom
 
 ```
 aws cloudformation create-stack \
