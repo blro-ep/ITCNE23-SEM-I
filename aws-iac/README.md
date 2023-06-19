@@ -74,7 +74,11 @@ TBZ Semster Arbeit Dany / Roger
 
 > This project aims to demonstrate multiple approaches for connecting different CloudFormation scripts together and the implementation will be extensively explained > and commented on to make each step easy to understand. 
 
+**Infrastructure architecture**
 ![Drawio](images/AWSInfra01.png)
+
+**Infrastructure Overview**
+![Drawio](images/AWSInfraInstances.png)
 
 ## 02 AWS CloudFormation Cheat Sheet
 
