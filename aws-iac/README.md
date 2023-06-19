@@ -77,9 +77,6 @@ TBZ Semster Arbeit Dany / Roger
 **Infrastructure architecture**
 ![Drawio](images/AWSInfra01.png)
 
-**Infrastructure Overview**
-![Drawio](images/AWSInfraInstances.png)
-
 ## 02 AWS CloudFormation Cheat Sheet
 
 This AWS CloudFormation Cheat Sheet is a quick, self-made reference guide that will provide you with a complete list of all the features that are used in my script.
@@ -96,6 +93,8 @@ For keeping the scop of this project reasonable, the guide is described just in 
 Here is the full project planning overview of the AWS infrastructure that will be used for the project.
 
 - [**AWS IAC project planning**](awsproject.md)
+
+![Drawio](images/AWSInfraInstances.png)
 
 ## 04 How to Deploy 
 
