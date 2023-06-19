@@ -34,9 +34,16 @@
 * 5.2     - [Weaknesses](#52-weaknesses)
 * 5.3     - [Opportunities](#53-opportunities)
 * 5.4     - [Threats](#54-threats)
-* 6       - [Project Planning](#6-project-planning)
-* 6.1     - [Project Management Tools](#61-projectmanagement-tools)
-* 6.2     - [Tasks](#62-tasks)
+* 6       - [Testing](#6-testing)
+* 6.1     - [Update Mail Setting](#61-update-gmail-settings)
+* 6.2     - [Check Admin UI's](#62-check-admin-uis)
+* 6.3     - [Podman](#63-podman)
+* 6.3.1   - [Podman Compose](#631-podman-compose)
+* 6.4     - [stress-ng](#64-stress-ng)
+* 6.4.1   - [CPU load](#641-cpu-load)
+* 6.4.2   - [Memory load](#642-memory-load)
+* 6.5     - [Apache service](#65-apache-stop-start)
+* 7       - [Projectmanagement](#7-projectmanagement)
 
 ---
 
@@ -236,6 +243,80 @@ Github is used in this project to manage the monitoring setup.
 
 ---
 
-## 6. Projectmanagement
+## 6. Testing
+### 6.1 Update Gmail Settings
+Set email address and password.
+```
+sudo sed -i "s/xxx@gmail.com/<<MAILADDRESS>>/g" /opt/ITCNE23-SEM-I/monitoring/alertmanager/alertmanager.yml
+sudo sed -i "s/xxxxxxxxxxx/<<PASSWORD>>/g" /opt/ITCNE23-SEM-I/monitoring/alertmanager/alertmanager.yml
+```
+### 6.2 Check Admin UI's
+Check if the Admin UI is reachable.
+
+| Application | URL | Port |
+|---|---|---|
+|Prometheus|http://"*loadbalancer-address-from-AWS*"|9090|
+|Grafana|http://"*loadbalancer-address-from-AWS*"|3000|
+|Alertmanager|http://"*loadbalancer-address-from-AWS*"|9093|
+|Blackbox-Exporter|http://"*loadbalancer-address-from-AWS*"|9115|
+### 6.3 Podman
+Basic commands for podman.
+```
+# show running containers.
+sudo podman ps
+
+# show all containers regardless of status
+sudo podman ps -a
+
+# show logs from a container, example prometheus
+sudo podman logs prometheus
+
+# change in running container, example prometheus
+sudo podman exec -it prometheus /bin/sh
+
+# show container images
+sudo podman images
+
+# list volumens
+sudo podman volume ls
+
+# display a container, image, volume, network, or pod’s configuration, example prometheus
+sudo podman inspect prometheus
+```
+
+#### 6.3.1 Podman-Compose
+Basic commands for podman, change into the Compose YAML directory
+```
+# change directory
+cd /opt/ITCNE23-SEM-I/monitoring/podman/
+
+# restart all containers
+sudo podman-compose restart
+
+# restart a single container, example prometheus
+sudo podman-compose restart prometheus
+
+# stop all container
+sudo podman-compose stop
+
+# start all container, option -d starts the container in the background, detaching it from the current shell
+sudo podman-compose up -d
+```
+### 6.4 stress-ng
+The stress-ng tool is used to generate load on the server for testing.
+#### 6.4.1 CPU Load
+```
+sudo stress-ng -c 0 -l 90 -t 3m &
+```
+#### 6.4.2 Memory Load
+```
+sudo stress-ng --vm 1 --vm-bytes 384M --timeout 3m &
+```
+### 6.5 Apache stop/ start
+```
+sudo systemctl stop apache2.service
+sudo systemctl status apache2.service
+```
+## 7. Projectmanagement
 The project management documentation can be found under the following link:
 - [**Project Documentation**](../project/README.md)
