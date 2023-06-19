@@ -111,11 +111,67 @@ By using the Framework you will learn architectural best practices for designing
 
 > The AWS Well-Architected Framework describes key concepts, design principles, and architectural best practices for designing and running workloads in the cloud.
 
-- [**AWS Well Architected Framework**](best_practice.md)
+**Benefits of a 3 Tier Architecture**
+- Decreased development time — different teams can work on different tiers simultaneously, resulting in decreased time to deploy
+- Increased scalability — a tier can have an auto-scaling group independent of other tiers, meaning for each tier, you only use what you need
+- Increased reliability — each tier can have multiple resources in multiple availability zones and the success and availability of one tier is independent of the other tiers
+- Increased security — each tier can have its own security group, allowing for custom permissions depending on the needs of that tier
+- Increased security — each tier can have its own NACL, allowing for custom permissions depending on the needs of that tier
+
+A highly available architecture that spans two to four Availability Zones.
+
+> Thats why i used two Availability Zones and 3 Tier Architecture for my VPC design.
+
+**VPC/CIDR**
+The RFC recommended private address space:
+
+| RFC1918 RANGE| Example CIDR block | 
+| ---     | ---   | 
+| `10.0.0.0 - 10.255.255.255`| 10.0.0.0/16 | 
+| `172.16.0.0 - 172.31.255.255`| 172.31.0.0/16 | 
+| `192.168.0.0 - 192.168.255.255`| 192.168.0.0/20 | 
+
+Spare capacity for adding subnets to support your environment as it grows.
+
+> Thats why i used 10.42.0.0/16 for my VPC design. And a /24 Prefix for each subnet.
+
+**Gateway and  Endpoint**
+
+This endpoint's provides a secure, reliable connection to Amazon S3, EC2Messages, SSMMessages and SSMVPCManager without requiring an internet gateway, NAT gateway, or virtual private gateway.
+
+> SSM Manager allowes you to manage your EC2 instances instances through a hybrid environment by using **Systems Manager** without the need for SSH or RDP connections.
+> Place your product instances in private subnets, and route private subnet traffic through **NAT gateways** that are configured in public subnets
+> Integrate AWS Flow Logs with Amazon CloudWatch Logs to monitor the network traffic in your VPC.
+
+**Stacks**
+
+> A layered architecture organizes stacks into multiple horizontal layers that build on top of one another. 
+> Use dynamic export names to export values from one stack to another.
+> Use cross-stack references to export shared resources
+> Use IAM to control access to resources
+> Use pseudo parameters to promote portability
+> Validate templates before using them
+> Use Cloud Init to deploy software packages and run commands
+> Use Termination Protection for critical stacks
+
+**Security Groups**
+
+> Always use security groups and IAM roles to limit access to resources. (deploying a template)
+> Implement Network Segmentation: Segment your network by using multiple security groups and subnets to create different security boundaries.
+> Use Security Group IDs Instead of IP Addresses: Rather than relying on specific IP addresses, use security group IDs whenever possible..
+> Limit access to security groups
+> Isolate different types of resources into separate security groups
+> Limit Outbound Traffic: Restrict outbound traffic to only the necessary ports
 
 ## 05 Conclusion
 
 > Comming Soon
+> Tagging
+> Wrap strings with single quotes to avoid errors when using special characters.
+> Modularize your templates into smaller, more manageable files.
+> Reuse template to replicate stacks in multiple environments.
+> Limit Outbound Traffic: Restrict outbound traffic to only the necessary ports
+> (deploying a template) intigration
 
 
 
