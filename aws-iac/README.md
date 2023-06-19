@@ -153,6 +153,10 @@ Spare capacity for adding subnets to support your environment as it grows.
 - Use Termination Protection for critical stacks
 - Make your code more readable and use short yaml syntax for CloudFormation
 - Add comments to your code to make it easier to understand
+- Use Parameters to make your code more flexible
+- Use test / prod parameters to deploy the same template in different sizes and environments
+- implementing conditions to make your code more reusable
+- Use dynamic references between resources to make your code more reusable
 
 **Security Groups**
 
