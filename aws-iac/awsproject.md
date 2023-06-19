@@ -3,11 +3,10 @@ Definition IAC Project
 
 ## Table of Content
 
-
-* 01 - [SMART Objectives](#03-SMART-Objectives)
-* 02 - [Seusag](#04-Seusag)
+* 01 - [SMART Objectives](#01-SMART-Objectives)
+* 02 - [Seusag](#02-Seusag)
 * 03 - [Port Matrix](#03-Port-Matrix)
-* 04 - [Security Groups](#05-Security-Groups)
+* 04 - [Security Groups](#04-Security-Groups)
 * 05 - [Dependencies](#05-Dependencies)
 
 ## 01 SMART Objectives
