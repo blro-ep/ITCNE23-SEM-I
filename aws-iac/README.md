@@ -133,7 +133,7 @@ Spare capacity for adding subnets to support your environment as it grows.
 
 > Thats why i used 10.42.0.0/16 for my VPC design. And a /24 Prefix for each subnet.
 
-**Gateway and  Endpoint**
+**Gateway and Endpoint**
 
 > This endpoint's provides a secure, reliable connection to Amazon S3, EC2Messages, SSMMessages and SSMVPCManager without requiring an internet gateway, NAT gateway, or virtual private gateway.
 
@@ -151,6 +151,8 @@ Spare capacity for adding subnets to support your environment as it grows.
 - Validate templates before using them
 - Use Cloud Init to deploy software packages and run commands
 - Use Termination Protection for critical stacks
+- Make your code more readable and use short yaml syntax for CloudFormation
+- Add comments to your code to make it easier to understand
 
 **Security Groups**
 
