@@ -68,37 +68,37 @@ Use a Git repository to make project collaboration as agile and lean as possible
 ![1.Sprint](images/sprint-1.png)
 
 **Keep**
-The decision to document the project in Github was a good one.
-The project could be divided into individual tasks and offers a good and quick overview of the project with the Kanban board, roadmap and task list.
-With github, you can work on the project independently of each other and all steps can be traced with the commits.
-Switching from Docker to Podman in the POC (input from Marcello) worked well. Learned that podman / podman-compose can be operated using the same commands as docker. There were problems restarting the containers with Podman-Compose, but this could be fixed with an update from version 3.4.4 (Ubuntu Repo) to 4.5.1.
+The decision to document the project in Github was a good one.<br>
+The project could be divided into individual tasks and offers a good and quick overview of the project with the Kanban board, roadmap and task list.<br>
+With github, you can work on the project independently of each other and all steps can be traced with the commits.<br>
+Switching from Docker to Podman in the POC (input from Marcello) worked well. Learned that podman / podman-compose can be operated using the same commands as docker. There were problems restarting the containers with Podman-Compose, but this could be fixed with an update from version 3.4.4 (Ubuntu Repo) to 4.5.1.<br>
 
 **Drop**
-In another project, we will create github's table of contents differently. This version is too complex and not flexible.
+In another project, we will create github's table of contents differently. This version is too complex and not flexible.<br>
 
 **Try**
  Access the experiences of faculty and peers faster before investing too much time in a task.
  Finding a solution for reading the IP address when starting up the monitoring instances.
- Find a solution for setting passwords so they are not visible in the git repo.
+ Find a solution for setting passwords so they are not visible in the git repo.<br>
 
 **2. Sprint / 14.06.2023**
 ![2.Sprint](images/sprint-2.png)
 
 **Keep**
-The cooperation in the sub-projects (IaC / Monitoring) worked well.
-Interfaces were discussed together and divided into tasks.
-Visualizations of the network, security groups and monitoring overview was very helpful for general understanding.
-The first solution to reading the IP address from generating the Monitoring Instances was only with cloud-init, which still required a bash script. Using Jinja templates was the better solution.
-Through the testing I got to know the stress-ng program, which can be used to generate load on an ec2 instance.
+The cooperation in the sub-projects (IaC / Monitoring) worked well.<br>
+Interfaces were discussed together and divided into tasks.<br>
+Visualizations of the network, security groups and monitoring overview was very helpful for general understanding.<br>
+The first solution to reading the IP address from generating the Monitoring Instances was only with cloud-init, which still required a bash script. Using Jinja templates was the better solution.<br>
+Through the testing I got to know the stress-ng program, which can be used to generate load on an ec2 instance.<br>
 
-**Drop***
+**Drop**
 Stick to the original task and carefully question additional features that are not included in the task. These can quickly lead to a great deal of additional work.<br>
-A solution for the password problem was found using Secret Manager. Due to the complexity, there is no integration in IaC. The task goes into the backlog. A possible solution is documented in [Task-26](https://github.com/blro-ep/ITCNE23-SEM-I/issues/26).
+A solution for the password problem was found using Secret Manager. Due to the complexity, there is no integration in IaC. The task goes into the backlog. A possible solution is documented in [Task-26](https://github.com/blro-ep/ITCNE23-SEM-I/issues/26).<br>
 
 
 **Try**
-Prioritize the tasks better and move them to the backlog if necessary.
-Better document the findings from the sprint (Keep / Drop / Try).
+Prioritize the tasks better and move them to the backlog if necessary.<br>
+Better document the findings from the sprint (Keep / Drop / Try).<br>
 
 
 **3. Sprint / 05.07.2023**
