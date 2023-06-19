@@ -331,7 +331,7 @@ Resources:
     Condition: WantNatGateways
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/d4b68337cea90add2efddb13cd91e7cd.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/d4b68337cea90add2efddb13cd91e7cd.template
       Parameters:
         Subnet1Nat:
           Ref: PublicSubnet1
@@ -1680,7 +1680,7 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: public-bucket-dam
+      BucketName: public-bucket-dam-fr
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -1731,12 +1731,12 @@ Resources:
         s3BucketfirstName: dam-private-bucket-testbucket
         ValueEnvironment:
           Ref: EnvironmentName
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/b72f4b62b64d0605a54e3bf476fc405c.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/b72f4b62b64d0605a54e3bf476fc405c.template
   FlowLogModule:
     Condition: WantFlowLog
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/97a0a707aafb361773bba87a95ef03bc.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/97a0a707aafb361773bba87a95ef03bc.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1753,7 +1753,7 @@ Resources:
     Condition: WantEC2
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/c535450983bb036841c4a53e4cfceec7.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/c535450983bb036841c4a53e4cfceec7.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1780,7 +1780,7 @@ Resources:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/f38ef6d97f3802736573b045bcc58215.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/f38ef6d97f3802736573b045bcc58215.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1816,7 +1816,7 @@ Resources:
     DependsOn: IAMMonitoringGroup
     Condition: WantIAM
     Properties:
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/409d44ff190c0176d9b5ec3ddb880872.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/409d44ff190c0176d9b5ec3ddb880872.template
       Parameters:
         UserName:
           Ref: MonitoringUser
@@ -1829,7 +1829,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: WantIAM
     Properties:
-      TemplateURL: https://s3.eu-central-1.amazonaws.com/devdeploysemfr/6d36c385695b7e398199ce8c07396b39.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/6d36c385695b7e398199ce8c07396b39.template
       Parameters:
         GroupName:
           Ref: MonitoringGroup
@@ -1968,7 +1968,7 @@ Outputs:
         Fn::Sub: ${AWS::StackName}-DevInstanceProfile
   IPEc2InstanceID:
     Condition: WantEC2
-    Description: The Public IP Address of the Ec2 Template
+    Description: The Public IP Address of the Apache Server
     Value:
       Fn::GetAtt:
       - VPCBASICInstance

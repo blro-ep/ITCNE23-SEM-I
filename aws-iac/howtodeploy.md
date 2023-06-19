@@ -182,6 +182,7 @@ aws cloudformation deploy \
     --capabilities CAPABILITY_IAM \
     --capabilities CAPABILITY_NAMED_IAM \
     --role-arn arn:aws:iam::824877243403:role/cloudformation-role \
+    --s3-bucket devdeploysemzh \
     --profile cloudformation-user
 ```
 

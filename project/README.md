@@ -72,9 +72,12 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - The project could be divided into individual tasks and offers a good and quick overview of the project with the Kanban board, roadmap and task list.<br>
 - With github, you can work on the project independently of each other and all steps can be traced with the commits.<br>
 - Switching from Docker to Podman in the POC (input from Marcello) worked well. Learned that podman / podman-compose can be operated using the same commands as docker. There were problems restarting the containers with Podman-Compose, but this could be fixed with an update from version 3.4.4 (Ubuntu Repo) to 4.5.1. .<br>
+- I have learnt that the formation of Yaml can be a big pain in the ass and that there are good plugins for Visual Studio Code that can help with this.<br>
+- Creating a cheatsheet takes a lot of time, but it is well worth every minute of it.<br>
 
 **Drop**
 - In another project, we will create github's table of contents differently. This version is too complex and not flexible.<br>
+- The scope of the next project is going to be a lot smaller.<br>
 
 **Try**
  - Access the experiences of faculty and peers faster before investing too much time in a task.<br>
@@ -90,11 +93,14 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - Visualizations of the network, security groups and monitoring overview was very helpful for general understanding.<br>
 - The first solution to reading the IP address from generating the Monitoring Instances was only with cloud-init, which still required a bash script. Using Jinja templates was the better solution.<br>
 - Through the testing I got to know the stress-ng program, which can be used to generate load on an ec2 instance.<br>
+- Spending a lot of time with Cloudformation and other services was very helpful for the AWS architect exam.<br>
+- AWS docs was very helpful in solving problems.<br>
 
 **Drop**
 - Stick to the original task and carefully question additional features that are not included in the task. These can quickly lead to a great deal of additional work.<br>
 - A solution for the password problem was found using Secret Manager. Due to the complexity, there is no integration in IaC. The task goes into the backlog. A possible solution is documented in [Task-26](https://github.com/blro-ep/ITCNE23-SEM-I/issues/26).<br>
-
+- opt-in for the AWS Free Tier. The costs for the project are not covered by the free tier.<br>
+- optimize the cloudformation templates. The templates are very long and complex. The templates could be more modular.<br>
 
 **Try**
 - Prioritize the tasks better and move them to the backlog if necessary.<br>
@@ -113,13 +119,21 @@ Use a Git repository to make project collaboration as agile and lean as possible
 
 | Description | Test Step | Expected Result | Status | Screen |
 | ---     | ---   | ---     | ---   |  ---   |
-| `Region`| Deploy IaC in eu-central-2 | Stack complete| Stack complete | [Screenshot](images/regionz.png) |
 | `Region`| Deploy IaC in eu-central-1 | Stack complete| Stack complete | [Screenshot](images/regionf.png) |
+| `Region`| Deploy IaC in eu-central-2 | Stack complete| Stack complete | [Screenshot](images/regionz.png) |
 | `Region`| Deploy monitoring in eu-central-1 | Stack complete| Stack complete | [Screenshot](images/regionfm.png) |
 | `Region`| Deploy monitoring in eu-central-2 | Stack complete| Stack complete | [Screenshot](images/regionzm.png) |
+| `DevInstance`| Dev Instance Website | Shows possible connections | Shows connections | [Screenshot](images/devinstance.png) |
+| `DevInstance`| Dev Instance SSM Connection | Hostname IP Address | ip-10-42-11-224.VPC-DEV01.internal | [Screenshot](images/devinstancessm.png) |
+| `BasicInstance`| Basic Instance SSM Connection | Hostname IP Address | ip-10-42-21-181 | [Screenshot](images/basicinstancessm.png) |
+| `BasicInstance`| Running Apache Server | curl IP Address | curl 10.42.21.181 | [Screenshot](images/basicinstance.png) |
+| `GrafanaInstance`| Grafana Instance SSM Connection | Hostname IP Address | 10.42.21.146 | [Screenshot](images/grafanainstancessm.png) |
+| `GrafanaInstance`| Dev Instance access to Grafana Web | Timeout | Timeout | [Screenshot](images/timeout.png) |
+| `GrafanaInstance`| SSH access to Grafana Web | Timeout | Timeout | [Screenshot](images/timeout1.png) |
+| `GrafanaInstance`| Ping google | Timeout | Timeout | [Screenshot](images/timeout2.png) |
 | `Podman`| Check the Podman Containers are running | 4 Containers UP | 4 Containers UP | [Screenshot](images/check-podman-containers.png) |
 | `Prometheus`| Check that the Prometheus UI is reachable and the targets are up | UI is reachable, targets up | UI is reachable, targets up | [Screenshot](images/check-prometheus-UI-targets.png) |
-| `Grafan`| Check that the Grafana UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-grafana-UI.png) <br> [Setup](images/Grafana-Setup.mp4) |
+| `Grafana`| Check that the Grafana UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-grafana-UI.png) <br> [Setup](images/Grafana-Setup.mp4) |
 | `Blackbox-Exporter`| Check that the Blackbox-Exporter UI is reachable and Probes are available | UI reachable | UI reachable | [Screenshot](images/check-blackbox_exporter-UI.png) |
 | `Alertmanager`| Check that the Alertmanager UI is reachable | UI reachable | UI reachable | [Screenshot](images/check-alertmanager-UI.png) |
 | `Alertmanager`| Add gmailaddress / password to the config | Send email alerts | Send email alerts | [Screenshot-1](images/set-smtp-settings.png) <br> [Screenshot-2](images/send-smtp-alerts.png) |
