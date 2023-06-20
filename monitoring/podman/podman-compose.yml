@@ -38,7 +38,9 @@ services:
     ports:
       - "3000:3000"
     restart: always
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
 
 volumes:
-  prometheus-data:
-  grafana-storage:
+  prometheus-data: {}
+  grafana-storage: {}
