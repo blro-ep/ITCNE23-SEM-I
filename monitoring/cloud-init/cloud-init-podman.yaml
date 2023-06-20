@@ -29,7 +29,9 @@ runcmd:
   - sudo apt-get install -y stress-ng
   - sudo pip3 install podman-compose
   - sudo sed -i "s/xxx.xxx.xxx.xxx/{{ ds.meta_data.local_ipv4 }}/g" /opt/ITCNE23-SEM-I/monitoring/prometheus/prometheus.yml
+  - sudo sed -i "s/xxx.xxx.xxx.xxx/{{ ds.meta_data.local_ipv4 }}/g" /opt/ITCNE23-SEM-I/monitoring/grafana/data_source/prometheus.json
   - [ bash, /opt/ITCNE23-SEM-I/monitoring/cloud-init/ec2-aws-get-secret.sh ]
   - cd /opt/ITCNE23-SEM-I/monitoring/podman
   - podman-compose up -d
+  - "curl -X 'POST' 'http://localhost:3000/api/datasources' -H 'Content-Type: application/json' --user admin:admin --data-binary /home/outside/github/ITCNE23-SEM-I/monitoring/grafana/data_source/@prometheus.json"
   
