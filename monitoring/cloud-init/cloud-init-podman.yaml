@@ -34,5 +34,4 @@ runcmd:
   - cd /opt/ITCNE23-SEM-I/monitoring/podman
   - podman-compose up -d
   - cd /opt/ITCNE23-SEM-I/monitoring/grafana/data_source
-  - "curl -X 'POST' 'http://localhost:3000/api/datasources' -H 'Content-Type: application/json' --user admin:admin --data-binary @prometheus.json"
-  
+  - [ bash, curl -X "POST" "http://localhost:3000/api/datasources" -H "Content-Type:application/json" --user admin:admin --data-binary @prometheus.json ]  
