@@ -317,6 +317,12 @@ sudo stress-ng --vm 1 --vm-bytes 384M --timeout 3m &
 sudo systemctl stop apache2.service
 sudo systemctl status apache2.service
 ```
+### 6.6 Reload Prometheus Config
+Reload Prometheus configuration without container restart.
+```
+curl -X POST http://localhost:9090/-/reload
+```
+
 ## 7. Projectmanagement
 The project management documentation can be found under the following link:
 - [**Project Documentation**](../project/README.md)
