@@ -1,6 +1,8 @@
 ## template: jinja
 #cloud-config
+package_update: true
 package_upgrade: true
+package_reboot_if_required: false
 
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDtN+sKx8MaNh5gpulK9plpe1bxHtYfSlj2WOvMM8cjXzUMRxxIxxPivAohTZYsCW9OwK376GclZd17RqDfx9ifoa1rUpQnyZ1ckB4Xw5zZA+bZintl1L0OAwzTmaITXbly7913BNjkiQ9Vyy3gYwYqEKrmQPfhaWKG3oWCWhQHBE9nllYPtnIspupeEGRaS1rJL1NZH7nRE+5dQMXnIr3pRUDbX0q2WXodYtVuUVaujYCGWDTLzgrLgVWRix165pMfXXJ80wmZCz8JC/vcM7veKiKRtbeTHJSMnxCxN9MpKe/PZqLtS3WywzHkBqF2s208SC0bvfUpxrAKGzUresUWT6+EgeoBDs7IsSwFekAerckSMH0CWXdL0triE52gQK+7mWKPh6vvzONngNiwKQuOD6lnbaVuK2DrJ/Oi4aT2+eonA2ovFCP4BHTgSwc/VVh3++Fu944ZsJOV6zK50uopfCVcrjZ7vs2y15DgwrtARQkaSZVIEwVgZG7FN2n4AEkSvotpElxLNuLbmoKimQdJy96YZYcN2skkOVaaPa1zvB18cT/V5+1ctGJ1rG7jrzkoaATjt4DHEONGfNT5VjE5CYteEExmI9uzEpEuKY+jBWbtRily49ESSEZQd3aCS8svDe8jxvs9zC9N7pzh+5O9PgJsUkyHLJANOJNrWyeOYw== outside@XPS
@@ -12,6 +14,13 @@ packages:
   - gnupg
   - lsb-release
   - libyajl2
+  - prometheus-node-exporter
+  - containernetworking-plugins
+  - python3-pip
+  - jq
+  - awscli
+  - stress-ng
+
 
 runcmd:
   - cd /opt
@@ -20,13 +29,7 @@ runcmd:
   - sudo curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
   - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg] https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
   - sudo apt-get update && sudo apt-get upgrade -y
-  - sudo apt-get install -y prometheus-node-exporter
-  - sudo apt-get install -y containernetworking-plugins
-  - sudo apt-get install -y python3-pip
   - sudo apt-get install -y podman
-  - sudo apt-get install -y jq
-  - sudo apt-get install -y awscli
-  - sudo apt-get install -y stress-ng
   - sudo pip3 install podman-compose
   - sudo sed -i "s/xxx.xxx.xxx.xxx/{{ ds.meta_data.local_ipv4 }}/g" /opt/ITCNE23-SEM-I/monitoring/prometheus/prometheus.yml
   - sudo sed -i "s/xxx.xxx.xxx.xxx/{{ ds.meta_data.local_ipv4 }}/g" /opt/ITCNE23-SEM-I/monitoring/grafana/data_source/prometheus.json
