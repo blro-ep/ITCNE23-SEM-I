@@ -20,6 +20,7 @@ packages:
   - jq
   - awscli
   - stress-ng
+  - libwww-perl
 
 
 runcmd:
