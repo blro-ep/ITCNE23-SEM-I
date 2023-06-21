@@ -40,7 +40,7 @@ services:
     restart: always
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel
-      - GF_PATHS_PROVISIONING=/opt/ITCNE23-SEM-I/monitoring/grafana:/etc/grafana/provisioning
+      - GF_PATHS_PROVISIONING=/opt/ITCNE23-SEM-I/monitoring/grafana
 volumes:
   prometheus-data: {}
   grafana-storage: {}
