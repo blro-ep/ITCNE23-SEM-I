@@ -37,7 +37,7 @@ runcmd:
   - [ bash, /opt/ITCNE23-SEM-I/monitoring/cloud-init/ec2-aws-get-secret.sh ]
   - cd /opt/ITCNE23-SEM-I/monitoring/podman/
   - podman-compose up -d
-  - sleep 20
+  - sleep 5
   - cd /opt/ITCNE23-SEM-I/monitoring/grafana/data_source/ 
   - sudo curl -X "POST" "http://localhost:3000/api/datasources" -H "Content-Type:application/json" --user admin:admin --data-binary @prometheus.json
   - cd /opt/ITCNE23-SEM-I/monitoring/grafana/
