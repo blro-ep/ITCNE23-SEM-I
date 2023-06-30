@@ -318,11 +318,17 @@ aws iam put-user-policy \
 3. We send the Access Key and Secret Key to Roger
 4. With following command Roger is able to see the Stack Information
 
+> In Outputs of the Monitoring Stack Roger can see all the information he needs to connect to the Monitoring Instance and the URL.
+
 ```
 aws cloudformation describe-stacks --stack-name MonitoringStack --profile roger
 ```
 
-1. In Outputs of the Monitoring Stack Roger can see all the information he needs to connect to the Monitoring Instance and the URL.
+5. With following command Roger is able to see the IP Address of the Dev Instance
+   
+```
+aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile roger --query "Stacks[].Outputs[?OutputKey=='IPEc2InstanceID'].OutputValue"
+```
 
 ## 08 Delete stack
 
