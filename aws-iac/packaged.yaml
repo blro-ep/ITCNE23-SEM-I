@@ -1780,7 +1780,7 @@ Resources:
     Condition: WantEC3
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/f38ef6d97f3802736573b045bcc58215.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/8991d02df2f9110bfcbac726dcc44cbc.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName
@@ -1973,6 +1973,27 @@ Outputs:
       Fn::GetAtt:
       - VPCBASICInstance
       - Outputs.PrivateIpAddress
+  VPCDEVInstanceID:
+    Condition: WantEC2
+    Description: The Public IP Address of the Public Instance
+    Value:
+      Fn::GetAtt:
+      - VPCDEVInstance
+      - Outputs.PrivateIpAddress
+  SSMManagerIDApache:
+    Condition: WantEC2
+    Description: The SSM Manager ID of the Apache Server
+    Value:
+      Fn::GetAtt:
+      - VPCBASICInstance
+      - Outputs.SSMManager
+  IP:
+    Condition: WantEC2
+    Description: The SSM Manager ID of the Apache Server
+    Value:
+      Fn::GetAtt:
+      - VPCBASICInstance
+      - Outputs.SSMManager
   S3Bucket:
     Description: Bucket Created using this template.
     Value:

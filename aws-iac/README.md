@@ -169,19 +169,21 @@ Spare capacity for adding subnets to support your environment as it grows.
 
 ## 06 Conclusion
 
-In conclusion, I can say that the journey of working on the AWS CloudFormation project has been an extremely learning and challenging experience. Through this undertaking, I have gained a broader understanding of Infrastructure as Code (IaC) and the possibilities it offers in the automation and deployment of AWS resources.
+**In conclusion**, I can say that the journey of working on the AWS CloudFormation project has been an extremely learning and challenging experience. Through this undertaking, I have gained a broader understanding of Infrastructure as Code (IaC) and the possibilities it offers in the automation and deployment of AWS resources.
 
 While working on this project, it became clear that the complexity of the CloudFormation template was growing tremendous as more resources and configurations were added. 
 For this reason, it helped me to build the template gradually, adding services and to test it after each step.
 
-In retrospect, I realised that further modularising the CloudFormation template would have greatly improved its maintainability, readability and reusability.
-Specifically, the NACL and Security Group sections of the template could have been modularised into separate files and then referenced in the main template. This would have made the template more readable and easier to maintain.
-Further more Improving the testability capabilities to validate the functionality of the individual resources would have been a great benefit.
-
 I have deepened my understanding of the AWS CLI and its capabilities for automating various tasks related to AWS resource provisioning 
 Particularly in terms of gaining hands-on experience with the AWS CLI deploying s3 buckets, iam users, put-user-policy, create-role, describe-stacks, deploy stacks and packages. 
 
-Although this project has been a remarkable journey, it is important to acknowledge that certain components I have not been able to be integrated due to time constraints and the scope of the project:
+**In retrospect**, I realised that further modularising the CloudFormation template would have greatly improved its maintainability, readability and reusability.
+Specifically, the NACL and Security Group sections of the template could have been modularised into separate files and then referenced in the main template. This would have made the template more readable and easier to maintain.
+Further more Improving the testability capabilities to validate the functionality of the individual resources would have been a great benefit.
+
+
+
+Although this project has been a remarkable journey, it is important to acknowledge that certain components I have **not been able to be integrated** due to time constraints and the scope of the project:
 
 - consistent tagging strategy
 - consistent naming strategy
@@ -190,6 +192,7 @@ Although this project has been a remarkable journey, it is important to acknowle
 - Limit Outbound Traffic: Restrict outbound traffic to only the necessary ports
 - Deploying -creating IAM User for Roger directly in a Cloudformation template
 - Deploying Prerequisite - IAM CloudFormation User directly in a Cloudformation template
+- S3 Bucket Nested Stack can not be deployed consistently
 
 
 

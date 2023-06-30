@@ -116,10 +116,16 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - The use of jinja templates in Cloud-Init has proven itself for reading the IP address when creating an instance. The template offers many exciting options.
 
 
+- AWS Well-Architected Framework was very helpful in challenging my knowledge and really understanding the details.<br>
+- Testing the deployment in a second region helped me to bring the documentation up to date.<br>
+- We have enough time to finish the project and concentrate on the testing and documentation.<br>
+
+
 **Drop**
+- Troubleshooting the S3Bucket Issue took up a lot of time and is not fixed yet.
 
 **Try**
-
+- The visualizations take up a lot of time and constant updating, perhaps it would be possible to automate them..<br>
 
 **4. . Sprint / 12.07.2023**
 
