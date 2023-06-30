@@ -109,6 +109,8 @@ Outputs:
     Value: !Sub aws ssm start-session --target ${DevInstance} --profile gmail
     Description: CMD Commend to Connect to the Linux Machine over Session Manager
 
+
+
   SSHConnection:
     Description: The public IP address of the deployed instance
     Value: !Sub ssh ec2-user@${DevInstance.PrivateIp}

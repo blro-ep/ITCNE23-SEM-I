@@ -324,11 +324,26 @@ aws iam put-user-policy \
 aws cloudformation describe-stacks --stack-name MonitoringStack --profile roger
 ```
 
-5. With following command Roger is able to see the IP Address of the Dev Instance
+5. With following command Roger is able to: 
+
+See the IP Address of the Dev Instance (Apache Webserver)
    
 ```
 aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile roger --query "Stacks[].Outputs[?OutputKey=='IPEc2InstanceID'].OutputValue"
 ```
+
+See the SSM Session Manager URL of the Dev Instance (Apache Webserver)
+
+```
+aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile roger --query "Stacks[].Outputs[?OutputKey=='SSMManagerIDApache'].OutputValue"
+```
+
+See the Webserver URL of the Public Instance (Ngix Webserver)
+
+```
+aws cloudformation describe-stacks --stack-name VPC-DEV01 --profile roger --query "Stacks[].Outputs[?OutputKey=='VPCDEVInstanceID'].OutputValue"
+```
+
 
 ## 08 Delete stack
 
