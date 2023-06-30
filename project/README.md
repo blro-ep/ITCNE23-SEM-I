@@ -113,6 +113,8 @@ Use a Git repository to make project collaboration as agile and lean as possible
 ![3.Sprint](images/sprint-3.png)
 
 **Keep**
+- The use of jinja templates in Cloud-Init has proven itself for reading the IP address when creating an instance. The template offers many exciting options.
+
 
 **Drop**
 
