@@ -110,6 +110,13 @@ Use a Git repository to make project collaboration as agile and lean as possible
 
 
 **3. Sprint / 05.07.2023**
+![3.Sprint](images/sprint-3.png)
+
+**Keep**
+
+**Drop**
+
+**Try**
 
 
 **4. . Sprint / 12.07.2023**
