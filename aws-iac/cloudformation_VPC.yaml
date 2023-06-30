@@ -2099,6 +2099,21 @@ Outputs:
     Description: The Public IP Address of the Apache Server
     Value: !GetAtt VPCBASICInstance.Outputs.PrivateIpAddress
 
+  VPCDEVInstanceID:
+    Condition: WantEC2
+    Description: The Public IP Address of the Public Instance
+    Value: !GetAtt VPCDEVInstance.Outputs.PrivateIpAddress
+
+  SSMManagerIDApache:
+    Condition: WantEC2
+    Description: The SSM Manager ID of the Apache Server
+    Value: !GetAtt VPCBASICInstance.Outputs.SSMManager
+
+  IP:
+    Condition: WantEC2
+    Description: The SSM Manager ID of the Apache Server
+    Value: !GetAtt VPCBASICInstance.Outputs.SSMManager
+
   S3Bucket:
     Description: Bucket Created using this template.
     Value: !Ref S3Bucket
