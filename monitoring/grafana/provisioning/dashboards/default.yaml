@@ -2,7 +2,7 @@ apiVersion: 1
 
 providers:
   # <string> an unique provider name. Required
-  - name: 'a unique provider name'
+  - name: 'AWS EC2 Instances'
     # <int> Org id. Default to 1
     orgId: 1
     # <string> name of the dashboard folder.
@@ -14,11 +14,11 @@ providers:
     # <bool> disable dashboard deletion
     disableDeletion: false
     # <int> how often Grafana will scan for changed dashboards
-    updateIntervalSeconds: 10
+    updateIntervalSeconds: 20
     # <bool> allow updating provisioned dashboards from the UI
     allowUiUpdates: false
     options:
       # <string, required> path to dashboard files on disk. Required when using the 'file' type
-      path: /opt/ITCNE23-SEM-I/monitoring/grafana
+      path: /opt/ITCNE23-SEM-I/monitoring/grafana/provisioning/dashboards/EC2-Instance.json
       # <bool> use folder names from filesystem to create folders in Grafana
       foldersFromFilesStructure: true
