@@ -108,30 +108,27 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - Prioritize the tasks better and move them to the backlog if necessary.<br>
 - Better document the findings from the sprint (Keep / Drop / Try).<br>
 
-
 **3. Sprint / 05.07.2023**
 ![3.Sprint](images/sprint-3.png)
 
 **Keep**
-- The use of jinja templates in Cloud-Init has proven itself for reading the IP address when creating an instance. The template offers many exciting options.
-
-
 - AWS Well-Architected Framework was very helpful in challenging my knowledge and really understanding the details.<br>
 - Testing the deployment in a second region helped me to bring the documentation up to date.<br>
 - We have enough time to finish the project and concentrate on the testing and documentation.<br>
-
+- The use of jinja templates in Cloud-Init has proven itself for reading the IP address when creating an instance. The template offers many exciting options.<br>
+- Adding the DataSource via Grafana API removes this manual step and makes testing easier.<br>
 
 **Drop**
 - Troubleshooting the S3Bucket Issue took up a lot of time and is not fixed yet.
 
 **Try**
 - The visualizations take up a lot of time and constant updating, perhaps it would be possible to automate them..<br>
+- Consideration should be given to how the dashboard can be added via Grafana API to further automate the process.<br>
 
 **4. . Sprint / 12.07.2023**
 
 
 ## 04 Testing
-
 ![Testing](images/testing.png)
 
 | Description | Test Step | Expected Result | Status | Screen |
