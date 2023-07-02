@@ -1,41 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "10.0.1"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph (old)",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,12 +11,6 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "target": {
-          "limit": 100,
-          "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
-        },
         "type": "dashboard"
       }
     ]
@@ -63,7 +20,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 7587,
   "graphTooltip": 0,
-  "id": null,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -74,7 +31,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -115,7 +72,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_duration_seconds{instance=~\"$target\"}",
           "format": "time_series",
@@ -159,7 +116,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "gridPos": {
         "h": 1,
@@ -174,7 +131,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "refId": "A"
         }
@@ -185,7 +142,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -264,7 +221,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_success{instance=~\"$target\"}",
           "format": "time_series",
@@ -283,7 +240,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -324,7 +281,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_http_duration_seconds{instance=~\"$target\"}",
           "format": "time_series",
@@ -371,7 +328,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -412,7 +369,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_duration_seconds{instance=~\"$target\"}",
           "format": "time_series",
@@ -455,7 +412,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -535,7 +492,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_http_status_code{instance=~\"$target\"}",
           "format": "time_series",
@@ -550,7 +507,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -613,7 +570,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_http_version{instance=~\"$target\"}",
           "format": "time_series",
@@ -627,7 +584,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -706,7 +663,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_http_ssl{instance=~\"$target\"}",
           "format": "time_series",
@@ -721,7 +678,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -801,7 +758,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "probe_ssl_earliest_cert_expiry{instance=~\"$target\"} - time()",
           "format": "time_series",
@@ -816,7 +773,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -879,7 +836,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "avg(probe_duration_seconds{instance=~\"$target\"})",
           "format": "time_series",
@@ -894,7 +851,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
       },
       "fieldConfig": {
         "defaults": {
@@ -958,7 +915,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
           },
           "expr": "avg(probe_dns_lookup_time_seconds{instance=~\"$target\"})",
           "format": "time_series",
@@ -974,7 +931,10 @@
   "refresh": "10s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "blackbox",
+    "prometheus"
+  ],
   "templating": {
     "list": [
       {
@@ -1067,10 +1027,14 @@
         "type": "interval"
       },
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63"
         },
         "definition": "",
         "hide": 0,
@@ -1078,10 +1042,7 @@
         "multi": true,
         "name": "target",
         "options": [],
-        "query": {
-          "query": "label_values(probe_success, instance)",
-          "refId": "Prometheus-target-Variable-Query"
-        },
+        "query": "label_values(probe_success, instance)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1094,7 +1055,7 @@
     ]
   },
   "time": {
-    "from": "now-1m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -1123,8 +1084,8 @@
     ]
   },
   "timezone": "",
-  "title": "Prometheus Blackbox Exporter Copy",
-  "uid": "f47b509d-527f-4663-983b-c0f022396f96",
+  "title": "Prometheus Blackbox Exporter",
+  "uid": "xtkCtBkiz",
   "version": 1,
   "weekStart": ""
 }
