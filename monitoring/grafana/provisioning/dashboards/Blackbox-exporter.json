@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.3.6"
+      "version": "10.0.1"
     },
     {
       "type": "panel",
@@ -103,7 +103,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -258,7 +258,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "repeatDirection": "v",
       "targets": [
         {
@@ -312,7 +312,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -400,7 +400,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -529,7 +529,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "repeatDirection": "h",
       "targets": [
         {
@@ -608,7 +608,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "targets": [
         {
           "datasource": {
@@ -700,7 +700,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "repeatDirection": "v",
       "targets": [
         {
@@ -795,7 +795,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "repeatDirection": "h",
       "targets": [
         {
@@ -874,7 +874,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "targets": [
         {
           "datasource": {
@@ -952,7 +952,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "10.0.1",
       "repeatDirection": "h",
       "targets": [
         {
@@ -972,7 +972,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 37,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [
     "blackbox",
@@ -1126,8 +1126,8 @@
     ]
   },
   "timezone": "",
-  "title": "Prometheus Blackbox Exporter",
-  "uid": "xtkCtBkiz",
-  "version": 1,
+  "title": "Prometheus Blackbox Exporter 2",
+  "uid": "xtkCtBkiz2",
+  "version": 3,
   "weekStart": ""
 }
