@@ -35,12 +35,14 @@ services:
     container_name: grafana
     volumes:
       - grafana-storage:/var/lib/grafana
+      - /opt/ITCNE23-SEM-I/monitoring/grafana/provisioning/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml
+      - /opt/ITCNE23-SEM-I/monitoring/grafana/provisioning/EC2-Instance.json:/etc/grafana/provisioning/dashboards/EC2-Instance.json
     ports:
       - "3000:3000"
     restart: always
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel
-      - GF_PATHS_PROVISIONING=/opt/ITCNE23-SEM-I/monitoring/grafana/provisioning
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
 volumes:
   prometheus-data: {}
   grafana-storage: {}
