@@ -974,10 +974,7 @@
   "refresh": "10s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [
-    "blackbox",
-    "prometheus"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
@@ -1097,7 +1094,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1m",
     "to": "now"
   },
   "timepicker": {
@@ -1126,8 +1123,8 @@
     ]
   },
   "timezone": "",
-  "title": "Prometheus Blackbox Exporter 2",
-  "uid": "xtkCtBkiz2",
-  "version": 3,
+  "title": "Prometheus Blackbox Exporter Copy",
+  "uid": "f47b509d-527f-4663-983b-c0f022396f96",
+  "version": 1,
   "weekStart": ""
 }
