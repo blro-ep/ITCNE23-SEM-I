@@ -1,7 +1,6 @@
 {
     "id": 1,
-#    "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63",
-    "uid": "prometheusdatasource",
+    "uid": "dcf7f9bf-4909-4403-8401-f4d4f9265d63",
     "orgId": 1,
     "name": "Prometheus",
     "type": "prometheus",
