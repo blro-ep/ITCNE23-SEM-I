@@ -282,6 +282,9 @@ sudo podman volume ls
 
 # display a container, image, volume, network, or pod’s configuration, example prometheus
 sudo podman inspect prometheus
+
+# connect into a container
+sudo podman exec -it grafana /bin/sh
 ```
 
 #### 6.3.1 Podman-Compose
