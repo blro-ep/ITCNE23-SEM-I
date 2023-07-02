@@ -37,6 +37,7 @@ services:
       - grafana-storage:/var/lib/grafana
       - /opt/ITCNE23-SEM-I/monitoring/grafana/provisioning/dashboards/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml
       - /opt/ITCNE23-SEM-I/monitoring/grafana/provisioning/dashboards/EC2-Instance.json:/etc/grafana/provisioning/dashboards/EC2-Instance.json
+      - /opt/ITCNE23-SEM-I/monitoring/grafana/provisioning/dashboards/Blackbox-exporter.json:/etc/grafana/provisioning/dashboards/Blackbox-exporter.json
     ports:
       - "3000:3000"
     restart: always

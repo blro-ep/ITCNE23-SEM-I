@@ -40,6 +40,3 @@ runcmd:
   - sleep 10
   - cd /opt/ITCNE23-SEM-I/monitoring/grafana/data_source/ 
   - sudo curl -X "POST" "http://localhost:3000/api/datasources" -H "Content-Type:application/json" --user admin:admin --data-binary @prometheus.json
-  - cd /opt/ITCNE23-SEM-I/monitoring/grafana/
-  #- sudo curl -X "POST" "http://localhost:3000/api/dashboards/import" -H "Content-Type:application/json" --user admin:admin --data-binary @EC2-Instance-1675192234096.json
-  #- curl -XPOST -i http://admin:admin@localhost:3000/api/dashboards/db --data-binary ./@EC2-Instance-1675192234096.json -H "Content-Type:application/json"
