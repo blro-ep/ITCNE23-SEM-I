@@ -346,7 +346,6 @@ Project IaC deployment with AWS CloudFormation and integrated monitoring.
 Collaboration Dany Ambühl / Roger Blum.
 
 ### 8.1 Monitoring
-
 The goal was to provide monitoring that can be started up automatically within Dany Ambühl's IaC project.
 Most of the automation is done via cloud-init, which is used to start up the instance with the required container.
 The setup of the containers is stored in the Github repo and is updated and read out during the creation of the instance.
