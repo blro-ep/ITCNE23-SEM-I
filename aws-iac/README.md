@@ -193,6 +193,7 @@ Although this project has been a remarkable journey, it is important to acknowle
 - Deploying -creating IAM User for Roger directly in a Cloudformation template
 - Deploying Prerequisite - IAM CloudFormation User directly in a Cloudformation template
 - S3 Bucket Nested Stack can not be deployed consistently
+- The Attached NFS Share could not get implemented with Rogers Container
 
 
 
