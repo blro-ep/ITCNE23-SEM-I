@@ -43,8 +43,11 @@
 * 6.4.1   - [CPU load](#641-cpu-load)
 * 6.4.2   - [Memory load](#642-memory-load)
 * 6.5     - [Apache service](#65-apache-stop-start)
+* 6.6     - [Reload Prometheus Config](#66-reload-prometheus-config)
+* 6.7     - [Check Prometheus Exporter](#67-check-prometheus-exporter)
 * 7       - [Projectmanagement](#7-projectmanagement)
-
+* 8       - [Projectconclusion](#8-projectconclusion)
+* 8.1     - [Monitoring](#81-monitoring)
 ---
 
 ## 1 Summary
@@ -248,6 +251,7 @@ Github is used in this project to manage the monitoring setup.
 Set email address and password.
 ```
 sudo sed -i "s/xxx@gmail.com/<<MAILADDRESS>>/g" /opt/ITCNE23-SEM-I/monitoring/alertmanager/alertmanager.yml
+
 sudo sed -i "s/xxxxxxxxxxx/<<PASSWORD>>/g" /opt/ITCNE23-SEM-I/monitoring/alertmanager/alertmanager.yml
 ```
 ### 6.2 Check Admin UI's
@@ -326,6 +330,36 @@ Reload Prometheus configuration without container restart.
 curl -X POST http://localhost:9090/-/reload
 ```
 
+### 6.7 Check prometheus exporter
+```
+systemctl status prometheus-node-exporter
+```
+
 ## 7. Projectmanagement
 The project management documentation can be found under the following link:
 - [**Project Documentation**](../project/README.md)
+
+## 8. Projectconclusion
+Semester thesis TBZ Cloud-native Engineer, class ITCNE 23, 1st semester.
+
+Project IaC deployment with AWS CloudFormation and integrated monitoring. 
+Collaboration Dany Ambühl / Roger Blum.
+
+### 8.1 Monitoring
+
+The goal was to provide monitoring that can be started up automatically within Dany Ambühl's IaC project.
+Most of the automation is done via cloud-init, which is used to start up the instance with the required container.
+The setup of the containers is stored in the Github repo and is updated and read out during the creation of the instance.
+According to the project application, the containers should be administered using Docker. At the suggestion of the lecturer Marcello Calisto, Docker was replaced by Podman. This was a good decision, as Podman will replace Docker in the long term. Through this adjustment, I learned that Docker images are compatible with Podman. Most Docker and Podman commands are identical, so existing know-how could be carried over. 
+One challenge was the Podman Compose version, which is included in the current Ubuntu package repositories. This led to a problem when restarting the container, which is why a new version is installed via cloud-init.
+
+The know-how gained in the course of the project regarding IaC and jinja-template has contributed to the automation of the solution and has led to constant optimization. The IP address in the conig files could be updated using cloud-init. By updating the IP address, it became possible to automate the addition of the Grafana DataSource and the dashboards.
+
+The DataSource is automated via Grafana API. A curl post is sent in cloud-init, which transfers the configuration in the form of a json file.
+The dashboards are imported using Grafana Provision, which resulted in an adaptation of Podman-Compose. I invested a lot of time here until I understood the concept and set the volumes of the Grafana container correctly. A major advantage is that Dashboard can be added automatically during operation (save the json file in the correct directory). 
+
+The credentials for sending emails from Alertmanger presented a major challenge. I didn't want to put this information in the public github repo. 
+A solution was found with the AWS Secret Manager (Roles / Policies). This has been successfully tested and documented.
+Unfortunately, there was not enough time for the integration into Dany's IaC project. So this remains a manual step.
+
+The implementation of the project and the collaboration with Dany Ambühl were very instructive and fun.
