@@ -199,7 +199,7 @@ Github is used in this project to manage the monitoring setup.
 | Node Exporter | 9100 |  inbound |
 | Blackbox Exporter | 9115 | inboud |
 | Alertmanager | 9093 | inbound |
-| Grafan |  3000 | inbound |
+| Grafan |  80 | inbound |
 | SSH | 22 | inbound |
 | http | 80 | outbound |
 | https | 443 | outbound |
