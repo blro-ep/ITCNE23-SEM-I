@@ -1,6 +1,10 @@
-- targets: ['https://google.com', 'https://swisscom.com', 'https://tbz.ch']
+- targets:
+    - "https://google.com"
+    - "https://swisscom.com"
+    - "https://tbz.ch"
   labels:
     group: 'extern'
-#- targets: ['https://xxx.com']
+#- targets:
+#  - "http://xxx.xxx"  
 #  labels:
 #    group: 'intern'

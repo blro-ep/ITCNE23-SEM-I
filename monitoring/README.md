@@ -45,6 +45,7 @@
 * 6.5     - [Apache service](#65-apache-stop-start)
 * 6.6     - [Reload Prometheus Config](#66-reload-prometheus-config)
 * 6.7     - [Check Prometheus Exporter](#67-check-prometheus-exporter)
+* 6.8     - [Target add / remove](#68-targets-add--remove)
 * 7       - [Projectmanagement](#7-projectmanagement)
 * 8       - [Projectconclusion](#8-projectconclusion)
 * 8.1     - [Monitoring](#81-monitoring)
@@ -333,6 +334,17 @@ curl -X POST http://localhost:9090/-/reload
 ### 6.7 Check prometheus exporter
 ```
 systemctl status prometheus-node-exporter
+```
+
+### 6.8 Targets add / remove
+#### EC2 targets
+```
+sudo nano /opt/ITCNE23-SEM-I/monitoring/prometheus/targets.yml
+```
+
+#### Blackbox targets
+```
+sudo nano /opt/ITCNE23-SEM-I/monitoring/prometheus/blackbox_targets.yml
 ```
 
 ## 7. Projectmanagement
