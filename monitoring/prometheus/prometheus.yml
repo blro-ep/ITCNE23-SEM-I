@@ -23,14 +23,14 @@ scrape_configs:
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
-    static_configs: # 
-      - targets: ['xxx.xxx.xxx.xxx:9100'] # IP addresses of the servers to be monitored
+    static_configs: 
+      - targets: ['xxx.xxx.xxx.xxx:9100'] # IP addresses of the monitoring instance
 
     file_sd_configs:
     - files:
-      - 'targets.yml'        
+      - 'targets.yml' # IP addresses of the servers to be monitored
 
-  - job_name: 'blackbox https'
+  - job_name: 'blackbox'
     metrics_path: /probe
     params:
       module: [http_2xx]

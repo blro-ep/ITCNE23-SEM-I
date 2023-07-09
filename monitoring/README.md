@@ -340,11 +340,23 @@ systemctl status prometheus-node-exporter
 #### EC2 targets
 ```
 sudo nano /opt/ITCNE23-SEM-I/monitoring/prometheus/targets.yml
+
+# yml example
+- targets:
+       - 16.62.65.245:9100
+  labels:
+       env: intern
 ```
 
 #### Blackbox targets
 ```
 sudo nano /opt/ITCNE23-SEM-I/monitoring/prometheus/blackbox_targets.yml
+
+# yml example
+- targets:
+    - "https://tbz.ch"
+  labels:
+    group: 'extern'
 ```
 
 ## 7. Projectmanagement
