@@ -379,7 +379,10 @@ One challenge was the Podman Compose version, which is included in the current U
 The know-how gained in the course of the project regarding IaC and jinja-template has contributed to the automation of the solution and has led to constant optimization. The IP address in the conig files could be updated using cloud-init. By updating the IP address, it became possible to automate the addition of the Grafana DataSource and the dashboards.
 
 The DataSource is automated via Grafana API. A curl post is sent in cloud-init, which transfers the configuration in the form of a json file.
-The dashboards are imported using Grafana Provision, which resulted in an adaptation of Podman-Compose. I invested a lot of time here until I understood the concept and set the volumes of the Grafana container correctly. A major advantage is that Dashboard can be added automatically during operation (save the json file in the correct directory). 
+The dashboards are imported using Grafana Provision, which resulted in an adaptation of Podman-Compose. I invested a lot of time here until I understood the concept and set the volumes of the Grafana container correctly. A major advantage is that Dashboard can be added automatically during operation (save the json file in the correct directory).
+
+Outsourcing the targets (ec2 / blackbox) from the prometheus.yml was a good decision.
+This means that targets can be added/removed during operation and are automatically loaded into the config.
 
 The credentials for sending emails from Alertmanger presented a major challenge. I didn't want to put this information in the public github repo. 
 A solution was found with the AWS Secret Manager (Roles / Policies). This has been successfully tested and documented.
