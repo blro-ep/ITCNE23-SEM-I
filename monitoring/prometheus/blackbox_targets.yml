@@ -1,10 +1,9 @@
 - targets:
     - "https://google.com"
-    - "https://swisscom.com"
     - "https://tbz.ch"
   labels:
-    group: 'extern'
+    env: 'extern'
 #- targets:
 #  - "http://xxx.xxx"  
 #  labels:
-#    group: 'intern'
+#    env: 'intern'
