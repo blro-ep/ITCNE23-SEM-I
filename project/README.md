@@ -2,7 +2,6 @@ Definition Lean / Agile Project
 ==== 
 
 ## Table of Content
-
 * 01 - [Our Kanban Board Explained](#01-Our-Kanban-Board-Explained)
 * 02 - [Communication Collaboration](#02-Communication-Collaboration)
 * 03 - [Sprint Completion](#03-sprint-completion)
@@ -125,7 +124,17 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - The visualizations take up a lot of time and constant updating, perhaps it would be possible to automate them..<br>
 - Consideration should be given to how the dashboard can be added via Grafana API to further automate the process.<br>
 
-**4. . Sprint / 12.07.2023**
+**4. Sprint / 12.07.2023**
+
+
+**Keep**
+- By outsourcing the target systems, they can be dynamically added / removed without interruption. <br>
+- Using Grafana Provisioning, dashboards can be added during the creation of the instance. Another advantage is that additional dashboards can be dynamically added / removed in the form of json files.<br>
+
+**Drop**
+
+**Try**
+- The following Prometheus function should be checked to automatically read in the ec2 instances. [<ec2_sd_config>](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#ec2_sd_config) <br>
 
 
 ## 04 Testing
