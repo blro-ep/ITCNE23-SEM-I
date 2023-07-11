@@ -43,11 +43,11 @@ In this project, we use Prometheus as data source, it is an open-source systems 
 
 - [**Monitoring Documentation**](monitoring/README.md)
 
-
 ## 05 Conclusion
 
-> Comming Soon
+> The project tools provided by Github (Projects / Board / Roadmap / Task) surprised us positively. These board resources made it very easy for everyone involved to keep track of everything and keep the schedule under control. 
+The work is traceable and could be tracked through the git-commits. It was fun to work with Github.<br>It was very exciting and instructive to see what can be deployed automatically using AWS CloudFormation and how monitoring is integrated using Cloud-init. 
+The work clearly illustrated the advantages of the cloud and showed the great potential.<br>Inputs from the lessons have been continuously incorporated into the work and have led to constant optimisations.<br>
 
-
-
-
+- [**Conclusion IaC**](/ITCNE23-SEM-I/aws-iac/README.md#06-conclusion)
+- [**Conclusion Monitoring**](monitoring/README.md#8-conclusion)

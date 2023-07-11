@@ -47,8 +47,8 @@
 * 6.7     - [Check Prometheus Exporter](#67-check-prometheus-exporter)
 * 6.8     - [Target add / remove](#68-targets-add--remove)
 * 7       - [Projectmanagement](#7-projectmanagement)
-* 8       - [Projectconclusion](#8-projectconclusion)
-* 8.1     - [Monitoring](#81-monitoring)
+* 8       - [Conclusion](#8-conclusion)
+
 ---
 
 ## 1 Summary
@@ -363,13 +363,13 @@ sudo nano /opt/ITCNE23-SEM-I/monitoring/prometheus/blackbox_targets.yml
 The project management documentation can be found under the following link:
 - [**Project Documentation**](../project/README.md)
 
-## 8. Projectconclusion
+## 8. Conclusion
 Semester thesis TBZ Cloud-native Engineer, class ITCNE 23, 1st semester.
 
 Project IaC deployment with AWS CloudFormation and integrated monitoring. 
 Collaboration Dany Ambühl / Roger Blum.
 
-### 8.1 Monitoring
+
 The goal was to provide monitoring that can be started up automatically within Dany Ambühl's IaC project.
 Most of the automation is done via cloud-init, which is used to start up the instance with the required container.
 The setup of the containers is stored in the Github repo and is updated and read out during the creation of the instance.
