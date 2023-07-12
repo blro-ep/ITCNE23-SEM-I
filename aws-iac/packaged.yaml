@@ -1753,7 +1753,7 @@ Resources:
     Condition: WantEC2
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/c535450983bb036841c4a53e4cfceec7.template
+      TemplateURL: https://s3.eu-central-2.amazonaws.com/devdeploysemzh/4b2b25c0bc9a7d66fe39968c4491f390.template
       Parameters:
         VPCModule:
           Ref: AWS::StackName

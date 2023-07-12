@@ -84,11 +84,11 @@ Resources:
             - gnupg
             - lsb-release
             - apache2
+            - prometheus-node-exporter
+            - jq
+            - awscli
 
           runcmd:
-            - sudo apt-get install -y prometheus-node-exporter
-            - sudo apt-get install -y jq
-            - sudo apt-get install -y awscli
             - sudo ufw allow 'Apache'
 
 Outputs:
