@@ -125,7 +125,7 @@ Use a Git repository to make project collaboration as agile and lean as possible
 - Consideration should be given to how the dashboard can be added via Grafana API to further automate the process.<br>
 
 **4. Sprint / 12.07.2023**
-
+![4.Sprint](images/sprint-4.png)
 
 **Keep**
 - By outsourcing the target systems, they can be dynamically added / removed without interruption. <br>
